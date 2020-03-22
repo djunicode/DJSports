@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { GoogleSignin, GoogleSigninButton} from 'react-native-google-signin'
 import ShadowView from 'react-native-simple-shadow-view/src/ShadowView';
+
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -118,6 +119,13 @@ export default class LoginScreen extends React.Component {
           <Text style={style.textbutton}>Sign Up</Text>
           </ShadowView>
         </TouchableOpacity>
+        <TouchableOpacity onPress = {() => this.props.navigation.navigate('CreateEvent')}>
+          <Text>CReate</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress = {() => this.props.navigation.navigate('MyEvent')}>
+          <Text>MyEvent</Text>
+        </TouchableOpacity>
+       
         </View>
       </View>
       </View>
