@@ -3,14 +3,18 @@ import React from 'react';
 import {
   View,
   TextInput,
-  Button,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ImageBackground
 } from 'react-native';
 import { GoogleSignin, GoogleSigninButton} from 'react-native-google-signin'
 import ShadowView from 'react-native-simple-shadow-view/src/ShadowView';
+<<<<<<< HEAD
 
+=======
+import Icon from 'react-native-vector-icons/FontAwesome'
+>>>>>>> e6b439310d954f6b98a444cada253212d61b53d6
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -19,26 +23,9 @@ export default class LoginScreen extends React.Component {
       pass: '',
     }
   }
-  componentDidMount(){
-    this.FirebaseIntialize()
-  }
- 
-  FirebaseIntialize = () => {
-    const firebaseConfig = {
-          apiKey: "AIzaSyALM6dJrv55UoWD6xFcFoIHT8efu-lM3Sw",
-          authDomain: "djsports-b4333.firebaseapp.com",
-          databaseURL: "https://djsports-b4333.firebaseio.com",
-          projectId: "djsports-b4333",
-          storageBucket: "djsports-b4333.appspot.com",
-          messagingSenderId: "913764974864",
-          appId: "1:913764974864:web:251eff9ecd4198fec5e595",
-          measurementId: "G-MQK3W3RT3J"
-        }
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    console.log('Firebase App Created')
-}
+  // componentDidMount(){
+  //   this.FirebaseIntialize()
+  // }
   
   LoginId = Id => {
     this.setState({ Id: Id })
@@ -85,39 +72,44 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View style={{padding:10,paddingTop:100}}>
+      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{height:'100%' , width:'100%'}}>
       <View style={style.container}>
-        <Text style={style.header}>WELCOME TO</Text>
         <Text style={style.header}>DJSPORTS</Text>
-        <ShadowView style={style.textInput}>
+        <View style={{flexDirection:'row' ,  padding:5 ,}}>
+        <Icon name="user" size={25} color="black" style={{paddingTop:10}} />
         <TextInput 
-          placeholder='LoginId'
+          placeholder='Login ID'
           placeholderTextColor='black'
           onChangeText={this.LoginId}
           keyboardType='email-address'
+          textContentType='emailAddress'
+          maxFontSizeMultiplier={100}
+          style={style.textInput}
           >
         </TextInput>
-        </ShadowView>
-        <Text></Text>
-        <ShadowView style={style.textInput}>
+        </View>
+        <View style={{flexDirection:'row' , padding:5 , marginBottom:20 }}>
+        <Icon name="lock" size={30} color="black" style={{paddingTop:9}} />
         <TextInput 
           secureTextEntry={true}
           placeholder='Password'
           placeholderTextColor='black'
-          onChangeText={this.Password}>
+          onChangeText={this.Password}
+          style={style.textInput}
+          >
         </TextInput>
-        </ShadowView>
+        </View>
         <Text></Text>
         <View style={{alignContent:'center',paddingLeft:0}}>
         <TouchableOpacity onPress={this.login} >
-        <ShadowView style={style.button}>
+        <View style={style.button1}>
           <Text style={style.textbutton}>Log In</Text>
-        </ShadowView>
+        </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.signUp} >
-          <ShadowView style={style.button}>
+          <View style={style.button2}>
           <Text style={style.textbutton}>Sign Up</Text>
-          </ShadowView>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress = {() => this.props.navigation.navigate('CreateEvent')}>
           <Text>CReate</Text>
@@ -128,7 +120,7 @@ export default class LoginScreen extends React.Component {
        
         </View>
       </View>
-      </View>
+      </ImageBackground>
     )
   }
 }
@@ -136,15 +128,20 @@ const style = StyleSheet.create({
   container:{
     paddingLeft:10,
     paddingRight:10,
-    borderColor:'#7ba7ed',
-    borderWidth:10,
-    borderRadius:10
+    borderRadius:20,
+    margin:10,
+    marginTop:150,
+    backgroundColor:'white'
   },
   header:{
-    fontSize:30,
+    paddingTop:30,
+    fontSize:40,
+    fontWeight:'bold',
     alignSelf:"center",
     padding:10,
-    paddingBottom:30
+    paddingBottom:40,
+    color:'black',
+    fontStyle:"italic"
   },
   textbutton:{
     fontSize:20,
@@ -152,27 +149,28 @@ const style = StyleSheet.create({
     color:'white'
   },
   textInput: {
-    backgroundColor: '#FFFFFF',
-    borderRadius:30,
     height:50,
+    width:'90%',
     justifyContent:'center',
-    shadowColor: '#E7EAF0',
-    shadowOpacity: 1,
-    shadowRadius: 2,
-    shadowOffset: {width: 3,height: 3},
     paddingLeft:10,
-    marginBottom:20,
+    color:'black',
+    borderBottomColor:'black', 
+    borderBottomWidth:1,
 },
-button:{
-  backgroundColor: '#7ba7ed',
-  borderRadius:30,
+button1:{
+  backgroundColor: '#341f97',
+  borderRadius:10,
   height:50,
   justifyContent:'center',
-  shadowColor: '#E7EAF0',
-  shadowOpacity: 1,
-  shadowRadius: 2,
-  shadowOffset: {width: 3,height: 3},
   paddingLeft:10,
-  marginBottom:20
-}
+  marginBottom:30
+},
+button2:{
+  backgroundColor: '#341f97',
+  borderRadius:10,
+  height:50,
+  justifyContent:'center',
+  paddingLeft:10,
+  marginBottom:40
+},
 })
