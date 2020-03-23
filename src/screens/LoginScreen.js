@@ -42,12 +42,12 @@ export default class LoginScreen extends React.Component {
     this.setState({ pass: pass })
   }
   navsidnout = () => {
-    this.props.navigation.navigate('SignOut')
+    this.props.navigation.navigate('home')
   }
   login = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.Id, this.state.pass)
       .then(
-        () => this.props.navigation.navigate('SignOut')
+        () => this.props.navigation.navigate('home')
       )
   }
   signUp = () => {

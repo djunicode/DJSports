@@ -13,7 +13,7 @@ export default class SplashScreen extends React.Component{
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
               setTimeout(
-              () => this.props.navigation.navigate('SignOut'),
+              () => this.props.navigation.navigate('home'),
               1000
               )
             }else{
