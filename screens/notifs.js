@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
-import TeamCard from '/Users/apple/DJSports/components/TeamCard.js'
+import TeamCard from '../components/TeamCard'
 //import { Item } from "react-native-paper/lib/typescript/src/components/List/List";
 // teamDetails
 // teamName
@@ -38,7 +38,7 @@ class notifs extends Component {
         
         ]}
 
-          renderItem={({ item }) => <TeamCard image  = {require('/Users/apple/DJSports/assets/media2.jpg')}
+          renderItem={({ item }) => <TeamCard image  = {require('../assets/media2.jpg')}
           teamDetails = {item.teamDetail}
           teamName = {item.teamName}
           moreDetails = {item.moreDetail}
