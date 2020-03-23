@@ -82,7 +82,7 @@ class profile extends Component {
 
                 <View style={{ alignSelf: "center" }}>
                     <View style={styles.profileImage}>
-                        <Image source={require("./assets/profile-pic.jpg")} style={styles.image} resizeMode="center"></Image>
+                        <Image source={require("/Users/apple/DJSports/assets/profile-pic.jpg")} style={styles.image} resizeMode="center"></Image>
                     </View>
                     <View style={styles.dm}>
                         {/* <MaterialIcons name="chat" size={18} color="#DFD8C8"></MaterialIcons> */}
@@ -127,13 +127,13 @@ class profile extends Component {
                 <View style={{ marginTop: 32 }}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         <View style={styles.mediaImageContainer}>
-                            <Image source={require("./assets/media1.jpg")} style={styles.image} resizeMode="cover"></Image>
+                            <Image source={require("/Users/apple/DJSports/assets/media1.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
                         <View style={styles.mediaImageContainer}>
-                            <Image source={require("./assets/media2.jpg")} style={styles.image} resizeMode="cover"></Image>
+                            <Image source={require("/Users/apple/DJSports/assets/media2.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
                         <View style={styles.mediaImageContainer}>
-                            <Image source={require("./assets/media3.jpg")} style={styles.image} resizeMode="cover"></Image>
+                            <Image source={require("/Users/apple/DJSports/assets/media3.jpg")} style={styles.image} resizeMode="cover"></Image>
                         </View>
                     </ScrollView>
                     {/* <View style={styles.mediaCount}>

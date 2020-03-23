@@ -2,15 +2,53 @@ import React, { Component } from "react";
 import { 
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    FlatList
 } from "react-native";
+
+import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
+import TeamCard from '/Users/apple/DJSports/components/TeamCard.js'
+//import { Item } from "react-native-paper/lib/typescript/src/components/List/List";
+// teamDetails
+// teamName
+// image
+// moreDetails
 
 class notifs extends Component {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>notifs</Text>
+            <View>
+              <Header style = {{backgroundColor: 'blue'}}/>
+                <FlatList
+         
+          scrollEnabled={true}
+        
+          data=
+          {[{teamDetail : 'Team is really Good',
+            teamName : 'Team1',
+            moreDetail:'Fantastic'
+            },
+            {teamDetail : 'Team is really Good',
+            teamName : 'Team2',
+            moreDetail:'Fantastic'
+            },{teamDetail : 'Team is really Good',
+            teamName : 'Team3',
+            moreDetail:'Fantastic'
+            },
+        
+        ]}
+
+          renderItem={({ item }) => <TeamCard image  = {require('/Users/apple/DJSports/assets/media2.jpg')}
+          teamDetails = {item.teamDetail}
+          teamName = {item.teamName}
+          moreDetails = {item.moreDetail}
+      >
+      </TeamCard>}
+          //keyExtractor={item => item.teamName}
+        />
+           
             </View>
+            
         );
     }
 }

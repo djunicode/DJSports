@@ -5,15 +5,15 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 
 //import {createDrawerNavigator} from 'react-navigation-drawer';
-import event from './screens/event.js'
-import home from './screens/home.js'
-import notifs from './screens/notifs.js'
-import profile from './screens/profile.js'
-import create_event from './screens/create_event.js'
-import create_team from './screens/create_team.js'
-
-
-
+import event from '/Users/apple/DJSports/screens/event.js'
+import home from '/Users/apple/DJSports/screens/home.js'
+import notifs from '/Users/apple/DJSports/screens/notifs.js'
+import profile from '/Users/apple/DJSports/screens/profile.js'
+import create_event from '/Users/apple/DJSports/screens/create_event.js'
+import create_team from '/Users/apple/DJSports/screens/create_team.js'
+import myteams from '/Users/apple/DJSports/screens/myteams.js'
+import team from '/Users/apple/DJSports/screens/team.js'
+import join_team from '/Users/apple/DJSports/screens/join_team.js'
 
 
 export default class App extends React.Component {
@@ -31,10 +31,27 @@ const event_main = createStackNavigator({
   create_event : {
     screen :create_event
   },
+  // create_team :{
+  //   screen : create_team
+  // },
+  initialRouteName : 'event'
+
+})
+const teamModule = createStackNavigator({
+  myteams :{
+    screen : myteams
+  },
+  team: {
+    screen :team
+  },
   create_team :{
     screen : create_team
   },
-  initialRouteName : 'event'
+  join_team : {
+    screen : join_team
+  },
+  
+  initialRouteName : 'myteams'
 
 })
 const BottomNavigator = createMaterialBottomTabNavigator({
@@ -46,7 +63,7 @@ const BottomNavigator = createMaterialBottomTabNavigator({
     screen :event_main
   },
   notifs : {
-    screen : notifs
+    screen : teamModule
   }
 
   ,profile : {
