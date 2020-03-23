@@ -31,7 +31,9 @@ export default class SignOutScreen extends React.Component{
             // doc.data() is never undefined for query doc snapshots
             userdata = doc.data() 
             console.warn(userdata) 
-            console.log('data Found')       
+            console.log('data Found')   
+            .then(this.setState({ userdata: userdata}))
+    
         });
     })
     .catch(function(error) {

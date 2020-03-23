@@ -6,11 +6,11 @@ import {
     Button
 } from "react-native";
 import {  SafeAreaView, Image, ScrollView } from "react-native";
-import firebase from '@firebase/app';
+import firebase from 'firebase';
 import '@firebase/firestore' 
 //import StarRating from 'react-native-star-rating';
 
-var username = 'random123'
+var username = 'Simrn'
 // var name1 
 //The above data comes from Authentication
 class profile extends Component {
@@ -35,19 +35,18 @@ class profile extends Component {
     }
    componentDidMount()
     {
-        console.log("profile screen mounted")
-        /*const firebaseConfig = {
-            apiKey: "AIzaSyCaiRymIDbjOu12yV_8IJsCbuOjgxX8_e4",
-            authDomain: "dj-rn-sports.firebaseapp.com",
-            databaseURL: "https://dj-rn-sports.firebaseio.com",
-            projectId: "dj-rn-sports",
-            storageBucket: "dj-rn-sports.appspot.com",
-            messagingSenderId: "244201229732",
-            appId: "1:244201229732:web:a924ba9108edf11f37c531",
-            measurementId: "G-LVDFN8YDHW"
-          };
-        console.log("INITIALIZE");
-        firebase.initializeApp(firebaseConfig);
+        // const firebaseConfig = {
+        //     apiKey: "AIzaSyCaiRymIDbjOu12yV_8IJsCbuOjgxX8_e4",
+        //     authDomain: "dj-rn-sports.firebaseapp.com",
+        //     databaseURL: "https://dj-rn-sports.firebaseio.com",
+        //     projectId: "dj-rn-sports",
+        //     storageBucket: "dj-rn-sports.appspot.com",
+        //     messagingSenderId: "244201229732",
+        //     appId: "1:244201229732:web:a924ba9108edf11f37c531",
+        //     measurementId: "G-LVDFN8YDHW"
+        //   };
+        // console.log("INITIALIZE");
+        // firebase.initializeApp(firebaseConfig);
         
         const ref = firebase.firestore().collection('Users').doc(username);
         firebase.firestore()
@@ -66,10 +65,14 @@ class profile extends Component {
         this.setState({ year: snapshot.data().year});
         this.setState({ wins: snapshot.data().wins});
         
-        });*/
+        });
            
 
 
+    }
+    signout = () => {
+        firebase.auth().signOut()
+        this.props.navigation.navigate('LoginScreen')
     }
 
     render() {
@@ -163,6 +166,9 @@ class profile extends Component {
                         </View>
                     </View>
                 </View>
+                <Button 
+                title='SignOut'
+                onPress={() => this.signout()}/>
             </ScrollView>
         </SafeAreaView>
         );
