@@ -6,23 +6,35 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  Button
 } from 'react-native';
 import { GoogleSignin, GoogleSigninButton} from 'react-native-google-signin'
 import ShadowView from 'react-native-simple-shadow-view/src/ShadowView';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import OneSignal from 'react-native-onesignal';
+import { set } from 'react-native-reanimated';
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       Id: '',
       pass: '',
+      userId: '',
     }
   }
-  // componentDidMount(){
-  //   this.FirebaseIntialize()
-  // }
-  
+  componentDidMount =  async() => {
+    OneSignal.addEventListener('ids' , this.onIds)
+    var today = new Date()
+    console.log(today.getFullYear())
+  }
+
+  onIds = (devices) =>{
+    console.log('Device info = ' , devices)
+    this.setState({
+      userId : devices.userId
+    })
+  }
   LoginId = Id => {
     this.setState({ Id: Id })
   }
@@ -41,6 +53,16 @@ export default class LoginScreen extends React.Component {
   signUp = () => {
     this.props.navigation.navigate('SignUpScreen')
   }
+
+  notify =() => {
+    console.log('Button pressed')
+    var contents = {'en': 'You got notification from user'};
+    var data = {};
+    var playerIds = [this.state.userId];
+    var other = {"send_after":"2020-03-23 13:34:00 GMT+0530" , 'android_sound':'notification' , 'android_visibility':1};
+    OneSignal.postNotification(contents, data, playerIds, other);
+  }
+
     googleLogin = async() =>  {
     try {
       this.firebaseinit
@@ -109,6 +131,10 @@ export default class LoginScreen extends React.Component {
         </TouchableOpacity>
         </View>
       </View>
+      <Button  
+        title='notification'
+        onPress={() => this.notify()}
+      />
       </ImageBackground>
     )
   }
