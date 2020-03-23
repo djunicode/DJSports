@@ -10,11 +10,7 @@ import {
 } from 'react-native';
 import { GoogleSignin, GoogleSigninButton} from 'react-native-google-signin'
 import ShadowView from 'react-native-simple-shadow-view/src/ShadowView';
-<<<<<<< HEAD
-
-=======
 import Icon from 'react-native-vector-icons/FontAwesome'
->>>>>>> e6b439310d954f6b98a444cada253212d61b53d6
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)

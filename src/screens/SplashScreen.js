@@ -9,6 +9,7 @@ export default class SplashScreen extends React.Component{
         OneSignal.init("ca9649a8-0f47-4d27-9c5f-e2d33c5bda97")
     }
     componentDidMount = async() =>{
+        console.log("starting")
         this.FirebaseIntialize()
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
