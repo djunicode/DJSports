@@ -1,26 +1,19 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView} from 'react-native';
-//import SignUpScreen from './SignUpScreen';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
-import Icon from 'react-native-vector-icons/FontAwesome';
-
 
 
 
 
 //const firebase = require('firebase');
 //require("firebase/firestore");
-//var db = firebase.firestore();
+var db = firebase.firestore();
 
 
 
-export default class create_event extends React.Component {
-
-    static navigationOptions = {
-        headerMode: 'none',
-    };
-
+export default class CreateEvent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,8 +24,6 @@ export default class create_event extends React.Component {
             no_people : '',
             venue : '',
             date: '',
-            db: firebase.firestore(),
-            id: 1,
             
 
         }
@@ -48,17 +39,16 @@ export default class create_event extends React.Component {
       
 
     handleCreate = () => {
-        //alert('Event created')
+        alert('Event created')
         console.log(this.state.event_name)
-        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
+        db.collection('CreatedEvent').doc(this.state.email).collection(this.state.event_name).doc(this.state.event_name).set({
             event_name : this.state.event_name,
             sport: this.state.sport,
             no_people : this.state.no_people,
             venue : this.state.venue,
-            date: this.state.date,
-            id: this.state.id
+            date: this.state.date
         })
-        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{user: 'simrn'}))
+        .then(() => console.log("doc added successfully"))
         .catch(function(error) {
             console.log("error adding ", error);
         });
@@ -67,9 +57,7 @@ export default class create_event extends React.Component {
     render() {
         return(
             <View style = {styles.container}>
-            <Text style = {styles.header}>{'Create your event'}</Text>
-            <ScrollView style = {styles.container}>
-               
+                <Text style = {styles.header}>{'Create your event'}</Text>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Event name</Text>
                     <TextInput 
@@ -128,16 +116,8 @@ export default class create_event extends React.Component {
                     <Text style = {{color: "white"}}>CREATE</Text>
 
                 </TouchableOpacity>
-                <TouchableOpacity onPress = {() => alert('Name of the event cannot be changed later')}>
-                    <Icon style={{marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end',}}
-                        name = "exclamation-circle"
-                        size = {25}
-                        color = "red"
-                    />
-                </TouchableOpacity>
                 
                 
-            </ScrollView>
             </View>
    
         );
@@ -178,8 +158,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: 52,
         justifyContent:"center",
-        alignItems:"center",
-    
+        alignItems:"center"
     }
 
 
