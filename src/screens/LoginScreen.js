@@ -91,6 +91,8 @@ export default class LoginScreen extends React.Component {
           <Text style={style.textbutton}>Sign Up</Text>
           </View>
         </TouchableOpacity>
+        
+       
         </View>
       </View>
       </ImageBackground>

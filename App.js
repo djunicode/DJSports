@@ -15,7 +15,9 @@ import team from './screens/team.js'
 import join_team from './screens/join_team.js'
 import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
+import EditEvent from './src/screens/EditEvent'
 import SplashScreen from './src/screens/SplashScreen'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -30,18 +32,28 @@ export default class App extends React.Component {
   }
 }
 const event_main = createStackNavigator({
-  event :{
+  /*event :{
     screen : event
+  },*/
+  MyEvent: {
+    screen: MyEvent,
+    
   },
   create_event : {
-    screen :create_event
+    screen :create_event,
   },
+  
+  EditEvent: {
+    screen: EditEvent,
+  },
+  
   // create_team :{
   //   screen : create_team
   // },
-  initialRouteName : 'event'
+  initialRouteName : 'MyEvent'
 
-})
+},{headerMode: "none"})
+
 const teamModule = createStackNavigator({
   myteams :{
     screen : myteams
@@ -56,13 +68,15 @@ const teamModule = createStackNavigator({
     screen : join_team
   },
   
-  initialRouteName : 'myteams'
+  initialRouteName : 'myteams',
+  
 
 })
 const Login = createSwitchNavigator(
   {
     LoginScreen: LoginScreen,
     SignUpScreen: SignUpScreen,
+   
   },
   {
     initialRouteName: 'LoginScreen',
@@ -72,21 +86,36 @@ const Login = createSwitchNavigator(
 const BottomNavigator = createMaterialBottomTabNavigator({
  
   home : {
-    screen : home
+    screen : home,
+    navigationOptions: {title: 'Home', tabBarIcon: ({ tintColor }) => (
+      <Icon name="home" size={25} color="white" />
+      )}
   },
   event_main :{
-    screen :event_main
+    screen :event_main,
+    navigationOptions: {title: 'My Events', tabBarIcon: ({ tintColor }) => (
+      <Icon name="folder-open" size={21} color="white" />
+      )}
   },
   notifs : {
-    screen : teamModule
+    screen : teamModule,
+    navigationOptions: {title: 'Notifications', tabBarIcon: ({ tintColor }) => (
+      <Icon name="bell" size={25} color="white" />
+      )}
   }
 
   ,profile : {
-    screen: profile
+    screen: profile,
+    navigationOptions: {title: 'Profile', tabBarIcon: ({ tintColor }) => (
+      <Icon name="user" size={25} color="white" />
+      )}
   }},
   {
   initialRouteName : 'home',
-  order : ['home','event_main','notifs','profile']
+  order : ['home','event_main','notifs','profile'],
+  activeColor: 'white',
+    inactiveColor: '#9e9e9e',
+    barStyle: { backgroundColor: '#1a237e' , }
   }
 )
 const Base = createSwitchNavigator(
