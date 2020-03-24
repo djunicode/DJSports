@@ -18,6 +18,8 @@ import LoginScreen from './src/screens/LoginScreen'
 import SignOutScreen from './src/screens/SignOutScreen'
 import MyEvent from './src/screens/MyEvent'
 import EditEvent from './src/screens/EditEvent'
+import ShowEvent from './src/screens/ShowEvent'
+
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -48,6 +50,10 @@ const event_main = createStackNavigator({
   
   EditEvent: {
     screen: EditEvent,
+  },
+
+  ShowEvent: {
+    screen: ShowEvent,
   },
   
   // create_team :{
@@ -128,7 +134,7 @@ const Base = createSwitchNavigator(
 },
 {
   initialRouteName : 'Tabs'
-})
+},{headerMode:'none'})
 const SplashNav = createSwitchNavigator(
   {
     SplashScreen:SplashScreen,
@@ -144,7 +150,8 @@ const Main  = createStackNavigator(
        SplashNav : SplashNav,
        Base : Base
 
-  }
+  },
+  {headerMode:'none'}
 ) 
 
 const AppContainer = createAppContainer(Main)

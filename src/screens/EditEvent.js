@@ -3,6 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, Scrol
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import DateTimePicker from "react-native-modal-datetime-picker";
+import moment from 'moment';
+
+
 
 export default class EditEvent extends React.Component {
 
@@ -51,11 +55,36 @@ export default class EditEvent extends React.Component {
             date: this.state.date,
             id: this.state.id
         })
-        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent'))
+        .then(() => console.log("doc edited successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent'))
         .catch(function(error) {
             console.log("error adding ", error);
         });
     }
+
+    handlePicker = (datetime) => {
+        this.setState({
+            isVisible: false,
+            date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
+            
+        },() => console.log("Date is ", this.state.date))
+        
+        //console.warn("A date has been picked: ", date);
+    }
+
+    hidePicker = (datetime) => {
+      this.setState({
+          isVisible: false,
+          //date: moment(datetime).format(),
+          
+      },() => console.log("Date is ", this.state.date))
+      
+  }
+
+  showPicker = () => {
+      this.setState({
+          isVisible: true,
+      })
+  }
 
    
 
@@ -63,6 +92,13 @@ export default class EditEvent extends React.Component {
         
         return(
             <View style = {styles.container}>
+                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
+                        <Icon style = {{margin: 20, marginBottom: 0}}
+                            name = "arrow-left"
+                            size = {35}
+                            color = "black"
+                        />
+                    </TouchableOpacity>
             <Text style = {styles.header}>{'Edit Event'}</Text>
             <ScrollView style = {styles.container}>
                
@@ -112,13 +148,19 @@ export default class EditEvent extends React.Component {
                 </View>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Date</Text>
-                    <TextInput 
-                    style = {styles.input}  
-                    autoCapitalize="none" 
-                    onChangeText = {date => this.setState({date})}
-                    value = {this.state.date}
-                    >
-                    </TextInput>
+                    <TouchableOpacity onPress={this.showPicker} >
+                    <Text style = {styles.input}>{this.state.date}</Text>
+                    </TouchableOpacity>
+                    
+                    <DateTimePicker
+                        isVisible={this.state.isVisible}
+                        mode='datetime'
+                        display = {'spinner'}
+                        onConfirm={this.handlePicker}
+                        onCancel={this.hidePicker}
+                    />
+                    
+                    
                 </View>
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleEdit} >
@@ -134,10 +176,11 @@ export default class EditEvent extends React.Component {
     }
 
     render() {
+        console.disableYellowBox = true
        const { state } = this.props.navigation;
         
         return(
-            this.change(state.params.event_name)
+            this.change(state.params.event_name,state.params.date)
    
         );
     }
@@ -153,7 +196,8 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         //flexDirection: 'row',
         marginBottom: 40,
-        marginTop: 20
+        marginTop: 20,
+        fontWeight: 'bold'
     },
     inputForm: {
         marginHorizontal: 20,
