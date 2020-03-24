@@ -15,14 +15,11 @@ import team from './screens/team.js'
 import join_team from './screens/join_team.js'
 import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
-import SignOutScreen from './src/screens/SignOutScreen'
-import MyEvent from './src/screens/MyEvent'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -145,7 +142,7 @@ const SplashNav = createSwitchNavigator(
   }
 )
 
-const Main  = createStackNavigator(
+const Main  = createSwitchNavigator(
   {
        SplashNav : SplashNav,
        Base : Base
