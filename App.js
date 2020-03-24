@@ -1,129 +1,114 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
 
 import React from 'react';
-import {createSwitchNavigator, createAppContainer } from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-//import {createDrawerNavigator} from 'react-navigation-drawer';
-import event from './screens/event.js'
-import home from './screens/home.js'
-import notifs from './screens/notifs.js'
-import profile from './screens/profile.js'
-import create_event from './screens/create_event.js'
-import create_team from './screens/create_team.js'
-import myteams from './screens/myteams.js'
-import team from './screens/team.js'
-import join_team from './screens/join_team.js'
-import SignUpScreen from './src/screens/SignUpScreen'
-import LoginScreen from './src/screens/LoginScreen'
-import SignOutScreen from './src/screens/SignOutScreen'
-import SplashScreen from './src/screens/SplashScreen'
-import {decode, encode} from 'base-64'
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 
+import {
+  Header,
+  LearnMoreLinks,
+  Colors,
+  DebugInstructions,
+  ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
 
-export default class App extends React.Component {
-  
-  render() {
-    return (
-          <AppContainer/> 
-    );
-  }
-}
-const event_main = createStackNavigator({
-  event :{
-    screen : event
+const App: () => React$Node = () => {
+  return (
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
+          <Header />
+          {global.HermesInternal == null ? null : (
+            <View style={styles.engine}>
+              <Text style={styles.footer}>Engine: Hermes</Text>
+            </View>
+          )}
+          <View style={styles.body}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Step One</Text>
+              <Text style={styles.sectionDescription}>
+                Edit <Text style={styles.highlight}>App.js</Text> to change this
+                screen and then come back to see your edits.
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>See Your Changes</Text>
+              <Text style={styles.sectionDescription}>
+                <ReloadInstructions />
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Debug</Text>
+              <Text style={styles.sectionDescription}>
+                <DebugInstructions />
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Learn More</Text>
+              <Text style={styles.sectionDescription}>
+                Read the docs to discover what to do next:
+              </Text>
+            </View>
+            <LearnMoreLinks />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: Colors.lighter,
   },
-  create_event : {
-    screen :create_event
+  engine: {
+    position: 'absolute',
+    right: 0,
   },
-  // create_team :{
-  //   screen : create_team
-  // },
-  initialRouteName : 'event'
-
-})
-const teamModule = createStackNavigator({
-  myteams :{
-    screen : myteams
+  body: {
+    backgroundColor: Colors.white,
   },
-  team: {
-    screen :team
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
   },
-  create_team :{
-    screen : create_team
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
   },
-  join_team : {
-    screen : join_team
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: Colors.dark,
   },
-  
-  initialRouteName : 'myteams'
-
-})
-const Login = createSwitchNavigator(
-  {
-    LoginScreen: LoginScreen,
-    SignUpScreen: SignUpScreen,
+  highlight: {
+    fontWeight: '700',
   },
-  {
-    initialRouteName: 'LoginScreen',
-  }
-
-);
-const BottomNavigator = createMaterialBottomTabNavigator({
- 
-  home : {
-    screen : home
+  footer: {
+    color: Colors.dark,
+    fontSize: 12,
+    fontWeight: '600',
+    padding: 4,
+    paddingRight: 12,
+    textAlign: 'right',
   },
-  event_main :{
-    screen :event_main
-  },
-  notifs : {
-    screen : teamModule
-  }
+});
 
-  ,profile : {
-    screen: profile
-  }},
-  {
-  initialRouteName : 'home',
-  order : ['home','event_main','notifs','profile']
-  }
-)
-const Base = createSwitchNavigator(
-{
-    Login : Login,
-    Tabs : BottomNavigator
-},
-{
-  initialRouteName : 'Tabs'
-})
-const SplashNav = createSwitchNavigator(
-  {
-    SplashScreen:SplashScreen,
-    Signoutnav:Login
-  },
-  {
-    initialRouteName:'SplashScreen'
-  }
-)
-
-const Main  = createStackNavigator(
-  {
-       SplashNav : SplashNav,
-       Base : Base
-
-  }
-) 
-
-const AppContainer = createAppContainer(Main)
-
-
-
-
-
-
-
-
-
-
+export default App;
