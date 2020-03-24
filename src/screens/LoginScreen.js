@@ -7,13 +7,9 @@ import {
   Text,
   TouchableOpacity,
   ImageBackground,
-  Button
 } from 'react-native';
-import { GoogleSignin, GoogleSigninButton} from 'react-native-google-signin'
-import ShadowView from 'react-native-simple-shadow-view/src/ShadowView';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import OneSignal from 'react-native-onesignal';
-import { set } from 'react-native-reanimated';
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -21,12 +17,13 @@ export default class LoginScreen extends React.Component {
       Id: '',
       pass: '',
       userId: '',
+      date : ''
     }
   }
   componentDidMount =  async() => {
     OneSignal.addEventListener('ids' , this.onIds)
-    var today = new Date()
-    console.log(today.getFullYear())
+    var d = Date(Date.now())
+    this.setState({date : d.toString()})
   }
 
   onIds = (devices) =>{
@@ -53,41 +50,6 @@ export default class LoginScreen extends React.Component {
   signUp = () => {
     this.props.navigation.navigate('SignUpScreen')
   }
-
-  notify =() => {
-    console.log('Button pressed')
-    var contents = {'en': 'You got notification from user'};
-    var data = {};
-    var playerIds = [this.state.userId];
-    var other = {"send_after":"2020-03-23 13:34:00 GMT+0530" , 'android_sound':'notification' , 'android_visibility':1};
-    OneSignal.postNotification(contents, data, playerIds, other);
-  }
-
-    googleLogin = async() =>  {
-    try {
-      this.firebaseinit
-      console.log("Google login begins")
-      // add any configuration settings here:
-      await GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-        offlineAccess: true,
-        webClientId:"244201229732-rgk2sqts94akiptkghgtk9kko6mmic4n.apps.googleusercontent.com",   
-      });
-      console.log("Login Configured")
-      const data = await GoogleSignin.signIn()
-      console.log(data)
-      // create a new firebase credential with the token
-      const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken)
-      // login with credential
-      const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
-      console.log("Google Logged in")
-      this.props.navigation.navigate('SignOut')
-      
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   render() {
     return (
       <ImageBackground source={require('../images/backgroundimage.jpg')} style={{height:'100%' , width:'100%'}}>
@@ -131,10 +93,6 @@ export default class LoginScreen extends React.Component {
         </TouchableOpacity>
         </View>
       </View>
-      <Button  
-        title='notification'
-        onPress={() => this.notify()}
-      />
       </ImageBackground>
     )
   }

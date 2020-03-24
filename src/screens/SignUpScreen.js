@@ -7,9 +7,9 @@ import {
     Text,
     StyleSheet,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    Picker
 } from 'react-native';
-import ShadowView from 'react-native-simple-shadow-view'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import 'firebase/firestore'
 export default class SignUpScreen extends React.Component {
@@ -96,10 +96,10 @@ export default class SignUpScreen extends React.Component {
     render() {
         return (
             <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: '100%', width: '100%' }} >
-                <ScrollView style={{ padding: 10 , marginTop:20 }}>
+                <ScrollView style={{ padding: 10, marginTop: 20 }}>
                     <View style={style.container}>
-                        <View style={{ flexDirection: 'row',  padding: 5,marginBottom:10 }}>
-                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 9,  }} />
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 9, }} />
                             <TextInput
                                 placeholder='User Name'
                                 placeholderTextColor='black'
@@ -107,9 +107,9 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.Username}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
 
-                            <Icon name="address-book" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
+                            <Icon name="address-book" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Address'
                                 placeholderTextColor='black'
@@ -117,37 +117,50 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.address}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row',  padding: 5,  marginBottom:10 , marginRight:10}}>
+                        <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10,paddingLeft:10 }}>
                                 <Icon name="mortar-board" size={23} color="black" style={{ paddingTop: 10, paddingLeft: 8, }} />
-                                <TextInput
-                                    placeholder='Branch'
-                                    placeholderTextColor='black'
-                                    style={style.textInput1}
-                                    onChangeText={this.branch}>
-                                </TextInput>
+                                <Picker
+                                    selectedValue={this.state.branch}
+                                    style={{ height: 50, width: 150 }}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        this.setState({ branch: itemValue })
+                                    }>
+                                    <Picker.Item label="Computer" value="Computer" />
+                                    <Picker.Item label="IT" value="IT" />
+                                </Picker>
                             </View>
-                            <View style={{ flexDirection: 'row', padding: 5, marginBottom:10, marginRight:10 }}>
-                                <Icon name="calendar" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
-                                <TextInput
-                                    placeholder='Year'
-                                    placeholderTextColor='black'
-                                    style={style.textInput1}
-                                    onChangeText={this.year}>
-                                </TextInput>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10 ,paddingLeft:10,marginRight:40 }}>
+                                <Icon name="calendar" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                                <Picker
+                                    selectedValue={this.state.year}
+                                    style={{ height: 50, width: 100, borderBottomWidth: 1, borderBottomColor: 'black' }}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        this.setState({ year: itemValue })
+                                    }>
+                                    <Picker.Item label="Year" value="" />
+                                    <Picker.Item label="FE" value="FE" />
+                                    <Picker.Item label="SE" value="SE" />
+                                    <Picker.Item label="TE" value="TE" />
+                                    <Picker.Item label="BE" value="BE" />
+                                </Picker>
                             </View>
-                            <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                                <Icon name="male" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
-                                <TextInput
-                                    placeholder='Gender'
-                                    placeholderTextColor='black'
-                                    style={style.textInput1}
-                                    onChangeText={this.gender}>
-                                </TextInput>
+                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10 }}>
+                                <Icon name="male" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 0, }} />
+                                <Picker
+                                    selectedValue={this.state.gender}
+                                    style={{ height: 50, width: 150 }}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        this.setState({ gender: itemValue })
+                                    }>
+                                    <Picker.Item label="Gender" value="" />
+                                    <Picker.Item label="Male" value="Male" />
+                                    <Picker.Item label="Female" value="Female" />
+                                </Picker>
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Sports1'
                                 placeholderTextColor='black'
@@ -155,17 +168,17 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.sports1}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Sports2'
                                 placeholderTextColor='black'
                                 style={style.textInput}
                                 onChangeText={this.sports2}>
                             </TextInput>
-                            </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} />
+                        </View>
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Sports3'
                                 placeholderTextColor='black'
@@ -173,8 +186,8 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.sports3}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                            <Icon name="user" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} />
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="user" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
                                 placeholder='LoginId'
                                 placeholderTextColor='black'
@@ -183,8 +196,8 @@ export default class SignUpScreen extends React.Component {
                                 keyboardType='email-address'>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} />
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
                                 secureTextEntry={true}
                                 placeholder='Enter Password'
@@ -193,9 +206,9 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.Password}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
 
-                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} />
+                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
                                 secureTextEntry={true}
                                 placeholder='Re Enter your Password'
@@ -226,7 +239,7 @@ export default class SignUpScreen extends React.Component {
 const style = StyleSheet.create({
     container: {
         paddingLeft: 10,
-        paddingRight:10,
+        paddingRight: 10,
         borderRadius: 20,
         backgroundColor: '#FFFFFF',
         paddingTop: 20
@@ -245,13 +258,13 @@ const style = StyleSheet.create({
         color: 'white'
     },
     textInput: {
-        height:50,
-        width:'90%',
-        justifyContent:'center',
-        paddingLeft:10,
-        color:'black',
-        borderBottomColor:'black', 
-        borderBottomWidth:1
+        height: 50,
+        width: '90%',
+        justifyContent: 'center',
+        paddingLeft: 10,
+        color: 'black',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1
     },
     button1: {
         backgroundColor: '#341f97',
@@ -270,12 +283,12 @@ const style = StyleSheet.create({
         marginBottom: 40
     },
     textInput1: {
-        height:50,
-        width:74,
-        justifyContent:'center',
-        paddingLeft:10,
-        color:'black',
-        borderBottomColor:'black', 
-        borderBottomWidth:1
+        height: 50,
+        width: 74,
+        justifyContent: 'center',
+        paddingLeft: 10,
+        color: 'black',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1
     },
 })

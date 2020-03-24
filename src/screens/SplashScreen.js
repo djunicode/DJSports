@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ImageBackground} from 'react-native';
+import { Text, StyleSheet, ImageBackground} from 'react-native';
 import firebase from 'firebase'
 import OneSignal from 'react-native-onesignal'
 
