@@ -18,6 +18,7 @@ import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
 import MyEvent from './src/screens/MyEvent'
+import EventDetails from './screens/EventDetails'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,6 +35,14 @@ export default class App extends React.Component {
     );
   }
 }
+const mainpage = createStackNavigator({
+  home:{
+    screen:home
+  },
+  details:{
+    screen:EventDetails
+  }
+})
 const event_main = createStackNavigator({
   /*event :{
     screen : event
@@ -93,7 +102,7 @@ const Login = createSwitchNavigator(
 const BottomNavigator = createMaterialBottomTabNavigator({
  
   home : {
-    screen : home,
+    screen : mainpage,
     navigationOptions: {title: 'Home', tabBarIcon: ({ tintColor }) => (
       <Icon name="home" size={25} color="white" />
       )}
