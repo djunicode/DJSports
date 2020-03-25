@@ -1,27 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox} from 'react-native';
-//import SignUpScreen from './SignUpScreen';
+import React from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
-//import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 
 
 
-
-//const firebase = require('firebase');
-//require("firebase/firestore");
-//var db = firebase.firestore();
-
-
-
-export default class create_event extends React.Component {
-
-    static navigationOptions = {
-        headerMode: 'none',
-    };
+export default class EditEvent extends React.Component {
 
     constructor(props) {
         super(props);
@@ -32,62 +19,35 @@ export default class create_event extends React.Component {
             sport: '',
             no_people : '',
             venue : '',
-            date: 'Select Date and Time',
+            date: '',
             db: firebase.firestore(),
             id: 1,
-            isVisible: false,
-            
-            
-
+            documentData: [],
             
 
         }
     }
 
-
-    componentDidMount(){
-        const user = firebase.auth().currentUser
-        this.setState({email : user.email })
-        console.log("success kinda")
-        console.log(user.email)
+    componentDidMount() {
+        const users = firebase.auth().currentUser
+        this.setState({email : users.email })
+        console.log("success yeah")
+        console.log(users.email)
+        const {state} = this.props.navigation;
         
-      }
-
-      
-
-      handlePicker = (datetime) => {
-          this.setState({
-              isVisible: false,
-              date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
-              
-          },() => console.log("Date is ", this.state.date))
-          
-          //console.warn("A date has been picked: ", date);
-      }
-
-      hidePicker = (datetime) => {
         this.setState({
-            isVisible: false,
-            //date: moment(datetime).format(),
-            
-        },() => console.log("Date is ", this.state.date))
-        
-    }
-
-    showPicker = () => {
-        this.setState({
-            isVisible: true,
+            event_name: state.params.event_name,
+            no_people: state.params.no_people,
+            sport: state.params.sport,
+            date: state.params.date,
+            venue: state.params.venue,
         })
+        
     }
 
-
-
-      
-
-    handleCreate = () => {
-        //alert('Event created')
+    handleEdit = () => {
         console.log(this.state.event_name)
-        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).update({
             event_name : this.state.event_name,
             sport: this.state.sport,
             no_people : this.state.no_people,
@@ -95,16 +55,41 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id
         })
-        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
+        .then(() => console.log("doc edited successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent'))
         .catch(function(error) {
             console.log("error adding ", error);
         });
     }
 
-    
+    handlePicker = (datetime) => {
+        this.setState({
+            isVisible: false,
+            date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
+            
+        },() => console.log("Date is ", this.state.date))
+        
+        //console.warn("A date has been picked: ", date);
+    }
 
-    render() {
-        console.disableYellowBox = true
+    hidePicker = (datetime) => {
+      this.setState({
+          isVisible: false,
+          //date: moment(datetime).format(),
+          
+      },() => console.log("Date is ", this.state.date))
+      
+  }
+
+  showPicker = () => {
+      this.setState({
+          isVisible: true,
+      })
+  }
+
+   
+
+    change = (event) => {
+        
         return(
             <View style = {styles.container}>
                  <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
@@ -114,7 +99,7 @@ export default class create_event extends React.Component {
                             color = "black"
                         />
                     </TouchableOpacity>
-            <Text style = {styles.header}>{'Create your event'}</Text>
+            <Text style = {styles.header}>{'Edit Event'}</Text>
             <ScrollView style = {styles.container}>
                
                 <View style = {styles.inputForm}>
@@ -122,8 +107,9 @@ export default class create_event extends React.Component {
                     <TextInput 
                     style = {styles.input}  
                     autoCapitalize="words" 
+                    
+                    value = {event}
                     onChangeText = {event_name => this.setState({event_name})}
-                    value = {this.state.event_name}
                     >
                     </TextInput>
                 </View>
@@ -131,7 +117,7 @@ export default class create_event extends React.Component {
                     <Text style = {styles.inputTitle}>Sport</Text>
                     <TextInput 
                     style = {styles.input}  
-                    autoCapitalize="words" 
+                    autoCapitalize="none" 
                     onChangeText = {sport => this.setState({sport})}
                     value = {this.state.sport}
                     >
@@ -175,27 +161,26 @@ export default class create_event extends React.Component {
                     />
                     
                     
-    
                 </View>
                 
-                <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
-                    <Text style = {{color: "white"}}>CREATE</Text>
+                <TouchableOpacity style = {styles.button } onPress = {this.handleEdit} >
+                    <Text style = {{color: "white"}}>CHANGE</Text>
 
                 </TouchableOpacity>
-                <TouchableOpacity onPress = {() => alert('Name of the event cannot be changed later')}>
-                    <Icon style={{marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end',}}
-                        name = "exclamation-circle"
-                        size = {25}
-                        color = "red"
-                    />
-                </TouchableOpacity>
-                
                 
                 
             </ScrollView>
-            
-      
             </View>
+
+        )
+    }
+
+    render() {
+        console.disableYellowBox = true
+       const { state } = this.props.navigation;
+        
+        return(
+            this.change(state.params.event_name,state.params.date)
    
         );
     }
