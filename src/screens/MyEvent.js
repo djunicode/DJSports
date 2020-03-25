@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {NavigationEvents} from 'react-navigation';
 
 
 
@@ -27,19 +28,35 @@ export default class MyEvent extends React.Component {
       notfirstTime: true,
 
         }
+        
+        
+
     }
+    onFocusFunction = () => {
+        this.retrieveData(this.state.email)
+        console.log("i am focused")
+
+      }
+
+    
 
     componentDidMount(){
         
-        /*const {state} = this.props.navigation;
-console.log("PROPS " + state.params.user);*/
+        
         const user = firebase.auth().currentUser
         this.setState({email : user.email })
         console.log("success kinda")
         console.log(user.email)
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            this.onFocusFunction()
+          })
 
+      }
+
+      componentWillUnmount () {
+        this.focusListener.remove()
       }
       
       /*firebasegetdata = (email) => {
@@ -101,7 +118,7 @@ console.log("PROPS " + state.params.user);*/
           });
           console.log('Retrieving additional Data');
           // Cloud Firestore: Query (Additional Query)
-          let additionalQuery = await firebase.firestore().collection('CreatedEvent').doc(email).collection('MyEvent')
+          let additionalQuery = await firebase.firestore().collection('CreatedEvent').doc(this.state.email).collection('MyEvent')
             .startAfter(this.state.lastVisible)
             .limit(this.state.limit)
           // Cloud Firestore: Query Snapshot
@@ -139,6 +156,12 @@ console.log("PROPS " + state.params.user);*/
         }
       };
 
+      showEvent = (item) => {
+        console.log(item.event_name)
+        this.props.navigation.navigate('ShowEvent',{event_name: item.event_name , sport:item.sport ,no_people: item.no_people, venue: item.venue, date: item.date})
+
+    }
+
       goEdit = (item) => {
           console.log(item.event_name)
           this.props.navigation.navigate('EditEvent',{event_name: item.event_name , sport:item.sport ,no_people: item.no_people, venue: item.venue, date: item.date})
@@ -147,16 +170,20 @@ console.log("PROPS " + state.params.user);*/
 
       deleteEvent = (item) => {
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function() {
+            
             console.log("Document successfully deleted!");
             alert('Event deleted')
-        }).catch(function(error) {
+            
+        }).then(this.onFocusFunction())
+        .catch(function(error) {
             console.error("Error removing document: ", error);
         });
 
       }
 
     render() {
-        
+        <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
+        console.disableYellowBox = true
         return(
             <SafeAreaView style = {styles.container}>
                 <Text style = {styles.header}>MY EVENTS</Text>
@@ -173,6 +200,13 @@ console.log("PROPS " + state.params.user);*/
                  
                     <Text style = {styles.date}>Date: {item.date}</Text>
                     <View style = {{flex:2, flexDirection: 'row', alignItems:'center'}}>
+                    <TouchableOpacity onPress = {() => this.showEvent(item)}>
+                    <Icon style={{margin: 12, alignSelf: 'center', flexDirection: 'column'}}
+                        name = "info-circle"
+                        size = {25}
+                        color = "#3f51b5"
+                    />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress = {() => this.goEdit(item)}>
                     <Icon style={{margin: 12, alignSelf: 'flex-end', flexDirection: 'column'}}
                         name = "pencil"

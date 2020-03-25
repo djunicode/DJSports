@@ -16,6 +16,9 @@ import join_team from './screens/join_team.js'
 import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
+import ShowEvent from './src/screens/ShowEvent'
+import MyEvent from './src/screens/MyEvent'
+
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {decode, encode} from 'base-64'
@@ -45,6 +48,10 @@ const event_main = createStackNavigator({
   
   EditEvent: {
     screen: EditEvent,
+  },
+
+  ShowEvent: {
+    screen: ShowEvent,
   },
   
   // create_team :{
@@ -125,7 +132,7 @@ const Base = createSwitchNavigator(
 },
 {
   initialRouteName : 'Tabs'
-})
+},{headerMode:'none'})
 const SplashNav = createSwitchNavigator(
   {
     SplashScreen:SplashScreen,
@@ -141,7 +148,8 @@ const Main  = createSwitchNavigator(
        SplashNav : SplashNav,
        Base : Base
 
-  }
+  },
+  {headerMode:'none'}
 ) 
 
 const AppContainer = createAppContainer(Main)
