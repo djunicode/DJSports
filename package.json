@@ -10,8 +10,32 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^2.3.0",
+    "@react-native-community/masked-view": "^0.1.7",
+    "@react-navigation/stack": "^5.2.3",
+    "base-64": "^0.1.0",
+    "firebase": "^7.12.0",
+    "install": "^0.13.0",
+    "moment": "^2.24.0",
+    "native-base": "^2.13.12",
     "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react-native": "0.61.5",
+    "react-native-elements": "^1.2.7",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-google-signin": "^2.1.1",
+    "react-native-modal-datetime-picker": "^8.5.1",
+    "react-native-navigation-stack": "^0.1.2",
+    "react-native-onesignal": "^3.6.5",
+    "react-native-paper": "^3.6.0",
+    "react-native-reanimated": "^1.7.0",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.4.0",
+    "react-native-simple-shadow-view": "^1.6.3",
+    "react-native-stack": "^1.0.0-alpha11",
+    "react-native-vector-icons": "^6.6.0",
+    "react-navigation": "^4.3.2",
+    "react-navigation-material-bottom-tabs": "^2.2.5",
+    "react-navigation-stack": "^2.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
