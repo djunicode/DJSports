@@ -1,6 +1,19 @@
 # DJSports
 react-native project for dj sports app
 
+<p>
+ 
+  master :
+  <a href="https://travis-ci.com/github/djunicode/DJSports">
+    <img src="https://travis-ci.com/djunicode/DJSports.svg?branch=master" alt="master build status" />
+  </a>
+
+ prod:
+  <a href="https://travis-ci.com/github/djunicode/DJSports">
+    <img src="https://travis-ci.com/djunicode/DJSports.svg?branch=prod" alt="prod build status" />
+  </a>
+ 
+</p>
 
 # Contribution Guidelines
 
