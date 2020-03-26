@@ -96,7 +96,8 @@ export default class MyEvent extends React.Component {
           let documentSnapshots = await initialQuery.get();
           // Cloud Firestore: Document Data
           let documentData = documentSnapshots.docs.map(document => document.data());
-          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)\
+          console.log(documentData)
           let lastVisible = documentData[documentData.length - 1].id;
           // Set State
           this.setState({

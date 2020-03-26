@@ -1333,6 +1333,13 @@
     wcwidth "^1.0.1"
     ws "^1.1.0"
 
+"@react-native-community/datetimepicker@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-2.3.0.tgz#fd3e430ef608a92af77f841f2a4593d8f03693c4"
+  integrity sha512-kEmhnvkVm0/WJxle2Oze1Wu5pSO65jeP6vdVJzglgQDI3X9bHUlId0JTKZPpDAB9nFUM8cp5X5RSR0KW0SbFsA==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/eslint-config@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-config/-/eslint-config-0.0.5.tgz#584f6493258202a57efc22e7be66966e43832795"
@@ -5220,6 +5227,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
 morgan@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -6129,6 +6141,13 @@ react-native-keyboard-aware-scroll-view@0.9.1:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+react-native-modal-datetime-picker@^8.5.1:
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-8.5.1.tgz#61e18b114c265964fdf6b2e39f4874028f96d06f"
+  integrity sha512-ZV3dCKDXLRcyRiUWmmQCeuRulY5fr0RVO2rS0Tt+dUA+1gg8ral+NG4LoqPsrVPJgrf3RKWSmU+O0fZXyw2Vow==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-navigation-stack@^0.1.2:
   version "0.1.2"

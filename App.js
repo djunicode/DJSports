@@ -18,10 +18,8 @@ import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
 import MyEvent from './src/screens/MyEvent'
-
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import  MyEvent from './src/screens/MyEvent'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
