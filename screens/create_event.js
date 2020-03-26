@@ -1,10 +1,12 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox} from 'react-native';
 //import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+//import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "react-native-modal-datetime-picker";
+import moment from 'moment';
 
 
 
@@ -30,13 +32,18 @@ export default class create_event extends React.Component {
             sport: '',
             no_people : '',
             venue : '',
-            date: '',
+            date: 'Select Date and Time',
             db: firebase.firestore(),
             id: 1,
+            isVisible: false,
+            
+            
+
             
 
         }
     }
+
 
     componentDidMount(){
         const user = firebase.auth().currentUser
@@ -45,6 +52,36 @@ export default class create_event extends React.Component {
         console.log(user.email)
         
       }
+
+      
+
+      handlePicker = (datetime) => {
+          this.setState({
+              isVisible: false,
+              date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
+              
+          },() => console.log("Date is ", this.state.date))
+          
+          //console.warn("A date has been picked: ", date);
+      }
+
+      hidePicker = (datetime) => {
+        this.setState({
+            isVisible: false,
+            //date: moment(datetime).format(),
+            
+        },() => console.log("Date is ", this.state.date))
+        
+    }
+
+    showPicker = () => {
+        this.setState({
+            isVisible: true,
+        })
+    }
+
+
+
       
 
     handleCreate = () => {
@@ -58,15 +95,33 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id
         })
-        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{user: 'simrn'}))
+        .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
+            event_name : this.state.event_name,
+            sport: this.state.sport,
+            no_people : this.state.no_people,
+            venue : this.state.venue,
+            date: this.state.date,
+            id: this.state.id
+        }))
+        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
         .catch(function(error) {
             console.log("error adding ", error);
         });
     }
 
+    
+
     render() {
+        console.disableYellowBox = true
         return(
             <View style = {styles.container}>
+                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
+                        <Icon style = {{margin: 20, marginBottom: 0}}
+                            name = "arrow-left"
+                            size = {35}
+                            color = "black"
+                        />
+                    </TouchableOpacity>
             <Text style = {styles.header}>{'Create your event'}</Text>
             <ScrollView style = {styles.container}>
                
@@ -84,7 +139,7 @@ export default class create_event extends React.Component {
                     <Text style = {styles.inputTitle}>Sport</Text>
                     <TextInput 
                     style = {styles.input}  
-                    autoCapitalize="none" 
+                    autoCapitalize="words" 
                     onChangeText = {sport => this.setState({sport})}
                     value = {this.state.sport}
                     >
@@ -115,13 +170,20 @@ export default class create_event extends React.Component {
                 </View>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Date</Text>
-                    <TextInput 
-                    style = {styles.input}  
-                    autoCapitalize="none" 
-                    onChangeText = {date => this.setState({date})}
-                    value = {this.state.date}
-                    >
-                    </TextInput>
+                    <TouchableOpacity onPress={this.showPicker} >
+                    <Text style = {styles.input}>{this.state.date}</Text>
+                    </TouchableOpacity>
+                    
+                    <DateTimePicker
+                        isVisible={this.state.isVisible}
+                        mode='datetime'
+                        display = {'spinner'}
+                        onConfirm={this.handlePicker}
+                        onCancel={this.hidePicker}
+                    />
+                    
+                    
+    
                 </View>
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
@@ -137,7 +199,10 @@ export default class create_event extends React.Component {
                 </TouchableOpacity>
                 
                 
+                
             </ScrollView>
+            
+      
             </View>
    
         );
@@ -154,7 +219,8 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         //flexDirection: 'row',
         marginBottom: 40,
-        marginTop: 20
+        marginTop: 20,
+        fontWeight: 'bold'
     },
     inputForm: {
         marginHorizontal: 20,
