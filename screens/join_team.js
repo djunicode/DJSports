@@ -11,6 +11,7 @@ class join_team extends Component {
         return (
             <View style={styles.container}>
                 <Text>
+                    Join teams comes here 
                     
                 </Text>
             </View>

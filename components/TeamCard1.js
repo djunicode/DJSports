@@ -6,13 +6,12 @@ import {
 } from "react-native";
 import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 // teamDetails
 // teamName
 // image
 // moreDetails
 
-class TeamCard extends Component {
+class TeamCard1 extends Component {
     render() {
         return (
             // <Container style = {{backgroundColor : '#efefef'}}>
@@ -35,6 +34,15 @@ class TeamCard extends Component {
                         </Subtitle>
                     </View>
                     </Left>
+                    <Right>
+                    
+                    <Icon
+                        name = "plus-circle"
+                        size = {30}
+                        color = "#3f51b5"
+                    />
+              
+                    </Right>
                     
                     
                   </CardItem>
@@ -43,9 +51,7 @@ class TeamCard extends Component {
                     <Left>
                     <Text>{this.props.moreDetails}</Text>
                     </Left>
-                    <Right>
-                       {/* Keeping Right empty for now  */}
-                    </Right>
+                    
                 </CardItem>
                 
                 </Card>
@@ -54,7 +60,7 @@ class TeamCard extends Component {
         // </Container>)
     }
 }
-export default TeamCard;
+export default TeamCard1;
 
 const styles = StyleSheet.create({
     container: {

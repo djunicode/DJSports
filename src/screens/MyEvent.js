@@ -34,9 +34,10 @@ export default class MyEvent extends React.Component {
         /*const {state} = this.props.navigation;
 console.log("PROPS " + state.params.user);*/
         const user = firebase.auth().currentUser
+        
         this.setState({email : user.email })
         console.log("success kinda")
-        console.log(user.email)
+        console.log(user)
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
 
