@@ -52,9 +52,10 @@ class profile extends Component {
         firebase.firestore()
         .runTransaction(async (transaction) => {
         const snapshot = await transaction.get(ref);
-        
+        console.log(snapshot.docs.map(doc => doc.data()))
         this.state.name1 = snapshot.data().name
         console.log(this.state.name1)
+        console.log(snapshot.data())
         console.log(snapshot.data().name)
         this.setState({ name: snapshot.data().name});  
         this.setState({ department: snapshot.data().department});
