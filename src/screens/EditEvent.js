@@ -55,7 +55,19 @@ export default class EditEvent extends React.Component {
             date: this.state.date,
             id: this.state.id
         })
-        .then(() => console.log("doc edited successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent'))
+        .then(() => console.log("doc edited successfully"), 
+        this.setState({id: this.state.id+1}) ,
+        this.props.navigation.navigate('MyEvent'),
+        this.state.db.collection('AllEvents').doc(this.state.event_name).update({
+            event_name : this.state.event_name,
+            sport: this.state.sport,
+            no_people : this.state.no_people,
+            venue : this.state.venue,
+            date: this.state.date,
+            id: this.state.id
+        })
+        )
+
         .catch(function(error) {
             console.log("error adding ", error);
         });

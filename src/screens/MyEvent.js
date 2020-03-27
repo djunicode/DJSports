@@ -26,15 +26,16 @@ export default class MyEvent extends React.Component {
             loading: false,
             refreshing: false,
             notfirstTime: true,
-            direct: 'false'
+            direct: 'false',
+            visible: false,
 
         }
 
 
 
     }
-    onFocusFunction = () => {
-        this.retrieveData(this.state.email)
+    onFocusFunction = (email) => {
+        this.retrieveData(email)
         console.log("i am focused")
 
     }
@@ -51,7 +52,7 @@ export default class MyEvent extends React.Component {
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
-            this.onFocusFunction()
+            this.onFocusFunction(user.email)
         })
 
     }
@@ -59,26 +60,6 @@ export default class MyEvent extends React.Component {
     componentWillUnmount() {
         this.focusListener.remove()
     }
-
-    /*firebasegetdata = (email) => {
-      console.log('Finding data')
-    firebase.firestore().collection('CreatedEvent').doc(email).collection('MyEvent')
-.get()
-.then(function(querySnapshot) {
-    var userdata 
-    
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        userdata = doc.data() 
-        
-        console.warn(userdata) 
-        console.log('data Found')       
-    });
-}, console.log(this.state.event_name))
-.catch(function(error) {
-    console.log("Error getting documents: ", error);
-});
-  }*/
 
 
 
@@ -175,10 +156,20 @@ export default class MyEvent extends React.Component {
     deleteEvent = (item) => {
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function () {
 
-            console.log("Document successfully deleted!");
+            console.log("Document successfully deleted from CreatedEvent!");
             alert('Event deleted')
 
-        }).then(this.onFocusFunction())
+        }).then(this.onFocusFunction(this.state.email),
+            this.state.db.collection('AllEvents').doc(item.event_name).delete().then(function () {
+
+                console.log("Document successfully deleted from AllEvents!");
+
+
+            })
+        )
+
+
+
             .catch(function (error) {
                 console.error("Error removing document: ", error);
             });
@@ -245,13 +236,14 @@ export default class MyEvent extends React.Component {
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
                 /> : <View
-                        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 25}}>NO EVENTS</Text>
-                        <Text style = {{fontSize: 17}}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
+                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
+                        <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
                     </View>}
+                
 
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
-                    <Icon style={{ marginRight: 20, marginBottom: 20, alignSelf: 'flex-end', }}
+                    <Icon style={{ marginRight: 20, marginBottom: 20, alignSelf: 'flex-end',  }}
                         name="plus-circle"
                         size={60}
                         color="#3f51b5"
@@ -260,6 +252,8 @@ export default class MyEvent extends React.Component {
             </SafeAreaView>
         );
     }
+
+    
 }
 
 
