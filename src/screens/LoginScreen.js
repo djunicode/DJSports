@@ -25,15 +25,17 @@ export default class LoginScreen extends React.Component {
     var d = Date(Date.now())
     this.setState({date : d.toString()})
   }
-
+  //onIds is a one-signal function which takes required info of the device
   onIds = (devices) =>{
     console.log('Device info = ' , devices)
     this.setState({
       userId : devices.userId
     })
   }
+
   LoginId = Id => {
     this.setState({ Id: Id })
+   
   }
   Password = pass => {
     this.setState({ pass: pass })
@@ -41,6 +43,7 @@ export default class LoginScreen extends React.Component {
   navsidnout = () => {
     this.props.navigation.navigate('home')
   }
+//Created functions
   login = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.Id, this.state.pass)
       .then(

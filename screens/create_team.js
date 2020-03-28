@@ -6,11 +6,72 @@ import {
     ImageBackground,
     TextInput,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from "react-native";
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 
 class create_team extends Component {
+    constructor(props)
+    {
+        super(props)
+        this.state={
+            sports:'',
+            details : '',
+            teamName : '',
+            db : firebase.firestore()
+        }
+    }
+
+    name =(name)=>{
+        this.setState({teamName: name})
+    }
+    sports = (sports)=> {
+        this.setState({sports: sports})
+    }
+    details = (details)=> {
+        this.setState({details: details})
+    }
+    handlePress = ()=> {
+        const usersRef = this.state.db.collection('teams').doc(this.state.teamName)
+
+    usersRef.get()
+    .then((docSnapshot) => {
+    if (docSnapshot.exists) {
+    //   usersRef.onSnapshot((doc) => {
+    //     // do stuff with the data
+    //   });
+      Alert.alert(
+          'Team Name exists'
+      )
+    } else {
+      usersRef.set({
+        teamName : this.state.teamName,
+        sports : this.state.sports,
+        details : this.state.details 
+      }).then(
+        this.props.navigation.navigate('select_player',this.state.sports)
+      ) // create the document
+    }
+});
+        // this.state.db.collection('teams').doc(this.state.teamName).set({
+        //     teamName : this.state.teamName,
+        //     sports : this.state.sports,
+        //     details : this.state.details 
+        // })
+        // .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{user: 'simrn'}))
+        // .catch(function(error) {
+        //     console.log("error adding ", error);
+        // });
+       
+        
+    }
+
+    
     render() {
+        var {navigate} = this.props.navigation
+        
         return (
             <ImageBackground source={require('../assets/media1.jpg')} style={{ height: '100%', width: '100%' }} >
             <ScrollView style={{ padding: 10 , marginTop:20 }}>
@@ -21,7 +82,7 @@ class create_team extends Component {
                             placeholder='Team Name'
                             placeholderTextColor='black'
                             style={style.textInput}
-                            onChangeText={this.Username}>
+                            onChangeText={this.name}>
                         </TextInput>
                     </View>
                     <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
@@ -31,7 +92,7 @@ class create_team extends Component {
                             placeholder='Sports'
                             placeholderTextColor='black'
                             style={style.textInput}
-                            onChangeText={this.address}>
+                            onChangeText={this.sports}>
                         </TextInput>
                     </View>
                     
@@ -41,64 +102,18 @@ class create_team extends Component {
                             placeholder='A little something about your team'
                             placeholderTextColor='black'
                             style={style.textInput}
-                            onChangeText={this.sports1}>
+                            onChangeText={this.details}>
                         </TextInput>
                     </View>
-                    <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                        {/* <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} /> */}
-                        <TextInput
-                            placeholder='Sports2'
-                            placeholderTextColor='black'
-                            style={style.textInput}
-                            onChangeText={this.sports2}>
-                        </TextInput>
-                        </View>
-                    <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                        {/* <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10,}} /> */}
-                        <TextInput
-                            placeholder='Sports3'
-                            placeholderTextColor='black'
-                            style={style.textInput}
-                            onChangeText={this.sports3}>
-                        </TextInput>
-                    </View>
-                    <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                        {/* <Icon name="user" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} /> */}
-                        <TextInput
-                            placeholder='LoginId'
-                            placeholderTextColor='black'
-                            style={style.textInput}
-                            onChangeText={this.LoginId}
-                            keyboardType='email-address'>
-                        </TextInput>
-                    </View>
-                    <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-                        {/* <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} /> */}
-                        <TextInput
-                            secureTextEntry={true}
-                            placeholder='Enter Password'
-                            placeholderTextColor='black'
-                            style={style.textInput}
-                            onChangeText={this.Password}>
-                        </TextInput>
-                    </View>
-                    <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-
-                        {/* <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12,}} /> */}
-                        <TextInput
-                            secureTextEntry={true}
-                            placeholder='Re Enter your Password'
-                            placeholderTextColor='black'
-                            style={style.textInput}
-                            onChangeText={this.RePassword}>
-                        </TextInput>
-                    </View>
+                    
+                    
+                    
                     {/* {
                         this.state.textVisible ? <Text>Password did not match</Text> : null
                     } */}
-                    <TouchableOpacity  >
+                    <TouchableOpacity onPress ={this.handlePress} >
                         <View style={style.button1}>
-                            <Text style={style.textbutton}>Create Team</Text>
+                            <Text style={style.textbutton}>Add players</Text>
                         </View>
                     </TouchableOpacity>
                     
@@ -107,6 +122,7 @@ class create_team extends Component {
         </ImageBackground>
         );
     }
+    // ()=>navigate('select_player',this.state.teamName)
 }
 export default create_team;
 
