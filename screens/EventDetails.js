@@ -17,13 +17,19 @@ export default class EventDetails extends Component {
         headerShown:false
     }
     componentWillMount(){
+     
       const user = firebase.auth().currentUser
       this.setState({email : user.email })
+      
     }
     componentDidMount(){
       checkData()
     }
+
+  
+
     render() {
+      
     var {params} = this.props.navigation.state
     checkData=async()=>{
       this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).get()
@@ -59,7 +65,7 @@ export default class EventDetails extends Component {
     }
 
 
-
+    
     return (
       <Container >
         
