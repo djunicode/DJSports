@@ -47,8 +47,9 @@ export default class MyEvent extends React.Component {
 
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
+        
         console.log("success kinda")
-        console.log(user.email)
+        console.log(user)
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
