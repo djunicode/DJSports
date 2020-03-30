@@ -36,6 +36,7 @@ export default class create_event extends React.Component {
             db: firebase.firestore(),
             id: 1,
             isVisible: false,
+            keywords: []
             
             
 
@@ -85,6 +86,9 @@ export default class create_event extends React.Component {
       
 
     handleCreate = () => {
+        let arr = this.handleEventName(this.state.event_name)
+        console.log(arr)
+        
         //alert('Event created')
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
@@ -93,7 +97,8 @@ export default class create_event extends React.Component {
             no_people : this.state.no_people,
             venue : this.state.venue,
             date: this.state.date,
-            id: this.state.id
+            id: this.state.id,
+            keywords: this.state.keywords
         })
         .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
             event_name : this.state.event_name,
@@ -101,12 +106,25 @@ export default class create_event extends React.Component {
             no_people : this.state.no_people,
             venue : this.state.venue,
             date: this.state.date,
-            id: this.state.id
+            id: this.state.id,
+            keywords: this.state.keywords
         }))
         .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
         .catch(function(error) {
             console.log("error adding ", error);
         });
+    }
+
+    handleEventName = (name) => {
+        this.setState ({ event_name: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywords: arrName})
+        return arrName;
     }
 
     
@@ -130,7 +148,7 @@ export default class create_event extends React.Component {
                     <TextInput 
                     style = {styles.input}  
                     autoCapitalize="words" 
-                    onChangeText = {event_name => this.setState({event_name})}
+                    onChangeText = {event_name => this.handleEventName(event_name)}
                     value = {this.state.event_name}
                     >
                     </TextInput>
