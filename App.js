@@ -21,7 +21,6 @@ import EventDetails from './screens/EventDetails'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MyEvent from './src/screens/MyEvent'
 import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }

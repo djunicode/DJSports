@@ -67,6 +67,7 @@ export default class LoginScreen extends React.Component {
           keyboardType='email-address'
           textContentType='emailAddress'
           maxFontSizeMultiplier={100}
+          autoCapitalize = 'none'
           style={style.textInput}
           >
         </TextInput>

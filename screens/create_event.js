@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
-
+//import RNGooglePlaces from 'react-native-google-places';
 
 
 
@@ -53,7 +53,7 @@ export default class create_event extends React.Component {
         
       }
 
-      
+    
 
       handlePicker = (datetime) => {
           this.setState({
