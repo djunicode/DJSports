@@ -47,7 +47,8 @@ class profile extends Component {
         //   };
         // console.log("INITIALIZE");
         // firebase.initializeApp(firebaseConfig);
-        
+        const user = firebase.auth().currentUser
+        console.log(user)
         const ref = firebase.firestore().collection('Users').doc(username);
         firebase.firestore()
         .runTransaction(async (transaction) => {

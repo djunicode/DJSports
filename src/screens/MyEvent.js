@@ -66,29 +66,6 @@ export default class MyEvent extends React.Component {
 
     retrieveData = async (email) => {
         try {
-<<<<<<< HEAD
-          // Set State: Loading
-          this.setState({
-            loading: true,
-          });
-          console.log('Retrieving Data for ',email );
-          // Cloud Firestore: Query
-          let initialQuery = await firebase.firestore().collection('CreatedEvent').doc(email).collection('MyEvent')
-            .limit(this.state.limit)
-          // Cloud Firestore: Query Snapshot
-          let documentSnapshots = await initialQuery.get();
-          // Cloud Firestore: Document Data
-          let documentData = documentSnapshots.docs.map(document => document.data());
-          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)\
-          console.log(documentData)
-          let lastVisible = documentData[documentData.length - 1].id;
-          // Set State
-          this.setState({
-            documentData: documentData,
-            lastVisible: lastVisible,
-            loading: false,
-          });
-=======
             // Set State: Loading
             this.setState({
                 loading: true,
@@ -110,7 +87,6 @@ export default class MyEvent extends React.Component {
                 lastVisible: lastVisible,
                 loading: false,
             });
->>>>>>> a588ec9bcc2a4007ffa722332835164868dc9144
         }
         catch (error) {
             console.log(error);
