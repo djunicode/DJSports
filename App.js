@@ -22,6 +22,7 @@ import EventDetails from './screens/EventDetails'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -82,6 +83,9 @@ const teamModule = createStackNavigator({
   },
   join_team : {
     screen : join_team
+  },
+  select_player : {
+    screen : select_player
   },
   
   initialRouteName : 'myteams',

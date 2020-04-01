@@ -8,6 +8,7 @@ import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Th
 
 class EventCard extends Component {
     render() {
+        console.disableYellowBox = true
         return (
             <Content style={{padding:5}}>
                 <Card style = {{alignContent : 'center',height:125}}>
