@@ -269,14 +269,15 @@ export default class MyEvent extends React.Component {
                     </DialogContent>
                 </Dialog>
                 
-
+                <View style = {styles.button}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
-                    <Icon style={{ marginRight: 20, marginBottom: 20, alignSelf: 'flex-end',  }}
+                    <Icon style={{  alignSelf: 'flex-end',  }}
                         name="plus-circle"
                         size={60}
                         color="#3f51b5"
                     />
                 </TouchableOpacity>
+                </View>
             </SafeAreaView>
         );
     }
@@ -330,6 +331,12 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         alignSelf: 'stretch',
         marginLeft: 10
+    },
+    button: {
+        height: 80,
+        width: 80,
+        margin:20,
+        alignSelf: 'flex-end'
     }
 
 });

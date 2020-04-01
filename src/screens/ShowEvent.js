@@ -45,6 +45,7 @@ export default class ShowEvent extends React.Component {
             style = {{flex: 1}}
             
         >
+            <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
             <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
                         <Icon style = {{margin: 20, marginBottom: 0}}
                             name = "arrow-left"
@@ -52,6 +53,7 @@ export default class ShowEvent extends React.Component {
                             color = "#84ffff"
                         />
                     </TouchableOpacity>
+                    </View>
                 <View style = {styles.header }>
                     
                 <Text style = {styles.headerText}>{this.state.event_name.toUpperCase()}</Text>

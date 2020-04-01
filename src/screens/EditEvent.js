@@ -100,10 +100,11 @@ export default class EditEvent extends React.Component {
 
    
 
-    change = (event) => {
+    change = (event,num) => {
         
         return(
             <View style = {styles.container}>
+                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
                  <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
                         <Icon style = {{margin: 20, marginBottom: 0}}
                             name = "arrow-left"
@@ -111,6 +112,7 @@ export default class EditEvent extends React.Component {
                             color = "black"
                         />
                     </TouchableOpacity>
+                    </View>
             <Text style = {styles.header}>{'Edit Event'}</Text>
             <ScrollView style = {styles.container}>
                
@@ -142,7 +144,7 @@ export default class EditEvent extends React.Component {
                     autoCapitalize="none" 
                     keyboardType = "number-pad"
                     onChangeText = {no_people => this.setState({no_people})}
-                    value = {this.state.no_people}
+                    value = {num}
                     >
                     </TextInput>
                 </View>
@@ -192,7 +194,7 @@ export default class EditEvent extends React.Component {
        const { state } = this.props.navigation;
         
         return(
-            this.change(state.params.event_name,state.params.date)
+            this.change(state.params.event_name,state.params.no_people)
    
         );
     }

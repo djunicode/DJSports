@@ -136,6 +136,7 @@ export default class create_event extends React.Component {
         console.disableYellowBox = true
         return(
             <View style = {styles.container}>
+                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
                  <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
                         <Icon style = {{margin: 20, marginBottom: 0}}
                             name = "arrow-left"
@@ -143,6 +144,7 @@ export default class create_event extends React.Component {
                             color = "black"
                         />
                     </TouchableOpacity>
+                </View>
             <Text style = {styles.header}>{'Create your event'}</Text>
             <ScrollView style = {styles.container}>
                
@@ -211,14 +213,15 @@ export default class create_event extends React.Component {
                     <Text style = {{color: "white"}}>CREATE</Text>
 
                 </TouchableOpacity>
-                <TouchableOpacity onPress = {() => alert('Name of the event cannot be changed later')}>
-                    <Icon style={{marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end',}}
+                <View style = {{ height: 40, width:40,marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end'}}>
+                <TouchableOpacity onPress = {() => alert('Name of the event and number of players cannot be changed later')}>
+                    <Icon style={{alignSelf: 'flex-end',}}
                         name = "exclamation-circle"
                         size = {25}
                         color = "red"
                     />
                 </TouchableOpacity>
-                
+                </View>
                 
                 
             </ScrollView>
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         //flexDirection: 'row',
         marginBottom: 40,
-        marginTop: 20,
+        //marginTop: 20,
         fontWeight: 'bold'
     },
     inputForm: {
