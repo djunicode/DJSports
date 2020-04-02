@@ -4,6 +4,8 @@ import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from 'react-navigation';
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+
 
 
 
@@ -28,6 +30,7 @@ export default class MyEvent extends React.Component {
             notfirstTime: true,
             direct: 'false',
             visible: false,
+            item: []
 
         }
 
@@ -153,14 +156,15 @@ export default class MyEvent extends React.Component {
 
     }
 
-    deleteEvent = (item) => {
-        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function () {
+
+    deleteEvent = () => {
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.item.event_name).delete().then(function () {
 
             console.log("Document successfully deleted from CreatedEvent!");
-            alert('Event deleted')
+            //alert('Event deleted')
 
         }).then(this.onFocusFunction(this.state.email),
-            this.state.db.collection('AllEvents').doc(item.event_name).delete().then(function () {
+            this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
 
                 console.log("Document successfully deleted from AllEvents!");
 
@@ -173,7 +177,7 @@ export default class MyEvent extends React.Component {
             .catch(function (error) {
                 console.error("Error removing document: ", error);
             });
-
+            
     }
 
     render() {
@@ -212,7 +216,7 @@ export default class MyEvent extends React.Component {
                                         color="#3f51b5"
                                     />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.deleteEvent(item)}>
+                                <TouchableOpacity onPress={() => this.setState({item: item, visible:true})}>
                                     <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
                                         name="trash-o"
                                         size={25}
@@ -240,6 +244,30 @@ export default class MyEvent extends React.Component {
                         <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
                         <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
                     </View>}
+
+                    <Dialog
+                    visible={this.state.visible}
+                   // dialogTitle = {<DialogTitle title="CAUTION"/>}
+                    footer={
+                        <DialogFooter>
+                           <DialogButton
+                            text="Cancel"
+                            onPress={() => this.setState({visible: false})}
+                          />
+                          <DialogButton
+                            text="OK"
+                            onPress={() => this.setState({visible: false},this.deleteEvent())}
+                          />
+                        </DialogFooter>
+                      }
+                    dialogAnimation={new SlideAnimation({
+                        slideFrom: 'bottom',
+                    })}
+                >
+                    <DialogContent>
+                <Text style = {{padding: 20, paddingBottom:0, fontSize: 20}}>Delete event {this.state.item.event_name}?</Text>
+                    </DialogContent>
+                </Dialog>
                 
 
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
