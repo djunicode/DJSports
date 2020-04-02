@@ -18,9 +18,11 @@ import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
 import MyEvent from './src/screens/MyEvent'
+import EventDetails from './screens/EventDetails'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -34,6 +36,14 @@ export default class App extends React.Component {
     );
   }
 }
+const mainpage = createStackNavigator({
+  home:{
+    screen:home
+  },
+  details:{
+    screen:EventDetails
+  }
+})
 const event_main = createStackNavigator({
   /*event :{
     screen : event
@@ -74,6 +84,9 @@ const teamModule = createStackNavigator({
   join_team : {
     screen : join_team
   },
+  select_player : {
+    screen : select_player
+  },
   
   initialRouteName : 'myteams',
   
@@ -93,7 +106,7 @@ const Login = createSwitchNavigator(
 const BottomNavigator = createMaterialBottomTabNavigator({
  
   home : {
-    screen : home,
+    screen : mainpage,
     navigationOptions: {title: 'Home', tabBarIcon: ({ tintColor }) => (
       <Icon name="home" size={25} color="white" />
       )}

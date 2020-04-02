@@ -5,9 +5,9 @@ import {
     StyleSheet,
     FlatList
 } from "react-native";
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
-import TeamCard from '../components/TeamCard'
+import TeamCard1 from '../components/TeamCard1'
 //import { Item } from "react-native-paper/lib/typescript/src/components/List/List";
 // teamDetails
 // teamName
@@ -38,12 +38,12 @@ class notifs extends Component {
         
         ]}
 
-          renderItem={({ item }) => <TeamCard image  = {require('../assets/media2.jpg')}
+          renderItem={({ item }) => <TeamCard1 image  = {require('../assets/media2.jpg')}
           teamDetails = {item.teamDetail}
           teamName = {item.teamName}
           moreDetails = {item.moreDetail}
       >
-      </TeamCard>}
+      </TeamCard1>}
           //keyExtractor={item => item.teamName}
         />
            
