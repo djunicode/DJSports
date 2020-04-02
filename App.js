@@ -17,8 +17,8 @@ import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
-import MyEvent from './src/screens/MyEvent'
 import EventDetails from './screens/EventDetails'
+import MyEvent from './src/screens/MyEvent'
 
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';

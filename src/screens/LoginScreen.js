@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import OneSignal from 'react-native-onesignal';
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -17,25 +18,27 @@ export default class LoginScreen extends React.Component {
       Id: '',
       pass: '',
       userId: '',
-      date : ''
+      date: '',
+      visible: false,
+      context: '',
     }
   }
-  componentDidMount =  async() => {
-    OneSignal.addEventListener('ids' , this.onIds)
+  componentDidMount = async () => {
+    OneSignal.addEventListener('ids', this.onIds)
     var d = Date(Date.now())
-    this.setState({date : d.toString()})
+    this.setState({ date: d.toString() })
   }
   //onIds is a one-signal function which takes required info of the device
-  onIds = (devices) =>{
-    console.log('Device info = ' , devices)
+  onIds = (devices) => {
+    console.log('Device info = ', devices)
     this.setState({
-      userId : devices.userId
+      userId: devices.userId
     })
   }
 
   LoginId = Id => {
     this.setState({ Id: Id })
-   
+
   }
   Password = pass => {
     this.setState({ pass: pass })
@@ -43,113 +46,144 @@ export default class LoginScreen extends React.Component {
   navsidnout = () => {
     this.props.navigation.navigate('home')
   }
-//Created functions
   login = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.Id, this.state.pass)
       .then(
         () => this.props.navigation.navigate('home')
-      )
+      ).catch((e) => this.check(e))
+  }
+  check = (e) => {
+    this.state.visible = true
+    this.setState({
+      context : e
+    })
   }
   signUp = () => {
     this.props.navigation.navigate('SignUpScreen')
   }
   render() {
     return (
-      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{height:'100%' , width:'100%'}}>
-      <View style={style.container}>
-        <Text style={style.header}>DJSPORTS</Text>
-        <View style={{flexDirection:'row' ,  padding:5 ,}}>
-        <Icon name="user" size={25} color="black" style={{paddingTop:10}} />
-        <TextInput 
-          placeholder='Login ID'
-          placeholderTextColor='black'
-          onChangeText={this.LoginId}
-          keyboardType='email-address'
-          textContentType='emailAddress'
-          maxFontSizeMultiplier={100}
-          autoCapitalize = 'none'
-          style={style.textInput}
-          >
-        </TextInput>
-        </View>
-        <View style={{flexDirection:'row' , padding:5 , marginBottom:20 }}>
-        <Icon name="lock" size={30} color="black" style={{paddingTop:9}} />
-        <TextInput 
-          secureTextEntry={true}
-          placeholder='Password'
-          placeholderTextColor='black'
-          onChangeText={this.Password}
-          style={style.textInput}
-          >
-        </TextInput>
-        </View>
-        <Text></Text>
-        <View style={{alignContent:'center',paddingLeft:0}}>
-        <TouchableOpacity onPress={this.login} >
-        <View style={style.button1}>
-          <Text style={style.textbutton}>Log In</Text>
-        </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.signUp} >
-          <View style={style.button2}>
-          <Text style={style.textbutton}>Sign Up</Text>
+      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: '100%', width: '100%' }}>
+        <View style={style.container}>
+          <Text style={style.header}>DJSPORTS</Text>
+          <View style={{ flexDirection: 'row', padding: 5, }}>
+            <Icon name="user" size={25} color="black" style={{ paddingTop: 10 }} />
+            <TextInput
+              placeholder='Login ID'
+              placeholderTextColor='black'
+              onChangeText={this.LoginId}
+              keyboardType='email-address'
+              textContentType='emailAddress'
+              maxFontSizeMultiplier={100}
+              autoCapitalize='none'
+              style={style.textInput}
+            >
+            </TextInput>
           </View>
-        </TouchableOpacity>
-        
-       
+          <Dialog
+            visible={this.state.visible}
+            dialogTitle={<DialogTitle title="CAUTION" />}
+            footer={
+              <DialogFooter>
+                <DialogButton
+                  text="OK"
+                  onPress={() => this.setState({ visible: false })}
+                />
+              </DialogFooter>
+            }
+            dialogAnimation={new SlideAnimation({
+              slideFrom: 'bottom',
+            })}>
+            <DialogContent>
+              <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>{this.state.context.toString()}</Text>
+            </DialogContent>
+          </Dialog>
+          <View style={{ flexDirection: 'row', padding: 5, marginBottom: 20 }}>
+            <Icon name="lock" size={30} color="black" style={{ paddingTop: 9 }} />
+            <TextInput
+              secureTextEntry={true}
+              placeholder='Password'
+              placeholderTextColor='black'
+              onChangeText={this.Password}
+              style={style.textInput}
+            >
+            </TextInput>
+          </View>
+          <Text></Text>
+
+          <View style={{ alignContent: 'center', paddingLeft: 0 ,flexDirection:'row' }}>
+            <TouchableOpacity onPress={this.login} >
+              <View style={style.button1}>
+                <Text style={style.textbutton}>Log In</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.signUp} >
+              <View style={style.button2}>
+                <Text style={style.textbutton}>Sign Up</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
       </ImageBackground>
     )
   }
 }
 const style = StyleSheet.create({
-  container:{
-    paddingLeft:10,
-    paddingRight:10,
-    borderRadius:20,
-    margin:10,
-    marginTop:150,
-    backgroundColor:'white'
+  container: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 20,
+    margin: 10,
+    marginTop: 200,
+    backgroundColor: 'white'
   },
-  header:{
-    paddingTop:30,
-    fontSize:40,
-    fontWeight:'bold',
-    alignSelf:"center",
-    padding:10,
-    paddingBottom:40,
-    color:'black',
-    fontStyle:"italic"
+  header: {
+    paddingTop: 30,
+    fontSize: 40,
+    fontWeight: 'bold',
+    alignSelf: "center",
+    padding: 10,
+    paddingBottom: 40,
+    color: 'black',
+    fontStyle: "italic"
   },
-  textbutton:{
-    fontSize:20,
-    alignSelf:"center",
-    color:'white'
+  textbutton: {
+    fontSize: 20,
+    alignSelf: "center",
+    color: 'white',
+    textAlign:'center'
   },
   textInput: {
-    height:50,
-    width:'90%',
-    justifyContent:'center',
-    paddingLeft:10,
-    color:'black',
-    borderBottomColor:'black', 
-    borderBottomWidth:1,
-},
-button1:{
-  backgroundColor: '#341f97',
-  borderRadius:10,
-  height:50,
-  justifyContent:'center',
-  paddingLeft:10,
-  marginBottom:30
-},
-button2:{
-  backgroundColor: '#341f97',
-  borderRadius:10,
-  height:50,
-  justifyContent:'center',
-  paddingLeft:10,
-  marginBottom:40
-},
+    height: 50,
+    width: '90%',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    color: 'black',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  button1: {
+    backgroundColor: '#341f97',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    marginBottom: 30,
+    marginRight:20,
+    width:150,
+    alignContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    marginLeft:20
+  },
+  button2: {
+    backgroundColor: '#341f97',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    marginBottom: 40,
+    width:150,
+
+  },
 })
