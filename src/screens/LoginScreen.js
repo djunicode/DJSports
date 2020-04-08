@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import OneSignal from 'react-native-onesignal';
+import 'firebase/firestore'
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -46,10 +47,16 @@ export default class LoginScreen extends React.Component {
   navsidnout = () => {
     this.props.navigation.navigate('home')
   }
+  signIn = async() => {
+    await firebase.firestore().collection("Users").doc(this.state.Id).update({
+      OneSignalId : this.state.userId
+    })
+    this.props.navigation.navigate('home')
+  }
   login = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.Id, this.state.pass)
       .then(
-        () => this.props.navigation.navigate('home')
+        () => this.signIn()
       ).catch((e) => this.check(e))
   }
   check = (e) => {
