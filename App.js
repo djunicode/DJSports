@@ -18,11 +18,13 @@ import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import EditEvent from './src/screens/EditEvent'
 import ShowEvent from './src/screens/ShowEvent'
-import MyEvent from './src/screens/MyEvent'
 import EventDetails from './screens/EventDetails'
-
+import ProfileDetails from './screens/ProfileDetails'
+import MyEvent from './src/screens/MyEvent'
+import ProfileSearch from "./src/screens/ProfileSearch.js"
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
@@ -43,7 +45,15 @@ const mainpage = createStackNavigator({
   },
   details:{
     screen:EventDetails
-  }
+  },
+  ProfileDetails:{
+    screen:ProfileDetails
+  },
+  ProfileSearch : {
+    screen : ProfileSearch
+  },
+  
+  initialRouteName : 'home'
 })
 const event_main = createStackNavigator({
   /*event :{
@@ -64,6 +74,7 @@ const event_main = createStackNavigator({
   ShowEvent: {
     screen: ShowEvent,
   },
+
   
   // create_team :{
   //   screen : create_team
@@ -96,8 +107,7 @@ const teamModule = createStackNavigator({
 const Login = createSwitchNavigator(
   {
     LoginScreen: LoginScreen,
-    SignUpScreen: SignUpScreen,
-   
+    SignUpScreen: SignUpScreen
   },
   {
     initialRouteName: 'LoginScreen',
