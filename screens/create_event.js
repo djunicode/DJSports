@@ -7,6 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+
 //import RNGooglePlaces from 'react-native-google-places';
 
 
@@ -15,7 +17,8 @@ import moment from 'moment';
 //require("firebase/firestore");
 //var db = firebase.firestore();
 
-
+const today = moment()
+const right_now = today.format()
 
 export default class create_event extends React.Component {
 
@@ -37,32 +40,48 @@ export default class create_event extends React.Component {
             id: 1,
             isVisible: false,
             keywords: [],
-            joined: 1
-            
-            
-
-            
+            joined: 1,
+            //date_time: '',
+            day:'',
+            see: false
+    
+         
 
         }
     }
 
 
     componentDidMount(){
+        const today = moment();
         const user = firebase.auth().currentUser
         this.setState({email : user.email })
         console.log("success kinda")
         console.log(user.email)
+        //console.log(today.format('MMMM Do YYYY, h:mm A'))
+        
         
       }
 
     
 
       handlePicker = (datetime) => {
-          this.setState({
-              isVisible: false,
-              date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
-              
-          },() => console.log("Date is ", this.state.date))
+          
+          const rn = moment(right_now).format('YYYY-MM-DD')
+          const data = moment(datetime).format('YYYY-MM-DD')
+          if(moment(rn).isSameOrAfter(data))
+                this.setState({
+                    see: true
+                })
+            else {
+                this.setState({
+                    isVisible: false,
+                    date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
+                    day: moment(datetime).format('YYYY-MM-DD'),
+                    //date_time : moment(datetime).format()
+                    
+                },() => console.log("Date is ", this.state.date))
+            }
+             
           
           //console.warn("A date has been picked: ", date);
       }
@@ -72,14 +91,16 @@ export default class create_event extends React.Component {
             isVisible: false,
             //date: moment(datetime).format(),
             
-        },() => console.log("Date is ", this.state.date))
+        },() => console.log("Date issss ", this.state.date))
         
     }
 
     showPicker = () => {
+        console.log('hell')
         this.setState({
             isVisible: true,
         })
+        console.log(this.state.isVisible)
     }
 
 
@@ -100,6 +121,8 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            //date_time: this.state.date_time,
+            day: this.state.day
         
         })
         .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
@@ -110,7 +133,11 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
-            joined : 1
+            joined : 1,
+            //date_time: this.state.date_time,
+            day: this.state.day
+
+
         }))
         .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
         .catch(function(error) {
@@ -128,6 +155,10 @@ export default class create_event extends React.Component {
         })
         this.setState({keywords: arrName})
         return arrName;
+    }
+
+    setAgain()  {
+        
     }
 
     
@@ -191,6 +222,26 @@ export default class create_event extends React.Component {
                     >
                     </TextInput>
                 </View>
+                <Dialog
+                    visible={this.state.see}
+                   // dialogTitle = {<DialogTitle title="CAUTION"/>}
+                    footer={
+                        <DialogFooter>
+                           <DialogButton
+                            text="OK"
+                            onPress={() => this.setState({see: false,isVisible: false})}
+                          />
+        
+                        </DialogFooter>
+                      }
+                    dialogAnimation={new SlideAnimation({
+                        slideFrom: 'bottom',
+                    })}
+                >
+                    <DialogContent>
+                <Text style = {{padding: 20, paddingBottom:0, fontSize: 20}}>INVALID DATE</Text>
+                    </DialogContent>
+                </Dialog>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Date</Text>
                     <TouchableOpacity onPress={this.showPicker} >
@@ -208,6 +259,7 @@ export default class create_event extends React.Component {
                     
     
                 </View>
+                
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
                     <Text style = {{color: "white"}}>CREATE</Text>

@@ -5,8 +5,11 @@ import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 
 
+const today = moment()
+const right_now = today.format()
 
 export default class EditEvent extends React.Component {
 
@@ -23,6 +26,9 @@ export default class EditEvent extends React.Component {
             db: firebase.firestore(),
             id: 1,
             documentData: [],
+            day: '',
+            see: false,
+            isVisible: false,
             
 
         }
@@ -41,6 +47,7 @@ export default class EditEvent extends React.Component {
             sport: state.params.sport,
             date: state.params.date,
             venue: state.params.venue,
+            day: state.params.day
         })
         
     }
@@ -53,7 +60,8 @@ export default class EditEvent extends React.Component {
             no_people : this.state.no_people,
             venue : this.state.venue,
             date: this.state.date,
-            id: this.state.id
+            id: this.state.id,
+            day: this.state.day
         })
         .then(() => console.log("doc edited successfully"), 
         this.setState({id: this.state.id+1}) ,
@@ -64,7 +72,8 @@ export default class EditEvent extends React.Component {
             no_people : this.state.no_people,
             venue : this.state.venue,
             date: this.state.date,
-            id: this.state.id
+            id: this.state.id, 
+            day: this.state.day
         })
         )
 
@@ -73,12 +82,37 @@ export default class EditEvent extends React.Component {
         });
     }
 
-    handlePicker = (datetime) => {
+    /*handlePicker = (datetime) => {
         this.setState({
             isVisible: false,
             date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
-            
+            day: moment(datetime).format('YYYY-MM-DD'),
+
         },() => console.log("Date is ", this.state.date))
+        
+        //console.warn("A date has been picked: ", date);
+    }*/
+
+    handlePicker = (datetime) => {
+          
+        const rn = moment(right_now).format('YYYY-MM-DD')
+        const data = moment(datetime).format('YYYY-MM-DD')
+        console.log(rn)
+        console.log(data)
+        if(moment(rn).isSameOrAfter(data))
+              this.setState({
+                  see: true
+              })
+          else {
+              this.setState({
+                  isVisible: false,
+                  date: moment(datetime).format('MMMM Do YYYY, h:mm A'),
+                  day: moment(datetime).format('YYYY-MM-DD'),
+                  //date_time : moment(datetime).format()
+                  
+              },() => console.log("Date is ", this.state.date))
+          }
+           
         
         //console.warn("A date has been picked: ", date);
     }
@@ -96,6 +130,7 @@ export default class EditEvent extends React.Component {
       this.setState({
           isVisible: true,
       })
+      console.log('hell now')
   }
 
    
@@ -160,6 +195,26 @@ export default class EditEvent extends React.Component {
                     >
                     </TextInput>
                 </View>
+                <Dialog
+                    visible={this.state.see}
+                   // dialogTitle = {<DialogTitle title="CAUTION"/>}
+                    footer={
+                        <DialogFooter>
+                           <DialogButton
+                            text="OK"
+                            onPress={() => this.setState({see: false,isVisible: false})}
+                          />
+        
+                        </DialogFooter>
+                      }
+                    dialogAnimation={new SlideAnimation({
+                        slideFrom: 'bottom',
+                    })}
+                >
+                    <DialogContent>
+                <Text style = {{padding: 20, paddingBottom:0, fontSize: 20}}>INVALID DATE</Text>
+                    </DialogContent>
+                </Dialog>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Date</Text>
                     <TouchableOpacity onPress={this.showPicker} >
