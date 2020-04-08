@@ -11,6 +11,7 @@ import ImagePicker from 'react-native-image-picker'
 import firebase from 'firebase';
 import '@firebase/firestore'
 import { concat } from "react-native-reanimated";
+import RNFetchBlob from 'react-native-fetch-blob'
 //import StarRating from 'react-native-star-rating';
 var username = 'Simrn'
 // var name1 
@@ -57,7 +58,6 @@ class profile extends Component {
                 this.setState({ sports: snapshot.data().sports });
                 this.setState({ year: snapshot.data().year });
                 this.setState({ wins: snapshot.data().wins });
-
             });
     }
     
