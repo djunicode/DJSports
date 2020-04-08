@@ -43,7 +43,9 @@ export default class create_event extends React.Component {
             joined: 1,
             //date_time: '',
             day:'',
-            see: false
+            see: false,
+            check :false,
+            visible: false
     
          
 
@@ -110,7 +112,8 @@ export default class create_event extends React.Component {
     handleCreate = () => {
         let arr = this.handleEventName(this.state.event_name)
         console.log(arr)
-        
+        this.check()
+        if (this.state.check) {
         //alert('Event created')
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
@@ -144,6 +147,11 @@ export default class create_event extends React.Component {
             console.log("error adding ", error);
         });
     }
+    else {
+        this.setState({ visible: true })
+        console.log('not happeming')
+    }
+    }
 
     handleEventName = (name) => {
         this.setState ({ event_name: name})
@@ -157,11 +165,25 @@ export default class create_event extends React.Component {
         return arrName;
     }
 
-    setAgain()  {
+    check = () => {
         
-    }
+        if (this.state.event_name != '')
+            this.setState({ check: true })
+        else if (this.state.sport != '')
+            this.setState({ check: true })
+        else if (this.state.no_people != '')
+            this.setState({ check: true })
+        else if (this.state.venue != '')
+            this.setState({ check: true })
+        else if (this.state.date !== 'Select Date and Time')
+            this.setState({ check: true })
+        
+        else
+            this.setState({ check: false })
 
-    
+
+
+    }
 
     render() {
         console.disableYellowBox = true
@@ -242,6 +264,26 @@ export default class create_event extends React.Component {
                 <Text style = {{padding: 20, paddingBottom:0, fontSize: 20}}>INVALID DATE</Text>
                     </DialogContent>
                 </Dialog>
+                <Dialog
+                            visible={this.state.visible}
+                            dialogTitle={<DialogTitle title="CAUTION" />}
+                            footer={
+                                <DialogFooter>
+
+                                    <DialogButton
+                                        text="OK"
+                                        onPress={() => this.setState({ visible: false })}
+                                    />
+                                </DialogFooter>
+                            }
+                            dialogAnimation={new SlideAnimation({
+                                slideFrom: 'bottom',
+                            })}
+                        >
+                            <DialogContent>
+                                <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Please fill up all the fields!</Text>
+                            </DialogContent>
+                        </Dialog>
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Date</Text>
                     <TouchableOpacity onPress={this.showPicker} >

@@ -29,6 +29,7 @@ export default class EditEvent extends React.Component {
             day: '',
             see: false,
             isVisible: false,
+            visible: false
             
 
         }
@@ -53,6 +54,8 @@ export default class EditEvent extends React.Component {
     }
 
     handleEdit = () => {
+        this.check()
+        if (this.state.check) {
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).update({
             event_name : this.state.event_name,
@@ -80,6 +83,11 @@ export default class EditEvent extends React.Component {
         .catch(function(error) {
             console.log("error adding ", error);
         });
+    }
+    else {
+        this.setState({ visible: true })
+        console.log('not happeming')
+    }
     }
 
     /*handlePicker = (datetime) => {
@@ -132,6 +140,26 @@ export default class EditEvent extends React.Component {
       })
       console.log('hell now')
   }
+
+  check = () => {
+        
+    if (this.state.event_name != '')
+        this.setState({ check: true })
+    else if (this.state.sport != '')
+        this.setState({ check: true })
+    else if (this.state.no_people != '')
+        this.setState({ check: true })
+    else if (this.state.venue != '')
+        this.setState({ check: true })
+    else if (this.state.date !== 'Select Date and Time')
+        this.setState({ check: true })
+    
+    else
+        this.setState({ check: false })
+
+
+
+}
 
    
 
@@ -220,7 +248,26 @@ export default class EditEvent extends React.Component {
                     <TouchableOpacity onPress={this.showPicker} >
                     <Text style = {styles.input}>{this.state.date}</Text>
                     </TouchableOpacity>
-                    
+                    <Dialog
+                            visible={this.state.visible}
+                            dialogTitle={<DialogTitle title="CAUTION" />}
+                            footer={
+                                <DialogFooter>
+
+                                    <DialogButton
+                                        text="OK"
+                                        onPress={() => this.setState({ visible: false })}
+                                    />
+                                </DialogFooter>
+                            }
+                            dialogAnimation={new SlideAnimation({
+                                slideFrom: 'bottom',
+                            })}
+                        >
+                            <DialogContent>
+                                <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Please fill up all the fields!</Text>
+                            </DialogContent>
+                        </Dialog>
                     <DateTimePicker
                         isVisible={this.state.isVisible}
                         mode='datetime'
