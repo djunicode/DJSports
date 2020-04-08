@@ -32,6 +32,7 @@ export default class SignUpScreen extends React.Component {
             sports3: '',
             visible: false,
             check: false,
+            keywords : []
         }
     }
     Username = username => {
@@ -141,7 +142,19 @@ export default class SignUpScreen extends React.Component {
     sports3 = sport => {
         this.setState({ sports3: sport })
     }
+    handleEventName = (name) => {
+        this.setState ({ event_name: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywords: arrName})
+        return arrName;
+    }
     addusertodb = () => {
+        let arr = this.handleEventName(this.state.username)
         this.state.db.collection("Users").doc(this.state.username).set({
             name: this.state.username,
             address: this.state.address,
@@ -152,7 +165,9 @@ export default class SignUpScreen extends React.Component {
             teams: 0,
             wins: '0',
             year: this.state.year,
-            branch: this.state.branch
+            branch: this.state.branch,
+            keywords: this.state.keywords
+
         })
             .then(() => this.props.navigation.navigate('LoginScreen'))
             .catch((e) => console.log(e))
