@@ -4,6 +4,7 @@ import {createSwitchNavigator, createAppContainer } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 //import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import event from './screens/event.js'
 import home from './screens/home.js'
 import notifs from './screens/notifs.js'
@@ -113,7 +114,7 @@ const Login = createSwitchNavigator(
   }
 
 );
-const BottomNavigator = createMaterialBottomTabNavigator({
+/*const BottomNavigator = createMaterialBottomTabNavigator({
  
   home : {
     screen : mainpage,
@@ -143,11 +144,58 @@ const BottomNavigator = createMaterialBottomTabNavigator({
   {
   initialRouteName : 'home',
   order : ['home','event_main','notifs','profile'],
-  activeColor: 'white',
+  activeTintColor: 'white',
     inactiveColor: '#9e9e9e',
     barStyle: { backgroundColor: '#1a237e' , }
   }
+)*/
+
+const BottomNavigator = createMaterialTopTabNavigator({
+ 
+  home : {
+    screen : mainpage,
+    navigationOptions: {title: 'Home', tabBarIcon: ({ tintColor }) => (
+      <Icon name="home" size={25} color="white" />
+      )},
+  },
+  event_main :{
+    screen :event_main,
+    navigationOptions: {title: 'My Events', tabBarIcon: ({ tintColor }) => (
+      <Icon name="folder-open" size={21} color="white" />
+      )}
+  },
+  notifs : {
+    screen : teamModule,
+    navigationOptions: {title: 'Notifications', tabBarIcon: ({ tintColor }) => (
+      <Icon name="bell" size={25} color="white" />
+      )}
+  }
+
+  ,profile : {
+    screen: profile,
+    navigationOptions: {title: 'Profile', tabBarIcon: ({ tintColor }) => (
+      <Icon name="user" size={25} color="white" />
+      )}
+  }},
+  {
+  initialRouteName : 'home',
+  tabBarPosition: 'bottom',
+  tabBarOptions: {activeTintColor: 'white',
+  inactiveColor: '#9e9e9e', showIcon: 'true',
+  style: { backgroundColor: '#1a237e', },
+  labelStyle: {fontSize:12,textTransform:'capitalize'},
+  tabStyle:{height:58},
+  iconStyle: {inactiveColor:'grey'},
+  
+},
+  order : ['home','event_main','notifs','profile'],
+  
+  
+  
+    
+  }
 )
+
 const Base = createSwitchNavigator(
 {
     Login : Login,
