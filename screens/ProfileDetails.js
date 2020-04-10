@@ -4,8 +4,8 @@ import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Ic
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
-
 export default class ProfileDetails extends Component {
+  
     constructor(props) {
         super(props);
         this.state = {
@@ -16,31 +16,83 @@ export default class ProfileDetails extends Component {
             num: 0,
             limit_reached: false,
             registered: false,
-            visible: false
+            visible: false,
+            isFavorite : false
         };
         
       }
+
       static navigationOptions = {
         headerShown:false
     }
-    componentWillMount(){
+    componentDidMount(){
      
       const user = firebase.auth().currentUser
-      this.setState({email : user.email })
-      
-    }
-    componentDidMount(){
-      this.checkLimit()
-      checkData()
-    }
-
-    checkLimit = () => {
+      const doc = this.state.db.collection("Users").doc(user.email)
       var {params} = this.props.navigation.state
-      let number = parseInt(params.item.no_people)
-      this.setState({num: number})
-      if(params.item.joined == number)
-        this.setState({limit_reached: true})
-    }
+      var t 
+     
+      firebase
+      .firestore()
+      .collection("Users").doc(user.email)
+      .get()
+      .then((querySnapshot) => { 
+        console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
+         
+          console.log("In snap")
+          var favs,t;
+          favs = querySnapshot.get("favorites")
+          t = favs.includes(params.item.name || params.item.email)
+          console.log("name " +params.item.name)
+          console.log(t+ favs)
+          this.setState({ isFavorite: t });   //set data in state here
+      
+          console.log(this.state.isFavorite)
+          console.log(user.email)
+      
+      });
+
+  }
+    addFav=()=>{
+      var {params} = this.props.navigation.state
+      const user = firebase.auth().currentUser
+      let id = user.email
+      
+      const  arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+        const doc = this.state.db.collection("Users").doc(id)
+        doc.update({
+        favorites : arrayUnion(params.item.name)
+        });
+        this.setState(
+          {
+            isFavorite : true
+          }
+        )
+        
+       }
+
+       remFav=()=>{
+        var {params} = this.props.navigation.state
+        const user = firebase.auth().currentUser
+        let id = user.email
+        
+        const  arrayRemove = firebase.firestore.FieldValue.arrayRemove;
+          const doc = this.state.db.collection("Users").doc(id)
+          doc.update({
+          favorites : arrayRemove(params.item.name)
+          });
+          this.setState({
+            isFavorite : false
+          })
+
+
+
+       }
+
+
+  
+   
+    
 
 
   
@@ -48,79 +100,6 @@ export default class ProfileDetails extends Component {
     render() {
       
     var {params} = this.props.navigation.state
-    
-    checkData=async()=>{
-      
-      
-      this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).get()
-  .then((docSnapshot) => {
-    if (docSnapshot.exists) {
-     this.setState({
-       iconname:'ios-checkmark-circle-outline',
-       registered: true,
-
-     })
-    }
-    else{
-      this.setState({
-        iconname:'ios-add-circle-outline'
-      })
-    }
-  });
-    }
-    
-
-    buttonpressed=()=>{
-      console.log(params.item.joined+1)
-      let count = params.item.joined+1
-
-      if(!this.state.registered) {
-      
-      this.state.db.collection('AllEvents').doc(params.item.event_name).update({
-        joined: count
-      
-    })
-      this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).set({
-          event_name : params.item.event_name,
-          sport: params.item.sport,
-          no_people : params.item.no_people,
-          venue : params.item.venue,
-          date: params.item.date,
-          id: params.item.id,
-        
-      })
-      .catch(function(error) {
-          console.log("error adding ", error);
-      });
-    }
-    else {
-      console.log('already registered')
-      this.setState({visible:true})
-    }
-
-
-
-      checkData()
-      
-  
-      }
-
-      
-    addFav=()=>{
-        const  arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-
-        doc.update({
-        fa: arrayUnion('coco puffs')
-});
-
-
-    }
-
-  
-    
-
-
-    
     return (
       <Container >
         
@@ -156,45 +135,29 @@ export default class ProfileDetails extends Component {
               </Body>
            
             </CardItem>
-            <TouchableOpacity onPress = {this.addFav}>
-                <View>
-                    <Text>
-                        Add to Favorite
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <CardItem style={{justifyContent: 'center',alignItems:'center'}}>
+            {  this.state.isFavorite?
+            <View>
+            <Text>
+              {params.item.name} is already in your favorites!
+            </Text>
+            <TouchableOpacity onPress ={this.remFav}>
               <View>
-                {(!this.state.limit_reached)?
-                <Button transparent textStyle={{color: '#87838B'}} onPress={()=>buttonpressed()}>
-                  <Icon name={this.state.iconname} style={{fontSize:55}}/>
-                </Button>:
-                <View>
-                  <Text style = {{color: 'red'}}>Sorry. Registrations full</Text>  
-                </View>}
+                <Text>Remove From favorites</Text>
               </View>
-            </CardItem>
+            </TouchableOpacity>
+            </View>
+            :
+            <TouchableOpacity onPress= {this.addFav}>
+            <View>
+                <Text>
+                    Add to Favorite
+                </Text>
+            </View>
+        </TouchableOpacity>
+        
+    }
           </Card>
-          <Dialog
-                    visible={this.state.visible}
-                    
-                    footer={
-                        <DialogFooter>
-                          
-                          <DialogButton
-                            text="OK"
-                            onPress={() => this.setState({visible: false})}
-                          />
-                        </DialogFooter>
-                      }
-                    dialogAnimation={new SlideAnimation({
-                        slideFrom: 'bottom',
-                    })}
-                >
-                    <DialogContent>
-                        <Text style = {{padding: 20, paddingBottom:0, fontSize: 18}}>You have already registered!</Text>
-                    </DialogContent>
-                </Dialog>
+         
         </Content>
       </Container>
     );

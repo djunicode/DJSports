@@ -21,7 +21,8 @@ class ProfileSearch extends Component {
       data:[],
       search: '',
       displayData: [],
-     
+      favs : [],
+      favData : [],
       documentData: [],
             limit: 9,
             lastVisible: null,
@@ -37,7 +38,23 @@ class ProfileSearch extends Component {
 
 
   onFocusFunction = (email) => {
+    const user = firebase.auth().currentUser
     console.log("i am focused")
+    firebase
+      .firestore()
+      .collection("Users").doc(email)
+      .get()
+      .then((querySnapshot) => { 
+      
+          var favs
+          favs = querySnapshot.get("favorites")
+         this.setState(
+           {
+             favs : favs
+           }
+         )
+      
+      });
     this.handleChange('')
 
 }
@@ -51,12 +68,24 @@ componentDidMount() {
     this.setState({ email: user.email })
     
     console.log("success kinda")
-    console.log(user)
+    
     //this.firebasegetdata(user.email)
     //this.retrieveData(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
         this.onFocusFunction(user.email)
     })
+    
+    // firebase
+    //   .firestore()
+    //   .collection("Users").doc(user.email)
+    //   .get()
+    //   .then((querySnapshot) => { 
+      
+    //       var favs
+    //       favs = querySnapshot.get("favorites")
+    //      console.log("My Favs"+favs)
+      
+    //   });
 
 }
 
@@ -96,6 +125,50 @@ componentWillUnmount() {
 
 
 
+showFav = async() => {
+  let data  = []
+  console.log("This is the list"+this.state.favs)
+  await this.state.favs.forEach(
+  async (elem)=>{
+    await
+  firebase
+  .firestore()
+  .collection("Users").doc(elem)
+  .get()
+  .then((querySnapshot) => { 
+    
+    console.log("My DATA"+querySnapshot.data().email)
+      // doc.data() is never undefined for query doc snapshots
+      // console.log(doc.id, " => ", doc.data());
+      
+     data.push(querySnapshot.data())
+    
+  //  this.setState(
+  //    {
+  //      favData :[ ...this.state.favData, querySnapshot.data() ]
+  //    }
+  //  )
+
+    });
+
+   
+});
+ this.setState(
+
+      { favData : data,
+        loading : false
+      }
+
+  )
+console.log("Check data "+data)
+console.log("Chevk state "+ this.state.favData)
+}
+
+
+
+
+
+
 
 
 handleChange = async(search) => {
@@ -126,19 +199,22 @@ handleChange = async(search) => {
       //Data=[]
       
 
-    }
-
     
+  }
  
  catch (error) {
    console.log(error);
  }
 }
 
+
+
 handleRefresh = () => {
   try {
     this.setState({refreshing:true})
+    this.showFav()
     this.handleChange('')
+    
     this.setState({
         
         refreshing:false
@@ -149,13 +225,17 @@ catch (error) {
 }
 }
 
-
-
-    render() {
+render() {
         console.disableYellowBox = true
         var {navigate} = this.props.navigation;
         return (
             <View style = {{flex:1}}>
+              <TouchableOpacity onPress = {this.showFav}>
+                <Text>touch</Text>
+              </TouchableOpacity>
+              <Text>
+                {this.state.favs}
+              </Text>
               <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
@@ -171,9 +251,47 @@ catch (error) {
         </Header>
         
           {(this.state.loading)?<ActivityIndicator size='large'/>:null}
-        
-        <FlatList
-         
+        <View>
+          <Text>
+            favorites
+          </Text>
+        </View>
+        {(Array.isArray(this.state.favs))?
+          <FlatList
+          
+          scrollEnabled={true}
+          
+          data= {this.state.favData}
+          renderItem={({ item }) => 
+          <TouchableOpacity onPress = {
+            ()=>navigate("ProfileDetails",{item})
+        }>
+        <ProfileCard
+            image  = {require('../../assets/media2.jpg')}
+          Name = {item.name}
+          Sports = {item.sports}
+          Ratings = {item.rating}
+          Branch={item.branch}
+          Year = {item.year}
+        >
+      </ProfileCard>
+    </TouchableOpacity>
+    
+      }
+      ListHeaderComponent={this.renderHeader}
+                   
+                    onRefresh={this.handleRefresh}
+                    refreshing={this.state.refreshing}
+
+        />:
+        <Text>You have no Favorites</Text>}
+        <View>
+          <Text>
+            People
+          </Text>
+        </View>
+       <FlatList
+          
           scrollEnabled={true}
           
           data= {this.state.displayData}
@@ -202,8 +320,7 @@ catch (error) {
            
             </View>
             
-        );
-    }
-}
+      );
+    
+}}
 export default ProfileSearch;
-
