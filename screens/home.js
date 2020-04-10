@@ -21,7 +21,7 @@ class home extends Component {
       data:[],
       search: '',
       displayData: [],
-     
+      email : '',
       documentData: [],
             limit: 9,
             lastVisible: null,
@@ -56,10 +56,15 @@ componentDidMount() {
     //this.firebasegetdata(user.email)
     //this.retrieveData(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-        this.onFocusFunction(user.email)
-    })
-
+      this.onFocusFunction(this.state.email)
+  })
 }
+
+componentDidUpdate() {
+  
+}
+
+
 
 componentWillUnmount() {
     this.focusListener.remove()

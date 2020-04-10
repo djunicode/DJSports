@@ -57,7 +57,6 @@ class profile extends Component {
                 this.setState({ sports: snapshot.data().sports });
                 this.setState({ year: snapshot.data().year });
                 this.setState({ wins: snapshot.data().wins });
-
             });
     }
     

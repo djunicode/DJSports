@@ -11,6 +11,7 @@ import {
     Picker
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import OneSignal from 'react-native-onesignal';
 import 'firebase/firestore'
 import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter, DialogTitle } from 'react-native-popup-dialog';
 
@@ -33,9 +34,21 @@ export default class SignUpScreen extends React.Component {
             sports3: '',
             visible: false,
             check: false,
-            keywords : []
+            keywords : [],
+            userId : '',
+            error : '',
         }
     }
+    componentDidMount = async() => {
+        OneSignal.addEventListener('ids', this.onIds)
+    }
+
+    onIds = (devices) => {
+        console.log('Device info = ', devices)
+        this.setState({
+          userId: devices.userId
+        })
+      }
     Username = username => {
         this.setState({ username: username })
     }
@@ -108,22 +121,19 @@ export default class SignUpScreen extends React.Component {
 
 
     }
-    signUp = () => {
+    signUp = async() => {
         console.log(this.state.Id)
-        this.check()
-        /*if (this.state.pass == this.state.pass2) {
-            firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
-                .then(() => this.addusertodb());
-        }
-        else {
-            this.setState({ textVisible: true })
-        }*/
+        await this.check()
         if (this.state.check) {
             console.log('happening')
             this.setState({ visible: false })
             if (this.state.pass == this.state.pass2) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
-                    .then(() => this.addusertodb());
+                    .then(() => this.addusertodb())
+                    .catch((e) => this.setState({
+                        error : e,
+                        visible : true
+                    }))
             }
             else {
 
@@ -160,6 +170,7 @@ export default class SignUpScreen extends React.Component {
         return arrName;
     }
     addusertodb = () => {
+      
         let arr = this.handleEventName(this.state.name)
         this.state.db.collection("Users").doc(this.state.username).set({
             name: this.state.name,
@@ -172,8 +183,8 @@ export default class SignUpScreen extends React.Component {
             wins: '0',
             year: this.state.year,
             branch: this.state.branch,
-            keywords: this.state.keywords
-
+            keywords: this.state.keywords,
+            OneSignalId : this.state.userId
         })
             .then(() => this.props.navigation.navigate('LoginScreen'))
             .catch((e) => console.log(e))
@@ -342,7 +353,11 @@ export default class SignUpScreen extends React.Component {
                             })}
                         >
                             <DialogContent>
-                                <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Please fill up all the fields!</Text>
+                                <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>
+                                {
+                                    this.state.error == '' ? 'Please fill up all the fields!' : this.state.error 
+                                }
+                                </Text>
                             </DialogContent>
                         </Dialog>
                         <View style={{flexDirection:'row' , marginTop:10,marginBottom:10}}>
