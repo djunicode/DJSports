@@ -11,8 +11,9 @@ import {
     Picker
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import OneSignal from 'react-native-onesignal';
 import 'firebase/firestore'
-import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter, DialogTitle } from 'react-native-popup-dialog';
 
 export default class SignUpScreen extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class SignUpScreen extends React.Component {
             address: '',
             textVisible: false,
             branch: 'mech',
+            name : "",
             db: firebase.firestore(),
             year: '',
             sports1: '',
@@ -32,10 +34,26 @@ export default class SignUpScreen extends React.Component {
             sports3: '',
             visible: false,
             check: false,
+            keywords : [],
+            userId : '',
+            error : '',
         }
     }
+    componentDidMount = async() => {
+        OneSignal.addEventListener('ids', this.onIds)
+    }
+
+    onIds = (devices) => {
+        console.log('Device info = ', devices)
+        this.setState({
+          userId: devices.userId
+        })
+      }
     Username = username => {
         this.setState({ username: username })
+    }
+    name = name => {
+        this.setState({ name: name })
     }
     address = address => {
         this.setState({ address: address })
@@ -61,7 +79,7 @@ export default class SignUpScreen extends React.Component {
     }
 
     check = () => {
-        console.log('checking') 
+        console.log('checking')
         console.log(this.state.username)
         console.log(this.state.address)
         console.log(this.state.branch)
@@ -73,60 +91,60 @@ export default class SignUpScreen extends React.Component {
         console.log(this.state.sports1)
         console.log(this.state.sports2)
         console.log(this.state.sports3)
-        if(this.state.username != '')
-            this.setState({ check: true }) 
-        else if(this.state.address != '' )
+        if (this.state.username != '')
             this.setState({ check: true })
-        else if(this.state.branch != '')
-            this.setState({ check: true }) 
-        else if(this.state.year != '')
-            this.setState({ check: true }) 
-        else if(this.state.gender != '')
+        else if (this.state.address != '')
             this.setState({ check: true })
-        else if(this.state.Id != '')
+        else if (this.state.branch != '')
             this.setState({ check: true })
-        else if(this.state.pass != '')
+        else if (this.state.year != '')
             this.setState({ check: true })
-        else if(this.state.pass2 != '')
+        else if (this.state.gender != '')
             this.setState({ check: true })
-        else if(this.state.sports1 != '')
+        else if (this.state.Id != '')
             this.setState({ check: true })
-        else if(this.state.sports2 != '')
+        else if (this.state.pass != '')
             this.setState({ check: true })
-        else if(this.state.sports3 != '')
+        else if (this.state.pass2 != '')
             this.setState({ check: true })
-        else 
-         this.setState({check: false})
-            
+        else if (this.state.sports1 != '')
+            this.setState({ check: true })
+        else if (this.state.sports2 != '')
+            this.setState({ check: true })
+        else if (this.state.sports3 != '')
+            this.setState({ check: true })
+        else if (this.state.name != '')
+            this.setState({ check: true })
+        else
+            this.setState({ check: false })
+
 
 
     }
-    signUp = () => {
+    signUp = async() => {
         console.log(this.state.Id)
-        this.check()
-        /*if (this.state.pass == this.state.pass2) {
-            firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
-                .then(() => this.addusertodb());
-        }
-        else {
-            this.setState({ textVisible: true })
-        }*/
-        if(this.state.check) {
+        await this.check()
+        if (this.state.check) {
             console.log('happening')
             this.setState({ visible: false })
             if (this.state.pass == this.state.pass2) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
-                    .then(() => this.addusertodb());
+                    .then(() => this.addusertodb())
+                    .catch((e) => this.setState({
+                        error : e,
+                        visible : true
+                    }))
             }
             else {
-                
+
                 this.setState({ textVisible: true })
             }
         }
-        else{
-            this.setState({visible:true})
-            console.log('not happeming')}
-        
+        else {
+            this.setState({ visible: true })
+            console.log('not happeming')
+        }
+
     }
     login = () => {
         this.props.navigation.navigate('LoginScreen')
@@ -140,9 +158,22 @@ export default class SignUpScreen extends React.Component {
     sports3 = sport => {
         this.setState({ sports3: sport })
     }
+    handleEventName = (name) => {
+        this.setState ({ event_name: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywords: arrName})
+        return arrName;
+    }
     addusertodb = () => {
+      
+        let arr = this.handleEventName(this.state.name)
         this.state.db.collection("Users").doc(this.state.username).set({
-            name: this.state.username,
+            name: this.state.name,
             address: this.state.address,
             email: this.state.Id.toLowerCase(),
             image: '',
@@ -151,7 +182,9 @@ export default class SignUpScreen extends React.Component {
             teams: 0,
             wins: '0',
             year: this.state.year,
-            branch: this.state.branch
+            branch: this.state.branch,
+            keywords: this.state.keywords,
+            OneSignalId : this.state.userId
         })
             .then(() => this.props.navigation.navigate('LoginScreen'))
             .catch((e) => console.log(e))
@@ -180,33 +213,43 @@ export default class SignUpScreen extends React.Component {
                                 onChangeText={this.address}>
                             </TextInput>
                         </View>
-                        <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10,paddingLeft:10 }}>
-                                <Icon name="mortar-board" size={23} color="black" style={{ paddingTop: 10, paddingLeft: 8, }} />
-                                <Picker
-                                    selectedValue={this.state.branch}
-                                    style={{ height: 50, width: 150 }}
-                                    onValueChange={(itemValue, itemIndex) =>
-                                       
-                                        this.setState({ branch: itemValue })
-                                        //console.log('branch issss ',this.state.branch)
-                                    }>
-                                    <Picker.Item label="Department" value="" />
-                                    <Picker.Item label="Computer" value="Computer" />
-                                    <Picker.Item label="IT" value="IT" />
-                                    <Picker.Item label="EXTC" value="EXTC" />
-                                    <Picker.Item label="Electronics" value="Electronics" />
-                                    <Picker.Item label="Chemical" value="Chemical" />
-                                    <Picker.Item label="Mechanical" value="Mechanical" />
-                                </Picker>
-                            </View>
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+
+                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <TextInput
+                                placeholder='Name'
+                                placeholderTextColor='black'
+                                style={style.textInput}
+                                onChangeText={this.name}>
+                            </TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10 }}>
+                            <Icon name="mortar-board" size={23} color="black" style={{ paddingTop: 10, paddingLeft: 8, }} />
+                            <Picker
+                                selectedValue={this.state.branch}
+                                style={{ height: 50, width: 150 }}
+                                onValueChange={(itemValue, itemIndex) =>
+
+                                    this.setState({ branch: itemValue })
+                                    //console.log('branch issss ',this.state.branch)
+                                }>
+                                <Picker.Item label="Department" value="" />
+                                <Picker.Item label="Computer" value="Computer" />
+                                <Picker.Item label="IT" value="IT" />
+                                <Picker.Item label="EXTC" value="EXTC" />
+                                <Picker.Item label="Electronics" value="Electronics" />
+                                <Picker.Item label="Chemical" value="Chemical" />
+                                <Picker.Item label="Mechanical" value="Mechanical" />
+                            </Picker>
+                        </View>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10 ,paddingLeft:10,marginRight:40 }}>
+                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10, marginRight: 40 }}>
                                 <Icon name="calendar" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
                                 <Picker
                                     selectedValue={this.state.year}
                                     style={{ height: 50, width: 100, borderBottomWidth: 1, borderBottomColor: 'black' }}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        
+
                                         this.setState({ year: itemValue })
                                         //console.log('gender issss ',this.state.gender)
                                     }>
@@ -265,7 +308,7 @@ export default class SignUpScreen extends React.Component {
                                 placeholderTextColor='black'
                                 style={style.textInput}
                                 onChangeText={this.LoginId}
-                                autoCapitalize = 'none'
+                                autoCapitalize='none'
                                 keyboardType='email-address'>
                             </TextInput>
                         </View>
@@ -291,39 +334,45 @@ export default class SignUpScreen extends React.Component {
                             </TextInput>
                         </View>
                         {
-                            this.state.textVisible ? <Text style = {{alignSelf: 'center', color : 'red'}}>Password did not match</Text> : null
+                            this.state.textVisible ? <Text style={{ alignSelf: 'center', color: 'red' }}>Password did not match</Text> : null
                         }
+                        <Dialog
+                            visible={this.state.visible}
+                            dialogTitle={<DialogTitle title="CAUTION" />}
+                            footer={
+                                <DialogFooter>
+
+                                    <DialogButton
+                                        text="OK"
+                                        onPress={() => this.setState({ visible: false })}
+                                    />
+                                </DialogFooter>
+                            }
+                            dialogAnimation={new SlideAnimation({
+                                slideFrom: 'bottom',
+                            })}
+                        >
+                            <DialogContent>
+                                <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>
+                                {
+                                    this.state.error == '' ? 'Please fill up all the fields!' : this.state.error 
+                                }
+                                </Text>
+                            </DialogContent>
+                        </Dialog>
+                        <View style={{flexDirection:'row' , marginTop:10,marginBottom:10}}>
                         <TouchableOpacity onPress={this.signUp} >
                             <View style={style.button1}>
                                 <Text style={style.textbutton}>Sign Up</Text>
                             </View>
 
                         </TouchableOpacity>
-                        <Dialog
-                    visible={this.state.visible}
-                    dialogTitle = {<DialogTitle title="CAUTION"/>}
-                    footer={
-                        <DialogFooter>
-                          
-                          <DialogButton
-                            text="OK"
-                            onPress={() => this.setState({visible: false})}
-                          />
-                        </DialogFooter>
-                      }
-                    dialogAnimation={new SlideAnimation({
-                        slideFrom: 'bottom',
-                    })}
-                >
-                    <DialogContent>
-                        <Text style = {{padding: 20, paddingBottom:0, fontSize: 18}}>Please fill up all the fields!</Text>
-                    </DialogContent>
-                </Dialog>
                         <TouchableOpacity onPress={this.login} >
                             <View style={style.button1}>
-                                <Text style={style.textbutton}>Go To Log In Screen</Text>
+                                <Text style={style.textbutton}>Go To LogIn</Text>
                             </View>
                         </TouchableOpacity>
+                        </View>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -366,7 +415,10 @@ const style = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         paddingLeft: 10,
+        width:150,
         marginBottom: 10,
+        marginRight:20,
+        marginLeft:20
     },
     button2: {
         backgroundColor: '#341f97',
@@ -374,7 +426,8 @@ const style = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         paddingLeft: 10,
-        marginBottom: 40
+        marginBottom: 40,
+        width:170
     },
     textInput1: {
         height: 50,
