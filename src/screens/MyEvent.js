@@ -5,8 +5,11 @@ import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from 'react-navigation';
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+import moment from 'moment';
 
 
+const today = moment()
+const right_now = today.format()
 
 
 export default class MyEvent extends React.Component {
@@ -30,7 +33,8 @@ export default class MyEvent extends React.Component {
             notfirstTime: true,
             direct: 'false',
             visible: false,
-            item: []
+            item: [],
+            
 
         }
 
@@ -40,6 +44,7 @@ export default class MyEvent extends React.Component {
     onFocusFunction = (email) => {
         this.retrieveData(email)
         console.log("i am focused")
+        //console.log(today.format('MMMM Do YYYY, h:mm A'))
 
     }
 
@@ -47,7 +52,7 @@ export default class MyEvent extends React.Component {
 
     componentDidMount() {
 
-
+        //const today = moment();
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
         console.log("success kinda")
@@ -57,6 +62,8 @@ export default class MyEvent extends React.Component {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             this.onFocusFunction(user.email)
         })
+
+
 
     }
 
@@ -152,7 +159,7 @@ export default class MyEvent extends React.Component {
 
     goEdit = (item) => {
         console.log(item.event_name)
-        this.props.navigation.navigate('EditEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date })
+        this.props.navigation.navigate('EditEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date, day: item.day })
 
     }
 
@@ -180,9 +187,45 @@ export default class MyEvent extends React.Component {
             
     }
 
+    deletEvent = (event) => {
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(event).delete().then(function () {
+
+            console.log("Document successfully deleted from CreatedEvent!");
+            //alert('Event deleted')
+
+        }).then(this.onFocusFunction(this.state.email),
+            this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
+
+                console.log("Document successfully deleted from AllEvents!");
+
+
+            })
+        )
+
+
+
+            .catch(function (error) {
+                console.error("Error removing document: ", error);
+            });
+            
+    }
+//{(today.isSameOrAfter(item.moment)?this.deleteEvent():console.log('ello'))}
+
+    checkDate = (data,event) => {
+        const rn = moment(right_now).format('YYYY-MM-DD')
+        console.log(moment(right_now).format('YYYY-MM-DD')),
+        console.log(data)
+        console.log(moment(rn).isAfter(data))
+        if(moment(rn).isAfter(data))
+             this.deletEvent(event)
+       
+    }
+
     render() {
         <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
         console.disableYellowBox = true
+        //console.log(today.format('MMMM Do YYYY, h:mm A'))
+
 
         return (
             <SafeAreaView style={styles.container}>
@@ -194,13 +237,15 @@ export default class MyEvent extends React.Component {
                     data={this.state.documentData}
                     // Render Items
                     renderItem={({ item }) => (
-
+                        
+                        this.checkDate(item.day,item.event_name),
                         <View style={styles.itemContainer}>
-
+                            
                             <Text style={styles.event_name}>{item.event_name}</Text>
 
 
                             <Text style={styles.date}>Date: {item.date}</Text>
+                            
                             <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => this.showEvent(item)}>
                                     <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
@@ -269,14 +314,15 @@ export default class MyEvent extends React.Component {
                     </DialogContent>
                 </Dialog>
                 
-
+                <View style = {styles.button}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
-                    <Icon style={{ marginRight: 20, marginBottom: 20, alignSelf: 'flex-end',  }}
+                    <Icon style={{  alignSelf: 'flex-end',  }}
                         name="plus-circle"
                         size={60}
                         color="#3f51b5"
                     />
                 </TouchableOpacity>
+                </View>
             </SafeAreaView>
         );
     }
@@ -330,6 +376,12 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         alignSelf: 'stretch',
         marginLeft: 10
+    },
+    button: {
+        height: 80,
+        width: 80,
+        margin:20,
+        alignSelf: 'flex-end'
     }
 
 });

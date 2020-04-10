@@ -26,6 +26,7 @@ export default class SignUpScreen extends React.Component {
             address: '',
             textVisible: false,
             branch: 'mech',
+            name : "",
             db: firebase.firestore(),
             year: '',
             sports1: '',
@@ -50,6 +51,9 @@ export default class SignUpScreen extends React.Component {
       }
     Username = username => {
         this.setState({ username: username })
+    }
+    name = name => {
+        this.setState({ name: name })
     }
     address = address => {
         this.setState({ address: address })
@@ -109,6 +113,8 @@ export default class SignUpScreen extends React.Component {
             this.setState({ check: true })
         else if (this.state.sports3 != '')
             this.setState({ check: true })
+        else if (this.state.name != '')
+            this.setState({ check: true })
         else
             this.setState({ check: false })
 
@@ -164,9 +170,10 @@ export default class SignUpScreen extends React.Component {
         return arrName;
     }
     addusertodb = () => {
-        let arr = this.handleEventName(this.state.username)
-        this.state.db.collection("Users").doc(this.state.Id).set({
-            name: this.state.username,
+      
+        let arr = this.handleEventName(this.state.name)
+        this.state.db.collection("Users").doc(this.state.username).set({
+            name: this.state.name,
             address: this.state.address,
             email: this.state.Id.toLowerCase(),
             image: '',
@@ -204,6 +211,16 @@ export default class SignUpScreen extends React.Component {
                                 placeholderTextColor='black'
                                 style={style.textInput}
                                 onChangeText={this.address}>
+                            </TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
+
+                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <TextInput
+                                placeholder='Name'
+                                placeholderTextColor='black'
+                                style={style.textInput}
+                                onChangeText={this.name}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10 }}>
