@@ -24,7 +24,6 @@ export default class MyEvent extends React.Component {
             venue: '',
             date: '',
             db: firebase.firestore(),
-
             documentData: [],
             limit: 9,
             lastVisible: null,
@@ -34,8 +33,8 @@ export default class MyEvent extends React.Component {
             direct: 'false',
             visible: false,
             item: [],
+            data2:[]
             
-
         }
 
 
@@ -153,7 +152,7 @@ export default class MyEvent extends React.Component {
 
     showEvent = (item) => {
         console.log(item.event_name)
-        this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date })
+        this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date,players:item.players,created_by:item.created_by })
 
     }
 
@@ -178,13 +177,13 @@ export default class MyEvent extends React.Component {
 
             })
         )
-
-
-
             .catch(function (error) {
                 console.error("Error removing document: ", error);
             });
-            
+            this.state.item.players.forEach(element => {
+                this.state.db.collection('CreatedEvent').doc(element).collection('MyEvent').doc(this.state.item.event_name).delete()
+                
+            });
     }
 
     deletEvent = (event) => {
@@ -208,6 +207,43 @@ export default class MyEvent extends React.Component {
                 console.error("Error removing document: ", error);
             });
             
+    }
+    leaveEvent=async(item)=>
+    {
+        // this.retrieveData2()
+        var docRef = this.state.db.collection("AllEvents").doc(item.event_name);
+
+       await docRef.get().then((doc)=> {
+            this.setState({
+                data2:doc.data()
+            })
+            //console.log(this.state.data2)
+            }).catch(function(error) {
+                    console.log("Error getting document:", error);
+        });
+        console.log(this.state.data2)
+        let arr=this.state.data2
+        arr=arr.players
+        arr=arr.filter(item=>item!=this.state.email)
+        console.log(arr)
+        let count = item.joined
+        count=count-1
+        this.state.db.collection('AllEvents').doc(item.event_name).update({
+            joined: count,
+            players:arr
+          
+        })
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function () {
+
+            console.log("Document successfully deleted from CreatedEvent!");
+            alert('Event left')
+
+        }).then(this.onFocusFunction(this.state.email))
+            .catch(function (error) {
+                console.error("Error removing document: ", error);
+            });
+
+
     }
 //{(today.isSameOrAfter(item.moment)?this.deleteEvent():console.log('ello'))}
 
@@ -237,16 +273,13 @@ export default class MyEvent extends React.Component {
                     data={this.state.documentData}
                     // Render Items
                     renderItem={({ item }) => (
-                        
-                        this.checkDate(item.day,item.event_name),
+
+                        (item.created_by==this.state.email)
+                        ?
                         <View style={styles.itemContainer}>
-                            
                             <Text style={styles.event_name}>{item.event_name}</Text>
-
-
                             <Text style={styles.date}>Date: {item.date}</Text>
-                            
-                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}> 
                                 <TouchableOpacity onPress={() => this.showEvent(item)}>
                                     <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
                                         name="info-circle"
@@ -270,7 +303,27 @@ export default class MyEvent extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
+                        :
+                        <View style={styles.itemContainer}>
+                            <Text style={styles.event_name}>{item.event_name}</Text>
+                            <Text style={styles.date}>Date: {item.date}</Text>
+                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}> 
+                                <TouchableOpacity onPress={() => this.showEvent(item)}>
+                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                        name="info-circle"
+                                        size={25}
+                                        color="#3f51b5"
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.leaveEvent(item)}>
+                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                        name="window-close"
+                                        size={25}
+                                        color="#3f51b5"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     )}
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
