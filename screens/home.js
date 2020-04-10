@@ -21,7 +21,7 @@ class home extends Component {
       data:[],
       search: '',
       displayData: [],
-     
+      email : '',
       documentData: [],
             limit: 9,
             lastVisible: null,
@@ -56,10 +56,15 @@ componentDidMount() {
     //this.firebasegetdata(user.email)
     //this.retrieveData(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-        this.onFocusFunction(user.email)
-    })
-
+      this.onFocusFunction(this.state.email)
+  })
 }
+
+componentDidUpdate() {
+  
+}
+
+
 
 componentWillUnmount() {
     this.focusListener.remove()
@@ -246,6 +251,13 @@ catch (error) {
         var {navigate} = this.props.navigation;
         return (
             <View style = {{flex:1}}>
+            <TouchableOpacity onPress = {()=>navigate('ProfileSearch')}>
+              <View>
+                <Text>
+                  Search People
+                </Text>
+              </View>
+            </TouchableOpacity>
               <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
@@ -257,8 +269,11 @@ catch (error) {
           <Button transparent>
             <Text>Search</Text>
           </Button>
+          
         </Header>
+        
           {(this.state.loading)?<ActivityIndicator size='large'/>:null}
+        
         <FlatList
          
           scrollEnabled={true}

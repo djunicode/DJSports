@@ -3,13 +3,20 @@ import { Image,View } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+
 export default class EventDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
             iconname:"ios-timer",
             db:firebase.firestore(),
-            email:''
+            email:'',
+            joined: 0,
+            num: 0,
+            limit_reached: false,
+            registered: false,
+            visible: false
         };
         
       }
@@ -23,20 +30,35 @@ export default class EventDetails extends Component {
       
     }
     componentDidMount(){
+      this.checkLimit()
       checkData()
     }
+
+    checkLimit = () => {
+      var {params} = this.props.navigation.state
+      let number = parseInt(params.item.no_people)
+      this.setState({num: number})
+      if(params.item.joined == number)
+        this.setState({limit_reached: true})
+    }
+
 
   
 
     render() {
       
     var {params} = this.props.navigation.state
+    
     checkData=async()=>{
+      
+      
       this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).get()
   .then((docSnapshot) => {
     if (docSnapshot.exists) {
      this.setState({
-       iconname:'ios-checkmark-circle-outline'
+       iconname:'ios-checkmark-circle-outline',
+       registered: true,
+
      })
     }
     else{
@@ -49,20 +71,45 @@ export default class EventDetails extends Component {
     
 
     buttonpressed=()=>{
+      console.log(params.item.joined+1)
+      let count = params.item.joined+1
+
+      if(!this.state.registered) {
+      
+      this.state.db.collection('AllEvents').doc(params.item.event_name).update({
+        joined: count
+      
+    })
       this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).set({
           event_name : params.item.event_name,
           sport: params.item.sport,
           no_people : params.item.no_people,
           venue : params.item.venue,
           date: params.item.date,
-          id: params.item.id
+          id: params.item.id,
         
       })
       .catch(function(error) {
           console.log("error adding ", error);
       });
-      checkData()
     }
+    else {
+      console.log('already registered')
+      this.setState({visible:true})
+    }
+
+
+
+      checkData()
+      
+  
+      }
+
+      
+    
+
+  
+    
 
 
     
@@ -102,12 +149,36 @@ export default class EventDetails extends Component {
             </CardItem>
             <CardItem style={{justifyContent: 'center',alignItems:'center'}}>
               <View>
+                {(!this.state.limit_reached)?
                 <Button transparent textStyle={{color: '#87838B'}} onPress={()=>buttonpressed()}>
                   <Icon name={this.state.iconname} style={{fontSize:55}}/>
-                </Button>
+                </Button>:
+                <View>
+                  <Text style = {{color: 'red'}}>Sorry. Registrations full</Text>  
+                </View>}
               </View>
             </CardItem>
           </Card>
+          <Dialog
+                    visible={this.state.visible}
+                    
+                    footer={
+                        <DialogFooter>
+                          
+                          <DialogButton
+                            text="OK"
+                            onPress={() => this.setState({visible: false})}
+                          />
+                        </DialogFooter>
+                      }
+                    dialogAnimation={new SlideAnimation({
+                        slideFrom: 'bottom',
+                    })}
+                >
+                    <DialogContent>
+                        <Text style = {{padding: 20, paddingBottom:0, fontSize: 18}}>You have already registered!</Text>
+                    </DialogContent>
+                </Dialog>
         </Content>
       </Container>
     );
