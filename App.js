@@ -24,6 +24,7 @@ import MyEvent from './src/screens/MyEvent'
 import ProfileSearch from "./src/screens/ProfileSearch.js"
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Showlist from './src/screens/ShowList';
 
 import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
@@ -55,6 +56,14 @@ const mainpage = createStackNavigator({
   
   initialRouteName : 'home'
 })
+const showeventpage=createStackNavigator({
+  ShowEvent:{
+    screen:ShowEvent
+   },
+   ShowList:{
+     screen:Showlist
+   }
+ })
 const event_main = createStackNavigator({
   /*event :{
     screen : event
@@ -72,7 +81,7 @@ const event_main = createStackNavigator({
   },
 
   ShowEvent: {
-    screen: ShowEvent,
+    screen: showeventpage,
   },
 
   

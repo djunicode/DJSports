@@ -125,7 +125,10 @@ export default class create_event extends React.Component {
             id: this.state.id,
             keywords: this.state.keywords,
             //date_time: this.state.date_time,
-            day: this.state.day
+            day: this.state.day,
+            created_by:this.state.email,
+            players:[],
+            joined:1,
         
         })
         .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
@@ -138,7 +141,9 @@ export default class create_event extends React.Component {
             keywords: this.state.keywords,
             joined : 1,
             //date_time: this.state.date_time,
-            day: this.state.day
+            day: this.state.day,
+            created_by:this.state.email,
+            players:[],
 
 
         }))

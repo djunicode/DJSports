@@ -13,11 +13,14 @@ export default class ShowEvent extends React.Component {
             event_name : '',
             sport: '',
             no_people : '',
+            created_by:'',
             venue : '',
             date: '',
             db: firebase.firestore(),
             id: 1,
             documentData: [],
+            players:[],
+            data2:[]
             
 
         }
@@ -25,19 +28,37 @@ export default class ShowEvent extends React.Component {
 
     componentDidMount() {
         const {state} = this.props.navigation;
-        
+        const user = firebase.auth().currentUser
+        this.retData(state.params.event_name)
         this.setState({
             event_name: state.params.event_name,
             no_people: state.params.no_people,
             sport: state.params.sport,
             date: state.params.date,
             venue: state.params.venue,
+            created_by:state.params.created_by,
+            email:user.email
         })
     }
+    retData=async(item)=>{
+    console.log(item)
+    var docRef = this.state.db.collection("AllEvents").doc(item);
+
+    await docRef.get().then((doc)=> {
+        this.setState({
+            data2:doc.data()
+        })
+        // console.log(this.state.data2)
+        }).catch(function(error) {
+                console.log("Error getting document:", error);
+    });
+}
 
     render() {
         console.disableYellowBox = true
         return(
+            (this.state.email==this.state.created_by)
+            ?
             <View style = {styles.container}>
                 <ImageBackground
             
@@ -45,7 +66,6 @@ export default class ShowEvent extends React.Component {
             style = {{flex: 1}}
             
         >
-            <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
             <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
                         <Icon style = {{margin: 20, marginBottom: 0}}
                             name = "arrow-left"
@@ -53,7 +73,50 @@ export default class ShowEvent extends React.Component {
                             color = "#84ffff"
                         />
                     </TouchableOpacity>
-                    </View>
+                <View style = {styles.header }>
+                    
+                <Text style = {styles.headerText}>{this.state.event_name.toUpperCase()}</Text>
+                </View>
+                
+                <View style = {styles.shadow}>
+                <Text style = {styles.title}>Sport</Text>
+                <Text style = {styles.info}>{this.state.sport}</Text>
+                </View>
+                
+                <TouchableOpacity style = {styles.shadow} onPress={()=>{
+                    //console.log(this.state.data2)
+                    this.props.navigation.navigate('ShowList', {players:this.state.data2.players })
+                }}>
+                <Text style = {styles.title}>Number of players</Text>
+                <Text style = {styles.info}>{this.state.no_people}</Text>
+                </TouchableOpacity>
+                <View style = {styles.shadow}>
+                <Text style = {styles.title}>Venue</Text>
+                <Text style = {styles.info}>{this.state.venue}</Text>
+                </View>
+                <View style = {styles.shadow}>
+                <Text style = {styles.title}>Date and time</Text>
+                <Text style = {styles.info}>{this.state.date}</Text>
+                </View>
+                
+
+            </ImageBackground>
+            </View>
+            :
+            <View style = {styles.container}>
+                <ImageBackground
+            
+            source = {{uri: 'https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'}}
+            style = {{flex: 1}}
+            
+        >
+            <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
+                        <Icon style = {{margin: 20, marginBottom: 0}}
+                            name = "arrow-left"
+                            size = {35}
+                            color = "#84ffff"
+                        />
+                    </TouchableOpacity>
                 <View style = {styles.header }>
                     
                 <Text style = {styles.headerText}>{this.state.event_name.toUpperCase()}</Text>
@@ -80,6 +143,7 @@ export default class ShowEvent extends React.Component {
 
             </ImageBackground>
             </View>
+
 
 
         );
