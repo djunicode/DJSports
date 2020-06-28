@@ -45,8 +45,8 @@ export default class create_event extends React.Component {
             day:'',
             see: false,
             check :false,
-            visible: false
-    
+            visible: false,
+            show : false
          
 
         }
@@ -64,7 +64,6 @@ export default class create_event extends React.Component {
         
       }
 
-    
 
       handlePicker = (datetime) => {
           
@@ -106,14 +105,27 @@ export default class create_event extends React.Component {
     }
 
 
-
+    numberOfpeople = (no_people) => {
+        if( parseInt(no_people) > 30){
+            this.setState({
+                show : true,
+            })
+        } else{
+            this.setState({
+                show : false,
+            })
+        }
+        this.setState({
+            no_people : no_people
+        })
+    }
       
 
     handleCreate = () => {
         let arr = this.handleEventName(this.state.event_name)
         console.log(arr)
-        this.check()
-        if (this.state.check) {
+        
+        if (this.check()) {
         //alert('Event created')
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
@@ -170,24 +182,12 @@ export default class create_event extends React.Component {
         return arrName;
     }
 
-    check = () => {
-        
-        if (this.state.event_name != '')
-            this.setState({ check: true })
-        else if (this.state.sport != '')
-            this.setState({ check: true })
-        else if (this.state.no_people != '')
-            this.setState({ check: true })
-        else if (this.state.venue != '')
-            this.setState({ check: true })
-        else if (this.state.date !== 'Select Date and Time')
-            this.setState({ check: true })
-        
+    check() {
+        console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
+        if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
+          return true
         else
-            this.setState({ check: false })
-
-
-
+            return false   
     }
 
     render() {
@@ -232,11 +232,14 @@ export default class create_event extends React.Component {
                     style = {styles.input}  
                     autoCapitalize="none" 
                     keyboardType = "number-pad"
-                    onChangeText = {no_people => this.setState({no_people})}
+                    onChangeText = {no_people => this.numberOfpeople(no_people)}
                     value = {this.state.no_people}
                     >
                     </TextInput>
                 </View>
+                {
+                   this.state.show ? <Text style = {{ color : 'red' , marginLeft:20 , fontSize:20}}>Maximum 30 players allowed</Text> : null
+                }
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Venue</Text>
                     <TextInput 
