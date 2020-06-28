@@ -40,6 +40,7 @@ export default class create_event extends React.Component {
             id: 1,
             isVisible: false,
             keywords: [],
+            keywordsSport:[],
             joined: 1,
             //date_time: '',
             day:'',
@@ -124,6 +125,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             //date_time: this.state.date_time,
             day: this.state.day,
             created_by:this.state.email,
@@ -139,6 +141,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             joined : 1,
             //date_time: this.state.date_time,
             day: this.state.day,
@@ -167,6 +170,19 @@ export default class create_event extends React.Component {
             arrName.push(curName);
         })
         this.setState({keywords: arrName})
+        return arrName;
+    }
+
+    handleSportName = (name) => {
+        this.setState ({ sport: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywordsSport: arrName})
+        console.log(arrName)
         return arrName;
     }
 
@@ -221,7 +237,7 @@ export default class create_event extends React.Component {
                     <TextInput 
                     style = {styles.input}  
                     autoCapitalize="words" 
-                    onChangeText = {sport => this.setState({sport})}
+                    onChangeText = {sport => this.handleSportName(sport)}
                     value = {this.state.sport}
                     >
                     </TextInput>

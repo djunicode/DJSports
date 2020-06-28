@@ -173,6 +173,12 @@ const BottomNavigator = createMaterialTopTabNavigator({
       <Icon name="folder-open" size={21} color="white" />
       )}
   },
+  /*profile_search : {
+    screen : ProfileSearch,
+    navigationOptions: {title: 'Explore', tabBarIcon: ({ tintColor }) => (
+      <Icon name="search" size={30} color="white" style = {{padding : 2}}/>
+      )}
+  },*/
   notifs : {
     screen : teamModule,
     navigationOptions: {title: 'Notifications', tabBarIcon: ({ tintColor }) => (
@@ -193,9 +199,9 @@ const BottomNavigator = createMaterialTopTabNavigator({
   inactiveColor: '#9e9e9e', showIcon: 'true',
   style: { backgroundColor: '#1a237e', },
   labelStyle: {fontSize:12,textTransform:'capitalize'},
-  tabStyle:{height:58},
-  iconStyle: {inactiveColor:'grey'},
-  
+  tabStyle:{height:60},
+  iconStyle: {inactiveColor:'grey', paddingTop:3, activeColor: 'white'},
+
 },
   order : ['home','event_main','notifs','profile'],
   
