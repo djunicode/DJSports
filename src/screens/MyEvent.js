@@ -4,8 +4,10 @@ import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from 'react-navigation';
-import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter, DialogTitle } from 'react-native-popup-dialog';
 import moment from 'moment';
+import ActionButton from 'react-native-action-button';
+
 
 
 const today = moment()
@@ -33,8 +35,8 @@ export default class MyEvent extends React.Component {
             direct: 'false',
             visible: false,
             item: [],
-            data2:[]
-            
+            data2: []
+
         }
 
 
@@ -152,7 +154,7 @@ export default class MyEvent extends React.Component {
 
     showEvent = (item) => {
         console.log(item.event_name)
-        this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date,players:item.players,created_by:item.created_by })
+        this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date, players: item.players, created_by: item.created_by })
 
     }
 
@@ -180,10 +182,10 @@ export default class MyEvent extends React.Component {
             .catch(function (error) {
                 console.error("Error removing document: ", error);
             });
-            this.state.item.players.forEach(element => {
-                this.state.db.collection('CreatedEvent').doc(element).collection('MyEvent').doc(this.state.item.event_name).delete()
-                
-            });
+        this.state.item.players.forEach(element => {
+            this.state.db.collection('CreatedEvent').doc(element).collection('MyEvent').doc(this.state.item.event_name).delete()
+
+        });
     }
 
     deletEvent = (event) => {
@@ -206,32 +208,31 @@ export default class MyEvent extends React.Component {
             .catch(function (error) {
                 console.error("Error removing document: ", error);
             });
-            
+
     }
-    leaveEvent=async(item)=>
-    {
+    leaveEvent = async (item) => {
         // this.retrieveData2()
         var docRef = this.state.db.collection("AllEvents").doc(item.event_name);
 
-       await docRef.get().then((doc)=> {
+        await docRef.get().then((doc) => {
             this.setState({
-                data2:doc.data()
+                data2: doc.data()
             })
             //console.log(this.state.data2)
-            }).catch(function(error) {
-                    console.log("Error getting document:", error);
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
         });
         console.log(this.state.data2)
-        let arr=this.state.data2
-        arr=arr.players
-        arr=arr.filter(item=>item!=this.state.email)
+        let arr = this.state.data2
+        arr = arr.players
+        arr = arr.filter(item => item != this.state.email)
         console.log(arr)
         let count = item.joined
-        count=count-1
+        count = count - 1
         this.state.db.collection('AllEvents').doc(item.event_name).update({
             joined: count,
-            players:arr
-          
+            players: arr
+
         })
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function () {
 
@@ -245,16 +246,16 @@ export default class MyEvent extends React.Component {
 
 
     }
-//{(today.isSameOrAfter(item.moment)?this.deleteEvent():console.log('ello'))}
+    //{(today.isSameOrAfter(item.moment)?this.deleteEvent():console.log('ello'))}
 
-    checkDate = (data,event) => {
+    checkDate = (data, event) => {
         const rn = moment(right_now).format('YYYY-MM-DD')
         console.log(moment(right_now).format('YYYY-MM-DD')),
-        console.log(data)
+            console.log(data)
         console.log(moment(rn).isAfter(data))
-        if(moment(rn).isAfter(data))
-             this.deletEvent(event)
-       
+        if (moment(rn).isAfter(data))
+            this.deletEvent(event)
+
     }
 
     render() {
@@ -265,7 +266,6 @@ export default class MyEvent extends React.Component {
 
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.header}>MY EVENTS</Text>
 
 
                 {(!this.state.direct) ? <FlatList
@@ -274,56 +274,72 @@ export default class MyEvent extends React.Component {
                     // Render Items
                     renderItem={({ item }) => (
 
-                        (item.created_by==this.state.email)
-                        ?
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.event_name}>{item.event_name}</Text>
-                            <Text style={styles.date}>Date: {item.date}</Text>
-                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}> 
-                                <TouchableOpacity onPress={() => this.showEvent(item)}>
-                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                        name="info-circle"
-                                        size={25}
-                                        color="#3f51b5"
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.goEdit(item)}>
-                                    <Icon style={{ margin: 12, alignSelf: 'flex-end', flexDirection: 'column' }}
-                                        name="pencil"
-                                        size={25}
-                                        color="#3f51b5"
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.setState({item: item, visible:true})}>
-                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                        name="trash-o"
-                                        size={25}
-                                        color="#3f51b5"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        :
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.event_name}>{item.event_name}</Text>
-                            <Text style={styles.date}>Date: {item.date}</Text>
-                            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}> 
-                                <TouchableOpacity onPress={() => this.showEvent(item)}>
-                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                        name="info-circle"
-                                        size={25}
-                                        color="#3f51b5"
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.leaveEvent(item)}>
-                                    <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                        name="window-close"
-                                        size={25}
-                                        color="#3f51b5"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        (item.created_by == this.state.email)
+                            ?
+                            <View style={styles.itemContainer}>
+
+                                
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <Text style={styles.event_name}>{item.event_name}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                            <TouchableOpacity onPress={() => this.showEvent(item)}>
+                                                <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                                    name="info-circle"
+                                                    size={25}
+                                                    color="#00e676"
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => this.goEdit(item)}>
+                                                <Icon style={{ marginLeft: 12, alignSelf: 'flex-end', flexDirection: 'column' }}
+                                                    name="pencil"
+                                                    size={25}
+                                                    color="#00e676"
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => this.setState({ item: item, visible: true })}>
+                                                <Icon style={{ marginLeft: 12,marginRight: 15, alignSelf: 'center', flexDirection: 'column' }}
+                                                    name="trash-o"
+                                                    size={25}
+                                                    color="#00e676"
+                                                />
+                                            </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <Text style={styles.date}>Date: {item.date}</Text>
+                                </View>
+                          
+                                
+                            :
+                            <View style={styles.itemContainer}>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <Text style={styles.event_name}>{item.event_name}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                        <TouchableOpacity onPress={() => this.showEvent(item)}>
+                                            <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                                name="info-circle"
+                                                size={25}
+                                                color="#00e676"
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => this.leaveEvent(item)}>
+                                            <Icon style={{ marginLeft: 12,marginRight: 15, alignSelf: 'center', flexDirection: 'column' }}
+                                                name="window-close"
+                                                size={25}
+                                                color="#00e676"
+                                            />
+                                        </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <Text style={styles.date}>Date: {item.date}</Text>
+                                </View>
                     )}
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
@@ -338,36 +354,114 @@ export default class MyEvent extends React.Component {
                     // Refreshing (Set To True When End Reached)
                     refreshing={this.state.refreshing}
                 /> : <View
-                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
-                        <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
-                    </View>}
+                                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
+                                    <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
+                                </View>}
 
-                    <Dialog
-                    visible={this.state.visible}
-                   // dialogTitle = {<DialogTitle title="CAUTION"/>}
-                    footer={
-                        <DialogFooter>
-                           <DialogButton
-                            text="Cancel"
-                            onPress={() => this.setState({visible: false})}
-                          />
-                          <DialogButton
-                            text="OK"
-                            onPress={() => this.setState({visible: false},this.deleteEvent())}
-                          />
-                        </DialogFooter>
-                      }
-                    dialogAnimation={new SlideAnimation({
-                        slideFrom: 'bottom',
-                    })}
-                >
-                    <DialogContent>
-                <Text style = {{padding: 20, paddingBottom:0, fontSize: 20}}>Delete event {this.state.item.event_name}?</Text>
-                    </DialogContent>
-                </Dialog>
-                
-                <View style = {styles.button}>
+                <Dialog
+                                    visible={this.state.visible}
+                                    // dialogTitle = {<DialogTitle title="CAUTION"/>}
+                                    footer={
+                                        <DialogFooter>
+                                            <DialogButton
+                                                text="Cancel"
+                                                onPress={() => this.setState({ visible: false })}
+                                            />
+                                            <DialogButton
+                                                text="OK"
+                                                onPress={() => this.setState({ visible: false }, this.deleteEvent())}
+                                            />
+                                        </DialogFooter>
+                                    }
+                                    dialogAnimation={new SlideAnimation({
+                                        slideFrom: 'bottom',
+                                    })}
+                                >
+                                    <DialogContent>
+                                        <Text style={{ padding: 20, paddingBottom: 0, fontSize: 20 }}>Delete event {this.state.item.event_name}?</Text>
+                                    </DialogContent>
+                                </Dialog>
+                                <ActionButton
+                                    buttonColor="white"
+                                    buttonTextStyle = {{color: 'black'}}
+                                    onPress={() => { this.props.navigation.navigate('create_event') }}
+                                    //renderIcon={() => this.icon()}
+                                    degrees='180'
+
+                                />
+
+            </SafeAreaView>
+        );
+    }
+
+
+}
+
+
+const styles = StyleSheet.create({
+                    container: {
+                    flex: 1,
+                    backgroundColor: 'black'
+
+
+    },
+    header: {
+                    alignSelf: "center",
+        fontStyle: "italic",
+        fontSize: 40,
+        marginBottom: 20,
+        marginTop: 20
+    },
+    headerText: {
+                    fontFamily: 'System',
+        fontSize: 36,
+        fontWeight: '600',
+        color: '#000',
+        marginLeft: 12,
+        marginBottom: 12,
+    },
+    itemContainer: {
+                    height: 120,
+        //flexDirection: 'row',
+        borderWidth: .2,
+        borderBottomColor: '#ababab',
+        borderTopColor: '#ababab'
+        //justifyContent: 'center',
+        //alignItems: 'center',
+    },
+    text: {
+                    fontFamily: 'System',
+        fontSize: 16,
+        fontWeight: '400',
+        color: '#000',
+    },
+    event_name: {
+                    fontSize: 25,
+        alignSelf: 'flex-start',
+        marginLeft: 15,
+        paddingTop: 20,
+        color: 'white'
+
+    },
+    date: {
+        fontSize: 18,
+        fontStyle: 'italic',
+        alignSelf: 'stretch',
+        marginLeft: 15,
+        paddingBottom: 20,
+        color: '#ababab'
+    },
+    button: {
+                    height: 80,
+        width: 80,
+        margin: 20,
+        alignSelf: 'flex-end'
+    }
+
+});
+
+/* <View style = {styles.button}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
                     <Icon style={{  alignSelf: 'flex-end',  }}
                         name="plus-circle"
@@ -376,65 +470,29 @@ export default class MyEvent extends React.Component {
                     />
                 </TouchableOpacity>
                 </View>
-            </SafeAreaView>
-        );
-    }
-
-    
-}
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-
-    },
-    header: {
-        alignSelf: "center",
-        fontStyle: "italic",
-        fontSize: 40,
-        marginBottom: 20,
-        marginTop: 20
-    },
-    headerText: {
-        fontFamily: 'System',
-        fontSize: 36,
-        fontWeight: '600',
-        color: '#000',
-        marginLeft: 12,
-        marginBottom: 12,
-    },
-    itemContainer: {
-        height: 120,
-        //flexDirection: 'row',
-        borderWidth: .2,
-        borderColor: '#000',
-        //justifyContent: 'center',
-        //alignItems: 'center',
-    },
-    text: {
-        fontFamily: 'System',
-        fontSize: 16,
-        fontWeight: '400',
-        color: '#000',
-    },
-    event_name: {
-        fontSize: 25,
-        alignSelf: 'flex-start',
-        margin: 10,
-
-    },
-    date: {
-        fontSize: 18,
-        fontStyle: 'italic',
-        alignSelf: 'stretch',
-        marginLeft: 10
-    },
-    button: {
-        height: 80,
-        width: 80,
-        margin:20,
-        alignSelf: 'flex-end'
-    }
-
-});
+                
+                
+                
+                
+                
+                
+                
+                <Text style={styles.event_name}>{item.event_name}</Text>
+                                    <Text style={styles.date}>Date: {item.date}</Text>
+                                    <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}>
+                                        <TouchableOpacity onPress={() => this.showEvent(item)}>
+                                            <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                                name="info-circle"
+                                                size={25}
+                                                color="#3f51b5"
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => this.leaveEvent(item)}>
+                                            <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                                name="window-close"
+                                                size={25}
+                                                color="#3f51b5"
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                */

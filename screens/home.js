@@ -298,9 +298,9 @@ class home extends Component {
     console.disableYellowBox = true
     var { navigate } = this.props.navigation;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 , backgroundColor: '#323232'}}>
         
-        <Header searchBar rounded>
+        <Header searchBar rounded style = {{backgroundColor: 'black'}}> 
           <Item>
             <Icon name="ios-search" />
             <Input placeholder="Search"
@@ -347,7 +347,7 @@ class home extends Component {
 
         />
         <ActionButton
-          buttonColor="rgba(900,900,60,1)"
+          buttonColor="white"
           onPress={() => { console.log("hi") }}
           renderIcon={() => this.icon()}
           degrees= '180'

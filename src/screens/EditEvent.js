@@ -167,16 +167,7 @@ export default class EditEvent extends React.Component {
         
         return(
             <View style = {styles.container}>
-                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
-                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
-                        <Icon style = {{margin: 20, marginBottom: 0}}
-                            name = "arrow-left"
-                            size = {35}
-                            color = "black"
-                        />
-                    </TouchableOpacity>
-                    </View>
-            <Text style = {styles.header}>{'Edit Event'}</Text>
+                
             <ScrollView style = {styles.container}>
                
                 <View style = {styles.inputForm}>
@@ -305,6 +296,7 @@ export default class EditEvent extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
+       marginTop:15
     },
     header: {
         alignSelf: "center",
