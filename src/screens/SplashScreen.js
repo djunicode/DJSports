@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, ImageBackground} from 'react-native';
+import { Text, StyleSheet, ImageBackground , Image} from 'react-native';
 import firebase from 'firebase'
 import OneSignal from 'react-native-onesignal'
 
@@ -44,6 +44,10 @@ export default class SplashScreen extends React.Component{
 render(){
     return(
         <ImageBackground source={require('../images/backgroundimage.jpg')} style={{width:'100%' , height:'100%',justifyContent:'center'}}>
+            <Image 
+                source={require('../images/logo.png')}
+                style = {{height:130 , width: 300 , alignSelf:'center'}}
+            />
             <Text style={style.text}>WELCOME TO</Text>
             <Text style={style.text}>DJSPORTS</Text>
         </ImageBackground>   

@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   ImageBackground,
+  Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import OneSignal from 'react-native-onesignal';
@@ -70,10 +71,13 @@ export default class LoginScreen extends React.Component {
   }
   render() {
     return (
-      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: '100%', width: '100%' }}>
+      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: null, width: null , flex:1 , justifyContent:'center' }}>
         <View style={style.container}>
-          <Text style={style.header}>DJSPORTS</Text>
-          <View style={{ flexDirection: 'row', padding: 5, }}>
+        <Image 
+                source={require('../images/logo.png')}
+                style = {{height:140 , width: null , margin:30 , marginBottom:50,marginTop:50}}
+            />
+          <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
             <Icon name="user" size={25} color="black" style={{ paddingTop: 10 }} />
             <TextInput
               placeholder='Login ID'
@@ -105,7 +109,7 @@ export default class LoginScreen extends React.Component {
               <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>{this.state.context.toString()}</Text>
             </DialogContent>
           </Dialog>
-          <View style={{ flexDirection: 'row', padding: 5, marginBottom: 20 }}>
+          <View style={{ flexDirection: 'row', padding: 5, marginBottom: 30 }}>
             <Icon name="lock" size={30} color="black" style={{ paddingTop: 9 }} />
             <TextInput
               secureTextEntry={true}
@@ -141,8 +145,8 @@ const style = StyleSheet.create({
     paddingRight: 10,
     borderRadius: 20,
     margin: 10,
-    marginTop: 200,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent:'center'
   },
   header: {
     paddingTop: 30,
