@@ -16,7 +16,7 @@ class EventCard extends Component {
                     <CardItem style = {{backgroundColor:'black'}}>
                         <Left>
                             <View>
-                                <Title style={{ color: 'white', paddingStart: 20 }}>
+                                <Title style={{ color: 'white', paddingStart: 20 , fontFamily: 'Lato-BlackItalic'}}>
                                     {this.props.EventName}
                                 </Title>
                                 <Subtitle style={{ color: 'white', paddingStart: 20, paddingTop: 5, fontSize: 15 }}>

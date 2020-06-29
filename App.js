@@ -31,12 +31,26 @@ import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#3498db',
+    accent: '#f1c40f',
+  },
+};
+
 
 export default class App extends React.Component {
   
   render() {
     return (
+      
           <AppContainer/> 
+     
     );
   }
 }
@@ -73,12 +87,13 @@ const event_main = createStackNavigator({
     screen: MyEvent,
     navigationOptions: {
       title: 'MY EVENTS',
-      headerStyle: { height: 70, justifyContent: 'center', backgroundColor: 'black'},
+      headerStyle: { height: 100, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
         fontSize: 35,
-        fontWeight: 'bold',
-        color: '#FFF'
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Acme-Regular'
       }
 
     }
@@ -129,7 +144,6 @@ const event_main = createStackNavigator({
       },
       headerBackTitleStyle:{ backgroundColor: 'white', color:'white', tintColor:'white'},
       headerBackAllowFontScaling: true,
-      headerBackImage: {color: 'white'}
 
 
     }

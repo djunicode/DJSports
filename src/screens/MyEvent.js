@@ -7,12 +7,17 @@ import { NavigationEvents } from 'react-navigation';
 import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter, DialogTitle } from 'react-native-popup-dialog';
 import moment from 'moment';
 import ActionButton from 'react-native-action-button';
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+import { MenuProvider, renderers } from 'react-native-popup-menu';
 
-
-
+const { SlideInMenu } = renderers;
 const today = moment()
 const right_now = today.format()
-
 
 export default class MyEvent extends React.Component {
     constructor(props) {
@@ -265,133 +270,157 @@ export default class MyEvent extends React.Component {
 
 
         return (
-            <SafeAreaView style={styles.container}>
+            <MenuProvider>
+                <SafeAreaView style={styles.container}>
 
 
-                {(!this.state.direct) ? <FlatList
-                    // Data
-                    data={this.state.documentData}
-                    // Render Items
-                    renderItem={({ item }) => (
+                    {(!this.state.direct) ? <FlatList
+                        // Data
+                        data={this.state.documentData}
+                        // Render Items
+                        renderItem={({ item }) => (
 
-                        (item.created_by == this.state.email)
-                            ?
-                            <View style={styles.itemContainer}>
+                            (item.created_by == this.state.email)
+                                ?
+                                <View style={styles.itemContainer}>
 
-                                
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text style={styles.event_name}>{item.event_name}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                            <TouchableOpacity onPress={() => this.showEvent(item)}>
-                                                <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                                    name="info-circle"
-                                                    size={25}
-                                                    color="#00e676"
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => this.goEdit(item)}>
-                                                <Icon style={{ marginLeft: 12, alignSelf: 'flex-end', flexDirection: 'column' }}
-                                                    name="pencil"
-                                                    size={25}
-                                                    color="#00e676"
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => this.setState({ item: item, visible: true })}>
-                                                <Icon style={{ marginLeft: 12,marginRight: 15, alignSelf: 'center', flexDirection: 'column' }}
-                                                    name="trash-o"
-                                                    size={25}
-                                                    color="#00e676"
-                                                />
-                                            </TouchableOpacity>
-                                            </View>
+
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={styles.event_name}>{item.event_name}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 30 }}>
+                                            <Menu
+                                                onSelect={() => console.log('blahh ', item.event_name)}
+                                                renderer={SlideInMenu} style={{ width: 50, height: 20, justifyContent: 'center' }}>
+                                                <MenuTrigger style={{ color: 'white' }}
+                                                >
+                                                    <Icon style={{ alignSelf: 'center', flexDirection: 'column', padding: 0 }}
+                                                        name="ellipsis-v"
+                                                        size={24}
+                                                        color="#636363"
+                                                    />
+                                                </MenuTrigger>
+                                                <MenuOptions style={{ backgroundColor: '#212121'}}>                                                    
+                                                    <MenuOption onSelect={() => this.goEdit(item)} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                
+                                                        <Text style={styles.menuText}>
+                                                        <Icon name="pencil" size = {17}/>
+                                                            {'  Edit the Event'}
+                                                        </Text>
+                                                     
+                                                    </MenuOption>
+                                                    <MenuOption onSelect={() => this.showEvent(item)}  style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="info-circle" size = {17}/>
+                                                            {'  View details'}
+                                                        </Text>
+                                                    </MenuOption>
+                                                    <MenuOption onSelect={() =>  this.setState({ item: item, visible: true })} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="trash-o" size = {17}/>
+                                                            {'  Delete the event'}
+                                                        </Text>
+                                                    </MenuOption>
+                                                </MenuOptions>
+                                            </Menu>
                                         </View>
                                     </View>
                                     <Text style={styles.date}>Date: {item.date}</Text>
                                 </View>
-                          
-                                
-                            :
-                            <View style={styles.itemContainer}>
-                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text style={styles.event_name}>{item.event_name}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                        <TouchableOpacity onPress={() => this.showEvent(item)}>
-                                            <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                                name="info-circle"
-                                                size={25}
-                                                color="#00e676"
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.leaveEvent(item)}>
-                                            <Icon style={{ marginLeft: 12,marginRight: 15, alignSelf: 'center', flexDirection: 'column' }}
-                                                name="window-close"
-                                                size={25}
-                                                color="#00e676"
-                                            />
-                                        </TouchableOpacity>
-                                            </View>
+
+
+                                :
+                                <View style={styles.itemContainer}>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={styles.event_name}>{item.event_name}</Text>
+                                        </View>
+                                        <View style={{  flexDirection: 'column', justifyContent: 'center', marginRight: 30 }}>
+                                        <Menu
+                                                onSelect={() => console.log('blahh ', item.event_name)}
+                                                renderer={SlideInMenu} style={{ width: 50, height: 20, justifyContent: 'center' }}>
+                                                <MenuTrigger style={{ color: 'white' }}
+                                                >
+                                                    <Icon style={{ alignSelf: 'center', flexDirection: 'column', padding: 0 }}
+                                                        name="ellipsis-v"
+                                                        size={24}
+                                                        color="#636363"
+                                                    />
+                                                </MenuTrigger>
+                                                <MenuOptions style={{ backgroundColor: '#212121',borderBottomWidth: 0.2, borderBottomColor:'#212121'}}>                                                    
+                                                   
+                                                    <MenuOption onSelect={() => this.showEvent(item)}  style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="info-circle" size = {17}/>
+                                                            {'  View details'}
+                                                        </Text>
+                                                    </MenuOption>
+                                                    <MenuOption onSelect={() =>  this.leaveEvent(item)} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="window-close" size = {17}/>
+                                                            {'  Leave the event'}
+                                                        </Text>
+                                                    </MenuOption>
+                                                </MenuOptions>
+                                            </Menu>
                                         </View>
                                     </View>
                                     <Text style={styles.date}>Date: {item.date}</Text>
                                 </View>
-                    )}
-                    // Item Key
-                    keyExtractor={(item, index) => String(index)}
-                    // Header (Title)
-                    ListHeaderComponent={this.renderHeader}
-                    // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
-                    // On End Reached (Takes a function)
-                    onEndReached={this.retrieveMore}
-                    // How Close To The End Of List Until Next Data Request Is Made
-                    onEndReachedThreshold={0}
-                    // Refreshing (Set To True When End Reached)
-                    refreshing={this.state.refreshing}
-                /> : <View
-                                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
-                                    <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
-                                </View>}
+                        )}
+                        // Item Key
+                        keyExtractor={(item, index) => String(index)}
+                        // Header (Title)
+                        ListHeaderComponent={this.renderHeader}
+                        // Footer (Activity Indicator)
+                        ListFooterComponent={this.renderFooter}
+                        // On End Reached (Takes a function)
+                        onEndReached={this.retrieveMore}
+                        // How Close To The End Of List Until Next Data Request Is Made
+                        onEndReachedThreshold={0}
+                        // Refreshing (Set To True When End Reached)
+                        refreshing={this.state.refreshing}
+                    /> : <View
+                        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
+                            <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
+                        </View>}
 
-                <Dialog
-                                    visible={this.state.visible}
-                                    // dialogTitle = {<DialogTitle title="CAUTION"/>}
-                                    footer={
-                                        <DialogFooter>
-                                            <DialogButton
-                                                text="Cancel"
-                                                onPress={() => this.setState({ visible: false })}
-                                            />
-                                            <DialogButton
-                                                text="OK"
-                                                onPress={() => this.setState({ visible: false }, this.deleteEvent())}
-                                            />
-                                        </DialogFooter>
-                                    }
-                                    dialogAnimation={new SlideAnimation({
-                                        slideFrom: 'bottom',
-                                    })}
-                                >
-                                    <DialogContent>
-                                        <Text style={{ padding: 20, paddingBottom: 0, fontSize: 20 }}>Delete event {this.state.item.event_name}?</Text>
-                                    </DialogContent>
-                                </Dialog>
-                                <ActionButton
-                                    buttonColor="white"
-                                    buttonTextStyle = {{color: 'black'}}
-                                    onPress={() => { this.props.navigation.navigate('create_event') }}
-                                    //renderIcon={() => this.icon()}
-                                    degrees='180'
-
+                    <Dialog
+                        visible={this.state.visible}
+                        // dialogTitle = {<DialogTitle title="CAUTION"/>}
+                        footer={
+                            <DialogFooter>
+                                <DialogButton
+                                    text="Cancel"
+                                    onPress={() => this.setState({ visible: false })}
                                 />
+                                <DialogButton
+                                    text="OK"
+                                    onPress={() => this.setState({ visible: false }, this.deleteEvent())}
+                                />
+                            </DialogFooter>
+                        }
+                        dialogAnimation={new SlideAnimation({
+                            slideFrom: 'bottom',
+                        })}
+                    >
+                        <DialogContent>
+                            <Text style={{ padding: 20, paddingBottom: 0, fontSize: 20 }}>Delete event {this.state.item.event_name}?</Text>
+                        </DialogContent>
+                    </Dialog>
+                    <ActionButton
+                        buttonColor="#00e676"
+                        buttonTextStyle={{ color: 'black' }}
+                        onPress={() => { this.props.navigation.navigate('create_event') }}
+                        //renderIcon={() => this.icon()}
+                        degrees='180'
 
-            </SafeAreaView>
+                    />
+
+                </SafeAreaView>
+            </MenuProvider>
         );
     }
 
@@ -400,21 +429,21 @@ export default class MyEvent extends React.Component {
 
 
 const styles = StyleSheet.create({
-                    container: {
-                    flex: 1,
-                    backgroundColor: 'black'
+    container: {
+        flex: 1,
+        backgroundColor: 'black'
 
 
     },
     header: {
-                    alignSelf: "center",
+        alignSelf: "center",
         fontStyle: "italic",
         fontSize: 40,
         marginBottom: 20,
         marginTop: 20
     },
     headerText: {
-                    fontFamily: 'System',
+        fontFamily: 'System',
         fontSize: 36,
         fontWeight: '600',
         color: '#000',
@@ -422,26 +451,27 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     itemContainer: {
-                    height: 120,
+        height: 120,
         //flexDirection: 'row',
-        borderWidth: .2,
-        borderBottomColor: '#ababab',
-        borderTopColor: '#ababab'
+        borderWidth: 0.2,
+        borderBottomColor: '#424242',
+       // borderTopColor: '#ababab'
         //justifyContent: 'center',
         //alignItems: 'center',
     },
     text: {
-                    fontFamily: 'System',
+        fontFamily: 'System',
         fontSize: 16,
         fontWeight: '400',
         color: '#000',
     },
     event_name: {
-                    fontSize: 25,
+        fontSize: 28,
         alignSelf: 'flex-start',
         marginLeft: 15,
         paddingTop: 20,
-        color: 'white'
+        color: 'white',
+        fontFamily: 'FiraSansCondensed-Regular'
 
     },
     date: {
@@ -453,10 +483,16 @@ const styles = StyleSheet.create({
         color: '#ababab'
     },
     button: {
-                    height: 80,
+        height: 80,
         width: 80,
         margin: 20,
         alignSelf: 'flex-end'
+    },
+    menuText: {
+        color: '#ababab',
+        fontSize: 20,
+        fontFamily: "FiraSansCondensed-Regular",
+
     }
 
 });
@@ -470,13 +506,13 @@ const styles = StyleSheet.create({
                     />
                 </TouchableOpacity>
                 </View>
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
                 <Text style={styles.event_name}>{item.event_name}</Text>
                                     <Text style={styles.date}>Date: {item.date}</Text>
                                     <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}>
@@ -496,3 +532,21 @@ const styles = StyleSheet.create({
                                         </TouchableOpacity>
                                     </View>
                 */
+
+/*<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                                <TouchableOpacity onPress={() => this.showEvent(item)}>
+                                                    <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
+                                                        name="info-circle"
+                                                        size={25}
+                                                        color="#00e676"
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => this.leaveEvent(item)}>
+                                                    <Icon style={{ marginLeft: 12, marginRight: 15, alignSelf: 'center', flexDirection: 'column' }}
+                                                        name="window-close"
+                                                        size={25}
+                                                        color="#00e676"
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                            */
