@@ -11,7 +11,7 @@ import notifs from './screens/notifs.js'
 import profile from './screens/profile.js'
 import create_event from './screens/create_event.js'
 import create_team from './screens/create_team.js'
-import myteams from './screens/myteams.js'
+import Notification from './screens/myteams.js'
 import team from './screens/team.js'
 import join_team from './screens/join_team.js'
 import SignUpScreen from './src/screens/SignUpScreen'
@@ -94,7 +94,7 @@ const event_main = createStackNavigator({
 
 const teamModule = createStackNavigator({
   myteams :{
-    screen : myteams
+    screen : Notification
   },
   team: {
     screen :team

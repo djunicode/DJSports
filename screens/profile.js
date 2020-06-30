@@ -10,12 +10,13 @@ import { SafeAreaView, Image, ScrollView } from "react-native";
 import ImagePicker from 'react-native-image-picker'
 import firebase from 'firebase';
 import '@firebase/firestore'
+import 'firebase/storage'
 import { concat } from "react-native-reanimated";
 //import StarRating from 'react-native-star-rating';
 var username = 'Simrn'
 // var name1 
 //The above data comes from Authentication
-class profile extends Component {
+class profile extends React.Component {
 
     constructor(props) {
 
@@ -35,12 +36,11 @@ class profile extends Component {
             fileUri: '',
         };
 
-
     }
     componentDidMount() {
         const user = firebase.auth().currentUser
-        console.log(user)
-        const ref = firebase.firestore().collection('Users').doc(username);
+        console.log('user : ' , user)
+        const ref = firebase.firestore().collection('Users').doc('manav');
         firebase.firestore()
             .runTransaction(async (transaction) => {
                 const snapshot = await transaction.get(ref);
@@ -59,13 +59,10 @@ class profile extends Component {
                 this.setState({ wins: snapshot.data().wins });
             });
     }
-    
+   
     chooseImage = () => {
         let options = {
           title: 'Select Image',
-          customButtons: [
-            { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-          ],
           storageOptions: {
             skipBackup: true,
             path: 'images',
@@ -87,12 +84,17 @@ class profile extends Component {
             // You can also display the image using data:
             // const source = { uri: 'data:image/jpeg;base64,' + response.data };
             // alert(JSON.stringify(response));s
-            console.log('response', JSON.stringify(response));
+            // console.log('response', JSON.stringify(response));
             this.setState({
               filePath: response,
               fileData: response.data,
               fileUri: response.uri
             });
+            const blob = this.uriToBlob(response.uri)
+            console.log(`blob create ${blob}`)
+            const img = this.uploadPhotoAsync(response.uri)
+            // const img = this.uploadToFirebase(blob)
+            console.log('image uploaded...'+ JSON.stringify(img))
           }
         });
       }
@@ -107,6 +109,85 @@ class profile extends Component {
           />
         }
       }
+      uriToBlob = (uri) => {
+
+        return new Promise((resolve, reject) => {
+    
+          const xhr = new XMLHttpRequest();
+    
+          xhr.onload = function() {
+            // return the blob
+            resolve(xhr.response);
+          };
+          
+          xhr.onerror = function() {
+            // something went wrong
+            reject(new Error('uriToBlob failed'));
+          };
+    
+          // this helps us get a blob
+          xhr.responseType = 'blob';
+    
+          xhr.open('GET', uri, true);
+          xhr.send(null);
+    
+        });
+    
+      }
+     
+
+    uploadPhotoAsync = async uri => {
+        const path = `photos/${this.uid}/${Date.now()}.jpg`;
+
+        return new Promise(async(res, rej) => {    
+            const response = await fetch(uri);
+            const file = await response.blob()
+
+            let upload = firebase
+                .storage()
+                .ref('profile/manav')
+                .put(file);
+
+            upload.on(
+                "state_changed",
+                snapshot => {},
+                err => {
+                    rej(err);
+                },
+                async () => {
+                    const url = await upload.snapshot.ref.getDownloadURL();
+                    res(url);
+                    console.log(url)
+                }
+            );
+        });
+    };
+    
+    
+      uploadToFirebase = (blob) => {
+    
+        return new Promise((resolve, reject)=>{
+    
+          var storageRef = firebase.storage().ref();
+    
+          storageRef.child('uploads/photo.jpg').put(blob, {
+            contentType: 'image/jpeg'
+          }).then((snapshot)=>{
+    
+            blob.close();
+    
+            resolve(snapshot);
+    
+          }).catch((error)=>{
+    
+            reject(error);
+    
+          });
+    
+        });
+    
+    
+      }      
     signout = () => {
         firebase.auth().signOut()
         this.props.navigation.navigate('LoginScreen')
