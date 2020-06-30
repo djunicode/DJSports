@@ -497,41 +497,7 @@ const styles = StyleSheet.create({
 
 });
 
-/* <View style = {styles.button}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('create_event')}>
-                    <Icon style={{  alignSelf: 'flex-end',  }}
-                        name="plus-circle"
-                        size={60}
-                        color="#3f51b5"
-                    />
-                </TouchableOpacity>
-                </View>
 
-
-
-
-
-
-
-                <Text style={styles.event_name}>{item.event_name}</Text>
-                                    <Text style={styles.date}>Date: {item.date}</Text>
-                                    <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center' }}>
-                                        <TouchableOpacity onPress={() => this.showEvent(item)}>
-                                            <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                                name="info-circle"
-                                                size={25}
-                                                color="#3f51b5"
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.leaveEvent(item)}>
-                                            <Icon style={{ margin: 12, alignSelf: 'center', flexDirection: 'column' }}
-                                                name="window-close"
-                                                size={25}
-                                                color="#3f51b5"
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                */
 
 /*<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                                 <TouchableOpacity onPress={() => this.showEvent(item)}>
