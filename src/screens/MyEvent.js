@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox , LayoutAnimation} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,7 +40,8 @@ export default class MyEvent extends React.Component {
             direct: 'false',
             visible: false,
             item: [],
-            data2: []
+            data2: [],
+            expanded: false
 
         }
 
@@ -272,8 +273,7 @@ export default class MyEvent extends React.Component {
         return (
             <MenuProvider>
                 <SafeAreaView style={styles.container}>
-
-
+                
                     {(!this.state.direct) ? <FlatList
                         // Data
                         data={this.state.documentData}
@@ -301,7 +301,7 @@ export default class MyEvent extends React.Component {
                                                         color="#636363"
                                                     />
                                                 </MenuTrigger>
-                                                <MenuOptions style={{ backgroundColor: '#212121'}}>                                                    
+                                                <MenuOptions style={{ backgroundColor: 'white'}}>                                                    
                                                     <MenuOption onSelect={() => this.goEdit(item)} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
                                                 
                                                         <Text style={styles.menuText}>
@@ -326,7 +326,10 @@ export default class MyEvent extends React.Component {
                                             </Menu>
                                         </View>
                                     </View>
-                                    <Text style={styles.date}>Date: {item.date}</Text>
+                                    <View style = {{flex:1,flexDirection: 'row', marginLeft:10, paddingTop:10}}>
+                                    <Icon style={{padding:6, paddingRight:0}} name="calendar" size = {17} color="#ababab"/>
+                                    <Text style={styles.date}>{item.date}</Text>
+                                    </View>
                                 </View>
 
 
@@ -348,7 +351,7 @@ export default class MyEvent extends React.Component {
                                                         color="#636363"
                                                     />
                                                 </MenuTrigger>
-                                                <MenuOptions style={{ backgroundColor: '#212121',borderBottomWidth: 0.2, borderBottomColor:'#212121'}}>                                                    
+                                                <MenuOptions style={{ backgroundColor: 'white',borderBottomWidth: 0.2, borderBottomColor:'#212121'}}>                                                    
                                                    
                                                     <MenuOption onSelect={() => this.showEvent(item)}  style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
                                                     <Text style={styles.menuText}>
@@ -366,7 +369,10 @@ export default class MyEvent extends React.Component {
                                             </Menu>
                                         </View>
                                     </View>
-                                    <Text style={styles.date}>Date: {item.date}</Text>
+                                    <View style = {{flex:1,flexDirection: 'row', marginLeft:10, paddingTop:10}}>
+                                    <Icon style={{padding:6, paddingRight:0}} name="calendar" size = {17} color="#ababab"/>
+                                    <Text style={styles.date}>{item.date}</Text>
+                                    </View>
                                 </View>
                         )}
                         // Item Key
@@ -476,11 +482,12 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: 18,
-        fontStyle: 'italic',
+        //fontStyle: 'italic',
         alignSelf: 'stretch',
         marginLeft: 15,
         paddingBottom: 20,
-        color: '#ababab'
+        color: '#ababab',
+        fontFamily: 'FiraSansCondensed-Regular'
     },
     button: {
         height: 80,
@@ -489,7 +496,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     menuText: {
-        color: '#ababab',
+        color: '#424242',
         fontSize: 20,
         fontFamily: "FiraSansCondensed-Regular",
 

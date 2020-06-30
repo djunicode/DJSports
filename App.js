@@ -87,13 +87,13 @@ const event_main = createStackNavigator({
     screen: MyEvent,
     navigationOptions: {
       title: 'MY EVENTS',
-      headerStyle: { height: 100, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
-        fontSize: 35,
+        fontSize: 40,
         //fontWeight: 'bold',
         color: '#FFF',
-        fontFamily: 'Acme-Regular'
+        fontFamily: 'Roboto-Regular'
       }
 
     }

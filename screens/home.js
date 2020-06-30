@@ -347,19 +347,19 @@ class home extends Component {
 
         />
         <ActionButton
-          buttonColor="white"
+          buttonColor="#00e676"
           onPress={() => { console.log("hi") }}
           renderIcon={() => this.icon()}
           degrees= '180'
 
         >
-          <ActionButton.Item buttonColor='#9b59b6' title="Search by Sport" onPress={() => this.setState({search_by_sport: true, search_by_name: false})}>
-            <Icon name="ios-basketball" style={styles.actionButtonIcon} />
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search by Sport" onPress={() => this.setState({search_by_sport: true, search_by_name: false})}>
+            <Icon name="ios-basketball" color = 'black' style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="Search by Event" onPress={() => {this.setState({search_by_name: true, search_by_sport: false}) }}>
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search by Event" onPress={() => {this.setState({search_by_name: true, search_by_sport: false}) }}>
             <Icon name="md-albums" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="Search People" onPress={() => {navigate('ProfileSearch') }}>
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search People" onPress={() => {navigate('ProfileSearch') }}>
             <Icon name="ios-contacts" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: 'white',
+    color: '#424242',
   },
 })
 
