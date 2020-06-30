@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, YellowBox , LayoutAnimation} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ActivityIndicator, StatusBar, StatusBarStyle,YellowBox , LayoutAnimation} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -273,7 +273,7 @@ export default class MyEvent extends React.Component {
         return (
             <MenuProvider>
                 <SafeAreaView style={styles.container}>
-                
+                <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
                     {(!this.state.direct) ? <FlatList
                         // Data
                         data={this.state.documentData}
@@ -398,8 +398,9 @@ export default class MyEvent extends React.Component {
                         // dialogTitle = {<DialogTitle title="CAUTION"/>}
                         footer={
                             <DialogFooter>
-                                <DialogButton
+                                <DialogButton 
                                     text="Cancel"
+                                    
                                     onPress={() => this.setState({ visible: false })}
                                 />
                                 <DialogButton
