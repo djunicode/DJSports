@@ -499,6 +499,8 @@ const styles = StyleSheet.create({
 
 
 
+
+
 /*<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                                 <TouchableOpacity onPress={() => this.showEvent(item)}>
                                                     <Icon style={{ marginLeft: 12, alignSelf: 'center', flexDirection: 'column' }}
