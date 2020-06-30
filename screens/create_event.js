@@ -40,6 +40,7 @@ export default class create_event extends React.Component {
             id: 1,
             isVisible: false,
             keywords: [],
+            keywordsSport:[],
             joined: 1,
             //date_time: '',
             day:'',
@@ -136,6 +137,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             //date_time: this.state.date_time,
             day: this.state.day,
             created_by:this.state.email,
@@ -151,6 +153,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             joined : 1,
             //date_time: this.state.date_time,
             day: this.state.day,
@@ -182,6 +185,19 @@ export default class create_event extends React.Component {
         return arrName;
     }
 
+    handleSportName = (name) => {
+        this.setState ({ sport: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywordsSport: arrName})
+        console.log(arrName)
+        return arrName;
+    }
+
     check() {
         console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
         if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
@@ -194,16 +210,7 @@ export default class create_event extends React.Component {
         console.disableYellowBox = true
         return(
             <View style = {styles.container}>
-                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
-                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
-                        <Icon style = {{margin: 20, marginBottom: 0}}
-                            name = "arrow-left"
-                            size = {35}
-                            color = "black"
-                        />
-                    </TouchableOpacity>
-                </View>
-            <Text style = {styles.header}>{'Create your event'}</Text>
+                
             <ScrollView style = {styles.container}>
                
                 <View style = {styles.inputForm}>
@@ -221,7 +228,7 @@ export default class create_event extends React.Component {
                     <TextInput 
                     style = {styles.input}  
                     autoCapitalize="words" 
-                    onChangeText = {sport => this.setState({sport})}
+                    onChangeText = {sport => this.handleSportName(sport)}
                     value = {this.state.sport}
                     >
                     </TextInput>
@@ -338,6 +345,7 @@ export default class create_event extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
+       marginTop: 15
     },
     header: {
         alignSelf: "center",

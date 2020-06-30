@@ -81,7 +81,7 @@ export default class EventDetails extends Component {
             console.log("Error getting document:", error);
         });
        this.setState({data2:documentData})
-        console.log(this.state.data2)
+        console.log('data 2 is',this.state.data2.player)
             }
     
 

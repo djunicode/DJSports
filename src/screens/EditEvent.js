@@ -54,8 +54,8 @@ export default class EditEvent extends React.Component {
     }
 
     handleEdit = () => {
-        this.check()
-        if (this.state.check) {
+        
+        if (this.check()) {
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).update({
             event_name : this.state.event_name,
@@ -141,7 +141,7 @@ export default class EditEvent extends React.Component {
       console.log('hell now')
   }
 
-  check = () => {
+ /* check = () => {
         
     if (this.state.event_name != '')
         this.setState({ check: true })
@@ -159,6 +159,14 @@ export default class EditEvent extends React.Component {
 
 
 
+}*/
+
+check() {
+    console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
+    if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
+      return true
+    else
+        return false   
 }
 
    
@@ -167,16 +175,7 @@ export default class EditEvent extends React.Component {
         
         return(
             <View style = {styles.container}>
-                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
-                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
-                        <Icon style = {{margin: 20, marginBottom: 0}}
-                            name = "arrow-left"
-                            size = {35}
-                            color = "black"
-                        />
-                    </TouchableOpacity>
-                    </View>
-            <Text style = {styles.header}>{'Edit Event'}</Text>
+                
             <ScrollView style = {styles.container}>
                
                 <View style = {styles.inputForm}>
@@ -305,6 +304,7 @@ export default class EditEvent extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
+       marginTop:15
     },
     header: {
         alignSelf: "center",
