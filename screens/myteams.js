@@ -4,7 +4,10 @@ import {
     Text,
     StyleSheet,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Image,
+    StatusBar,
+    StatusBarStyle
 } from "react-native";
 
 import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
@@ -15,7 +18,7 @@ import TeamCard from '../components/TeamCard.js'
 // image
 // moreDetails
 
-class myteams extends Component {
+class Notification extends Component {
 
     static navigationOptions = {
         title : 'First Screen'
@@ -23,76 +26,66 @@ class myteams extends Component {
     render() {
         var {navigate} = this.props.navigation;
         return (
-            <View>
-              {/* <Header style = {{backgroundColor: 'blue'}}/> */}
-                {/* Leave header for now */}
-                <View style = {{flexDirection: 'row', alignContent: 'center', justifyContent: 'space-evenly', marginTop: 20}}>
-                    <TouchableOpacity style = {styles.button2} onPress  = {
-                    ()=>navigate('create_team')}>
-                        <Text style = {{color: 'black', fontSize:20, padding:10}}>CREATE</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style = {styles.button2} onPress  = {
-                    ()=>navigate('join_team')}>
-                        <Text style = {{color: 'black', fontSize:20, padding:10}}>JOIN</Text>
-                    </TouchableOpacity>
+            <View style = {{flex:1 , backgroundColor:'#000' , borderTopColor:'#00e676' , borderTopWidth:1}}>
+                <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
+                <View style={{flexDirection:'row' , margin:20 , marginTop:20 , marginBottom:10}}>
+                    <Image 
+                        source = {require('../assets/profile-pic.jpg')}
+                        style = {{ height:80, width:80 , borderRadius:40}}
+                    />
+                    <View style ={{margin:15 , marginTop:0 }}>
+                        <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
+                            Random Name
+                        </Text>
+                        <Text style = {{fontSize:15 , color:'#fff'}}>
+                            wants to be your friend
+                        </Text>
+                    <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'center'}}>
+                        <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
+                            <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
+                                Accept
+                            </Text>
+                        </View>
+                        <View style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}}>
+                            <Text style={{fontWeight:'bold', fontSize:17}}>
+                                Ignore
+                            </Text>
+                        </View>
+                    </View>
+                    </View>
                 </View>
-                <FlatList
-         
-          scrollEnabled={true}
-        
-          data=
-          {[{teamDetail : 'Team is really Good',
-            teamName : 'Team1',
-            moreDetail:'Fantastic',
-            image : '../assets/media2.jpg'
-            },
-            {teamDetail : 'Team is really Good',
-            teamName : 'Team2',
-            moreDetail:'Fantastic',
-            image :'../assets/media2.jpg'
-            },{teamDetail : 'Team is really Good',
-            teamName : 'Team3',
-            moreDetail:'Fantastic',
-            image :'../assets/media2.jpg'
-            },{teamDetail : 'Team is really Good',
-            teamName : 'Team1',
-            moreDetail:'Fantastic',
-            image : '../assets/media2.jpg'
-            },
-            {teamDetail : 'Team is really Good',
-            teamName : 'Team2',
-            moreDetail:'Fantastic',
-            image : '../assets/media2.jpg'
-            },{teamDetail : 'Team is really Good',
-            teamName : 'Team3',
-            moreDetail:'Fantastic',
-            image :'../assets/media2.jpg'
-            }
-            // the above format should be followed for using the flat list
-        
-        ]}
-
-          renderItem={({ item }) => 
-          <TouchableOpacity onPress = {
-              ()=>navigate("team",{item})
-          }>
-        <TeamCard image  = {require('../assets/media2.jpg')}
-          teamDetails = {item.teamDetail}
-          teamName = {item.teamName}
-          moreDetails = {item.moreDetail}
-        >
-      </TeamCard>
-      </TouchableOpacity>
-      }
-          //keyExtractor={item => item.teamName}
-        />
-           
+                <View style={{flexDirection:'row' , margin:20 , marginTop:10}}>
+                    <Image 
+                        source = {require('../assets/profile-pic.jpg')}
+                        style = {{ height:80, width:80 , borderRadius:40}}
+                    />
+                    <View style ={{margin:15 , marginTop:0 }}>
+                        <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
+                            Random Name
+                        </Text>
+                        <Text style = {{fontSize:15 , color:'#fff'}}>
+                            invited you for random event
+                        </Text>
+                    <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'center'}}>
+                        <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
+                            <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
+                                Accept
+                            </Text>
+                        </View>
+                        <View style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}}>
+                            <Text style={{fontWeight:'bold', fontSize:17}}>
+                                Ignore
+                            </Text>
+                        </View>
+                    </View>
+                    </View>
+                </View>
             </View>
             
         );
     }
 }
-export default myteams;
+export default Notification;
 
 const styles = StyleSheet.create({
     container: {
