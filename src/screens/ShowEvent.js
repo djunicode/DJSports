@@ -2,7 +2,9 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput, ImageBackground} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
+//import {Icon} from 'native-base',
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 export default class ShowEvent extends React.Component {
     constructor(props) {
@@ -61,34 +63,38 @@ export default class ShowEvent extends React.Component {
             ?
             <View style = {styles.container}>
                 <ImageBackground
-            
-            source = {{uri: 'https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'}}
-            style = {{flex: 1}}
+            source={require('../images/infobkg2.jpeg')}
+            style = {{flex: 1,}}
             
         >
             
                     
-                <Text style = {styles.headerText}>{this.state.event_name.toUpperCase()}</Text>
+                <Text style = {styles.headerText}>{this.state.event_name}</Text>
                 
                 
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Sport</Text>
+                <Icon name="soccer-ball-o" size={25} style={styles.icon} />
                 <Text style = {styles.info}>{this.state.sport}</Text>
                 </View>
                 
-                <TouchableOpacity style = {styles.shadow} onPress={()=>{
+                <View  style = {styles.shadow} >
+                
+                <Icon name="users" style={styles.icon} size={25} />
+                <Text style = {styles.info}>{this.state.no_people}</Text>
+                <TouchableOpacity onPress={()=>{
                     //console.log(this.state.data2)
                     this.props.navigation.navigate('ShowList', {players:this.state.data2.players })
                 }}>
-                <Text style = {styles.title}>Number of players</Text>
-                <Text style = {styles.info}>{this.state.no_people}</Text>
+                     <Icon name="eye" style={{color: '#ababab', paddingLeft:260, padding:12}} size={19} />
                 </TouchableOpacity>
+                </View>
+
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Venue</Text>
+                <Icon name="map-marker" style={styles.icon} size={25} />
                 <Text style = {styles.info}>{this.state.venue}</Text>
                 </View>
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Date and time</Text>
+                <Icon name="calendar" style={styles.icon} size={25} />
                 <Text style = {styles.info}>{this.state.date}</Text>
                 </View>
                 
@@ -98,38 +104,38 @@ export default class ShowEvent extends React.Component {
             :
             <View style = {styles.container}>
                 <ImageBackground
-            
-            source = {{uri: 'https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'}}
+                        source={require('../images/infobkg2.jpeg')}
             style = {{flex: 1}}
             
         >
-            <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
-                        <Icon style = {{margin: 20, marginBottom: 0}}
-                            name = "arrow-left"
-                            size = {35}
-                            color = "#84ffff"
-                        />
-                    </TouchableOpacity>
-                <View style = {styles.header }>
+           
                     
-                <Text style = {styles.headerText}>{this.state.event_name.toUpperCase()}</Text>
-                </View>
+                <Text style = {styles.headerText}>{this.state.event_name}</Text>
+
                 
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Sport</Text>
+                <Icon name="soccer-ball-o" size={25} style={styles.icon} />
                 <Text style = {styles.info}>{this.state.sport}</Text>
                 </View>
                 
-                <View style = {styles.shadow}>
-                <Text style = {styles.title}>Number of players</Text>
+                <View  style = {styles.shadow} >
+                
+                <Icon name="users" style={styles.icon} size={25} />
                 <Text style = {styles.info}>{this.state.no_people}</Text>
+                <TouchableOpacity onPress={()=>{
+                    //console.log(this.state.data2)
+                    this.props.navigation.navigate('ShowList', {players:this.state.data2.players })
+                }}>
+                     <Icon name="eye" style={{color: '#ababab', paddingLeft:260, padding:12}} size={19} />
+                </TouchableOpacity>
                 </View>
+
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Venue</Text>
+                <Icon name="map-marker" style={styles.icon} size={25} />
                 <Text style = {styles.info}>{this.state.venue}</Text>
                 </View>
                 <View style = {styles.shadow}>
-                <Text style = {styles.title}>Date and time</Text>
+                <Icon name="calendar" style={styles.icon} size={25} />
                 <Text style = {styles.info}>{this.state.date}</Text>
                 </View>
                 
@@ -146,19 +152,20 @@ export default class ShowEvent extends React.Component {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: '#18ffff'
+        //backgroundColor: '#'
         //alignItems: 'center',
         //justifyContent: 'space-around',
         
     },
     headerText: {
-        //alignSelf: 'flex-start',
-        fontSize: 60,
-        fontStyle: 'italic',
-       paddingLeft:15,
-        fontWeight: 'bold',
+        alignSelf: 'center',
+        fontSize: 45,
+        //fontStyle: 'italic',
+       padding:15,
+        //fontWeight: 'bold',
         color: '#fafafa',
-        elevation: 20
+        elevation: 20,
+        fontFamily: 'FiraSansCondensed-Regular'
         
     },
     header : {
@@ -177,35 +184,42 @@ const styles = StyleSheet.create({
         //marginLeft: 10,
         fontWeight: 'bold',
         padding: 5,
-        color: '#1a237e'
+        color: '#ababab'
 
     },
     info: {
         fontSize : 25,
         //marginLeft: 10,
         padding:10,
-        paddingBottom: 15,
-        color: '#0d47a1'
+        paddingBottom: 1,
+        color: '#e0e0e0',
+        fontFamily: 'Roboto-Light'
         
 
 
     },
     shadow: {  
-        borderColor:'black', // if you need 
-        borderWidth:2.5,
-        elevation: 20,
-        shadowColor: 'red',
+       // borderColor:'black', // if you need 
+       // borderWidth:2.5,
+        //elevation: 20,
+        //shadowColor: 'red',
         borderRadius: 8,
-        alignItems: 'center',
-        alignSelf: 'stretch',
-        justifyContent: 'center',
-        borderBottomColor: '#3f51b5',
-        borderTopColor: '#3f51b5',
-        backgroundColor: '#84ffff',
+        //alignItems: 'center',
+        //alignSelf: 'stretch',
+        //justifyContent: 'center',
+        //borderBottomColor: '#3f51b5',
+        //borderTopColor: '#3f51b5',
+        //backgroundColor: '#84ffff',
         marginHorizontal: 10,
-        borderRightColor:'#3f51b5',
-        marginVertical: 10
+        //borderRightColor:'#3f51b5',
+        marginVertical: 10,
+        flexDirection:'row',
+        //padding:10
         
         
+    },
+    icon: {
+        color: 'white',
+        padding:12
     }
 })

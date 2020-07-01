@@ -279,7 +279,7 @@ check() {
                 </View>
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleEdit} >
-                    <Text style = {{color: "white"}}>CHANGE</Text>
+                    <Text style = {{color: "white", fontFamily:'Roboto-Regular', fontSize: 20, fontWeight:'bold'}}>CHANGE</Text>
 
                 </TouchableOpacity>
                 
@@ -304,7 +304,8 @@ check() {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       marginTop:15
+       paddingTop: 15,
+       backgroundColor: 'black'
     },
     header: {
         alignSelf: "center",
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         //flexDirection: 'row',
         marginBottom: 40,
-        marginTop: 20,
+        //marginTop: 20,
         fontWeight: 'bold'
     },
     inputForm: {
@@ -323,21 +324,29 @@ const styles = StyleSheet.create({
 
     inputTitle: {
         fontSize:18,
-        color: "#8A8F9E"
+        color: "#ababab",
+        fontFamily: 'Roboto-Light'
     },
     input: {
-        fontSize: 15,
+        fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40
+        height: 40,
+        color:'#fff',
+        borderColor: '#424242',
+        fontFamily: 'Roboto-Light'
     
     },
     button: {
-        marginHorizontal: 30,
-        backgroundColor: "black",
-        borderRadius: 8,
+       // marginHorizontal: 30,
+        backgroundColor: "#00e676",
+        borderRadius: 25,
         height: 52,
         justifyContent:"center",
         alignItems:"center",
+        width: 170,
+        alignSelf:'center',
+        marginTop: 15
+        
     
     }
 

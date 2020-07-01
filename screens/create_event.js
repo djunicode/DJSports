@@ -319,15 +319,15 @@ export default class create_event extends React.Component {
                 
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
-                    <Text style = {{color: "white"}}>CREATE</Text>
+                    <Text style = {{color: "white", fontFamily:'Roboto-Regular', fontSize: 20, fontWeight: 'bold'}}>CREATE</Text>
 
                 </TouchableOpacity>
-                <View style = {{ height: 40, width:40,marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end'}}>
+                <View style = {{ height: 40, width:40,marginRight: 10,marginBottom: 0, marginTop:80 ,alignSelf: 'flex-end'}}>
                 <TouchableOpacity onPress = {() => alert('Name of the event and number of players cannot be changed later')}>
                     <Icon style={{alignSelf: 'flex-end',}}
                         name = "exclamation-circle"
                         size = {25}
-                        color = "red"
+                        color = "#f44336"
                     />
                 </TouchableOpacity>
                 </View>
@@ -345,7 +345,8 @@ export default class create_event extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       marginTop: 15
+       paddingTop: 15,
+       backgroundColor: 'black'
     },
     header: {
         alignSelf: "center",
@@ -364,21 +365,29 @@ const styles = StyleSheet.create({
 
     inputTitle: {
         fontSize:18,
-        color: "#8A8F9E"
+        color: "#ababab",
+        fontFamily: 'Roboto-Light'
     },
     input: {
-        fontSize: 15,
+        fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40
+        height: 40,
+        color:'#fff',
+        borderColor: '#424242',
+        fontFamily: 'Roboto-Light'
     
     },
     button: {
-        marginHorizontal: 30,
-        backgroundColor: "black",
-        borderRadius: 8,
+       // marginHorizontal: 30,
+        backgroundColor: "#00e676",
+        borderRadius: 25,
         height: 52,
         justifyContent:"center",
         alignItems:"center",
+        width: 170,
+        alignSelf:'center',
+        marginTop: 15
+        
     
     }
 

@@ -103,16 +103,14 @@ const event_main = createStackNavigator({
     screen :create_event,
     navigationOptions: {
       title: 'CREATE  EVENT',
-      headerStyle: { height: 70, justifyContent: 'center', backgroundColor: 'black'},
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
-        fontSize: 35,
-        fontWeight: 'bold',
-        color: 'white'
-        //fontFamily: 'Cambria',
-    
-      }
-
+        fontSize: 40,
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      }, headerTintColor: 'white', 
     }
   },
   
@@ -120,13 +118,14 @@ const event_main = createStackNavigator({
     screen: EditEvent,
     navigationOptions: {
       title: 'EDIT EVENT',
-      headerStyle: { height: 70, justifyContent: 'center', backgroundColor: 'black'},
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
-        fontSize: 35,
-        fontWeight: 'bold',
-        color: 'white'
-      }
+        fontSize: 40,
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      }, headerTintColor: 'white', 
 
     }
   },
@@ -135,15 +134,14 @@ const event_main = createStackNavigator({
     screen: showeventpage,
     navigationOptions: {
       title: 'EVENT DETAILS',
-      headerStyle: { height: 70, justifyContent: 'center', backgroundColor: '#212121'},
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
-        fontSize: 35,
-        fontWeight: 'bold',
-        color: 'white'
-      },
-      headerBackTitleStyle:{ backgroundColor: 'white', color:'white', tintColor:'white'},
-      headerBackAllowFontScaling: true,
+        fontSize: 40,
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      }, headerTintColor: 'white', 
 
 
     }
