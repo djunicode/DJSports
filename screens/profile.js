@@ -202,7 +202,7 @@ class profile extends React.Component {
                         {/* <Ionicons name="md-more" size={24} color="#52575D"></Ionicons> */}
                     </View>
 
-                    <View style={{ alignSelf: "center" }}>
+                    <View style={{ alignSelf: "center" ,  }}>
                             <TouchableOpacity style={styles.profileImage}
                              onPress={() => this.chooseImage()}>
                                 {this.renderFileData()}
@@ -298,7 +298,7 @@ export default profile;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#FFF"
+        backgroundColor: "#000"
     },
     text: {
         fontFamily: "HelveticaNeue",
