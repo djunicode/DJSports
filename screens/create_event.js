@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+import Geocoder from 'react-native-geocoding';
 
 //import RNGooglePlaces from 'react-native-google-places';
 
@@ -35,6 +36,7 @@ export default class create_event extends React.Component {
             sport: '',
             no_people : '',
             venue : '',
+            location:"",
             date: 'Select Date and Time',
             db: firebase.firestore(),
             id: 1,
@@ -47,7 +49,10 @@ export default class create_event extends React.Component {
             see: false,
             check :false,
             visible: false,
-            show : false
+            show : false,
+            lat : 0,
+            long : 0
+
          
 
         }
@@ -56,15 +61,17 @@ export default class create_event extends React.Component {
 
     componentDidMount(){
         const today = moment();
+        Geocoder.init("AIzaSyCwsGyxbGuuYoCXOvr2Ju4PLZzM9gAo0NY");
+        console.log("Geoencoding initialised")
         const user = firebase.auth().currentUser
         this.setState({email : user.email })
-        console.log("success kinda")
-        console.log(user.email)
+        // console.log("success kinda")
+        // console.log(user.email)
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
         
         
       }
-
+      
 
       handlePicker = (datetime) => {
           
@@ -122,13 +129,14 @@ export default class create_event extends React.Component {
     }
       
 
-    handleCreate = () => {
+    handleCreate = async () => {
+        
         let arr = this.handleEventName(this.state.event_name)
         console.log(arr)
-        
+       
+
         if (this.check()) {
-        //alert('Event created')
-        console.log(this.state.event_name)
+            console.log("started check")
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
             event_name : this.state.event_name,
             sport: this.state.sport,
@@ -143,6 +151,8 @@ export default class create_event extends React.Component {
             created_by:this.state.email,
             players:[],
             joined:1,
+            lat : this.state.lat,
+            long : this.state.long
         
         })
         .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
@@ -159,7 +169,9 @@ export default class create_event extends React.Component {
             day: this.state.day,
             created_by:this.state.email,
             players:[],
-
+            location : [],
+            lat : this.state.lat,
+            long : this.state.long
 
         }))
         .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
@@ -171,7 +183,9 @@ export default class create_event extends React.Component {
         this.setState({ visible: true })
         console.log('not happeming')
     }
+         
     }
+         
 
     handleEventName = (name) => {
         this.setState ({ event_name: name})

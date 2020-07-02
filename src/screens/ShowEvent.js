@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput, ImageBackground} from 'react-native'
+import {Linking, View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput, ImageBackground} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,7 +20,10 @@ export default class ShowEvent extends React.Component {
             id: 1,
             documentData: [],
             players:[],
-            data2:[]
+            data2:[],
+            lat : 0,
+            long : 0,
+            location : ""
             
 
         }
@@ -30,6 +33,25 @@ export default class ShowEvent extends React.Component {
         const {state} = this.props.navigation;
         const user = firebase.auth().currentUser
         this.retData(state.params.event_name)
+        var location
+        console.log(state.params.venue)
+        fetch('https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext='+state.params.venue+'&apiKey=l9zrSly8XJoP7gQ7M5hCxRe_-g6f-yfr41tgSF2N7Yc')
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("test")
+          location = json.Response.View[0].Result[0].Location.DisplayPosition
+           this.setState({
+            lat: json.Response.View[0].Result[0].Location.DisplayPosition.Latitude,
+            long : json.Response.View[0].Result[0].Location.DisplayPosition.Longitude
+            })
+            console.log(this.state.lat)
+            console.log(this.state.long)
+ 
+        
+       })
+        .catch((error) => {
+          console.error(error);
+        })
         this.setState({
             event_name: state.params.event_name,
             no_people: state.params.no_people,
@@ -86,6 +108,11 @@ export default class ShowEvent extends React.Component {
                 <View style = {styles.shadow}>
                 <Text style = {styles.title}>Venue</Text>
                 <Text style = {styles.info}>{this.state.venue}</Text>
+                <Text style={{color: 'blue'}}
+      onPress={() => Linking.openURL('http://www.google.com/maps/place/'+ this.state.lat +','+this.state.long)}>
+                        Location on maps
+                    </Text>
+            <Text></Text>
                 </View>
                 <View style = {styles.shadow}>
                 <Text style = {styles.title}>Date and time</Text>
@@ -127,6 +154,7 @@ export default class ShowEvent extends React.Component {
                 <View style = {styles.shadow}>
                 <Text style = {styles.title}>Venue</Text>
                 <Text style = {styles.info}>{this.state.venue}</Text>
+            <Text> {this.state.location}</Text>
                 </View>
                 <View style = {styles.shadow}>
                 <Text style = {styles.title}>Date and time</Text>
