@@ -30,6 +30,7 @@ export default class MyEvent extends React.Component {
             no_people: '',
             venue: '',
             date: '',
+            location: [],
             db: firebase.firestore(),
             documentData: [],
             limit: 9,
@@ -63,7 +64,9 @@ export default class MyEvent extends React.Component {
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
         console.log("success kinda")
+
         console.log(user)
+        
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         this.focusListener = this.props.navigation.addListener('didFocus', () => {

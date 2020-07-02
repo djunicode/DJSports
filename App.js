@@ -13,6 +13,7 @@ import create_event from './screens/create_event.js'
 import create_team from './screens/create_team.js'
 import Notification from './screens/myteams.js'
 import team from './screens/team.js'
+import FavProfile from "./screens/FavProfile.js"
 import join_team from './screens/join_team.js'
 import SignUpScreen from './src/screens/SignUpScreen'
 import LoginScreen from './src/screens/LoginScreen'
@@ -22,6 +23,7 @@ import EventDetails from './screens/EventDetails'
 import ProfileDetails from './screens/ProfileDetails'
 import MyEvent from './src/screens/MyEvent'
 import ProfileSearch from "./src/screens/ProfileSearch.js"
+import Favorites from "./src/screens/Favorites.js"
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Showlist from './src/screens/ShowList';
@@ -64,8 +66,14 @@ const mainpage = createStackNavigator({
   ProfileDetails:{
     screen:ProfileDetails
   },
+  FavProfile:{
+    screen : FavProfile
+  },
   ProfileSearch : {
     screen : ProfileSearch
+  },
+  Favorites : {
+    screen : Favorites
   },
   
   initialRouteName : 'home'
