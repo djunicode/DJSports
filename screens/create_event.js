@@ -40,13 +40,14 @@ export default class create_event extends React.Component {
             id: 1,
             isVisible: false,
             keywords: [],
+            keywordsSport:[],
             joined: 1,
             //date_time: '',
             day:'',
             see: false,
             check :false,
-            visible: false
-    
+            visible: false,
+            show : false
          
 
         }
@@ -64,7 +65,6 @@ export default class create_event extends React.Component {
         
       }
 
-    
 
       handlePicker = (datetime) => {
           
@@ -106,14 +106,27 @@ export default class create_event extends React.Component {
     }
 
 
-
+    numberOfpeople = (no_people) => {
+        if( parseInt(no_people) > 30){
+            this.setState({
+                show : true,
+            })
+        } else{
+            this.setState({
+                show : false,
+            })
+        }
+        this.setState({
+            no_people : no_people
+        })
+    }
       
 
     handleCreate = () => {
         let arr = this.handleEventName(this.state.event_name)
         console.log(arr)
-        this.check()
-        if (this.state.check) {
+        
+        if (this.check()) {
         //alert('Event created')
         console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
@@ -124,6 +137,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             //date_time: this.state.date_time,
             day: this.state.day,
             created_by:this.state.email,
@@ -139,6 +153,7 @@ export default class create_event extends React.Component {
             date: this.state.date,
             id: this.state.id,
             keywords: this.state.keywords,
+            keywordsSport: this.state.keywordsSport,
             joined : 1,
             //date_time: this.state.date_time,
             day: this.state.day,
@@ -170,40 +185,32 @@ export default class create_event extends React.Component {
         return arrName;
     }
 
-    check = () => {
-        
-        if (this.state.event_name != '')
-            this.setState({ check: true })
-        else if (this.state.sport != '')
-            this.setState({ check: true })
-        else if (this.state.no_people != '')
-            this.setState({ check: true })
-        else if (this.state.venue != '')
-            this.setState({ check: true })
-        else if (this.state.date !== 'Select Date and Time')
-            this.setState({ check: true })
-        
+    handleSportName = (name) => {
+        this.setState ({ sport: name})
+        let arrName = [''];
+        let curName = '';
+        name.split('').forEach((letter) => {
+            curName += letter;
+            arrName.push(curName);
+        })
+        this.setState({keywordsSport: arrName})
+        console.log(arrName)
+        return arrName;
+    }
+
+    check() {
+        console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
+        if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
+          return true
         else
-            this.setState({ check: false })
-
-
-
+            return false   
     }
 
     render() {
         console.disableYellowBox = true
         return(
             <View style = {styles.container}>
-                <View style = {{ height: 55, width: 80, marginBottom:0,alignSelf:'flex-start'}}>
-                 <TouchableOpacity onPress = {() => this.props.navigation.goBack()}>
-                        <Icon style = {{margin: 20, marginBottom: 0}}
-                            name = "arrow-left"
-                            size = {35}
-                            color = "black"
-                        />
-                    </TouchableOpacity>
-                </View>
-            <Text style = {styles.header}>{'Create your event'}</Text>
+                
             <ScrollView style = {styles.container}>
                
                 <View style = {styles.inputForm}>
@@ -221,7 +228,7 @@ export default class create_event extends React.Component {
                     <TextInput 
                     style = {styles.input}  
                     autoCapitalize="words" 
-                    onChangeText = {sport => this.setState({sport})}
+                    onChangeText = {sport => this.handleSportName(sport)}
                     value = {this.state.sport}
                     >
                     </TextInput>
@@ -232,11 +239,14 @@ export default class create_event extends React.Component {
                     style = {styles.input}  
                     autoCapitalize="none" 
                     keyboardType = "number-pad"
-                    onChangeText = {no_people => this.setState({no_people})}
+                    onChangeText = {no_people => this.numberOfpeople(no_people)}
                     value = {this.state.no_people}
                     >
                     </TextInput>
                 </View>
+                {
+                   this.state.show ? <Text style = {{ color : 'red' , marginLeft:20 , fontSize:20}}>Maximum 30 players allowed</Text> : null
+                }
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Venue</Text>
                     <TextInput 
@@ -335,6 +345,7 @@ export default class create_event extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
+       marginTop: 15
     },
     header: {
         alignSelf: "center",

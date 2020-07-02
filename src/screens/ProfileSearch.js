@@ -230,12 +230,7 @@ render() {
         var {navigate} = this.props.navigation;
         return (
             <View style = {{flex:1}}>
-              <TouchableOpacity onPress = {this.showFav}>
-                <Text>touch</Text>
-              </TouchableOpacity>
-              <Text>
-                {this.state.favs}
-              </Text>
+              
               <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
@@ -285,11 +280,7 @@ render() {
 
         />:
         <Text>You have no Favorites</Text>}
-        <View>
-          <Text>
-            People
-          </Text>
-        </View>
+    
        <FlatList
           
           scrollEnabled={true}
@@ -324,3 +315,12 @@ render() {
     
 }}
 export default ProfileSearch;
+
+
+/*<TouchableOpacity onPress = {this.showFav}>
+                <Text>touch</Text>
+              </TouchableOpacity>
+              <Text>
+                {this.state.favs}
+              </Text>
+              */
