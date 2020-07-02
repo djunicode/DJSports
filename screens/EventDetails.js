@@ -16,7 +16,8 @@ export default class EventDetails extends Component {
             num: 0,
             limit_reached: false,
             registered: false,
-            visible: false
+            visible: false,
+            data2:[]
         };
         
       }
@@ -32,6 +33,7 @@ export default class EventDetails extends Component {
     componentDidMount(){
       this.checkLimit()
       checkData()
+      retData()
     }
 
     checkLimit = () => {
@@ -69,17 +71,38 @@ export default class EventDetails extends Component {
   });
     }
     
+    retData=async()=>{
+      let documentData=[]
+      var docRef = this.state.db.collection("AllEvents").doc(params.item.event_name);
+
+        await docRef.get().then(function(doc) {
+           documentData=doc.data()
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+       this.setState({data2:documentData})
+        console.log('data 2 is',this.state.data2.player)
+            }
+    
 
     buttonpressed=()=>{
-      console.log(params.item.joined+1)
+      let player=this.state.data2.players
+      let creator=this.state.data2.created_by
+      console.log(player)
+      player.push(this.state.email)
+      // console.log(params.item.joined+1)
       let count = params.item.joined+1
 
       if(!this.state.registered) {
       
       this.state.db.collection('AllEvents').doc(params.item.event_name).update({
-        joined: count
+        joined: count,
+        players:player
       
     })
+    this.state.db.collection('CreatedEvent').doc(creator).collection('MyEvent').doc(params.item.event_name).update({
+      players:player
+      })
       this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).set({
           event_name : params.item.event_name,
           sport: params.item.sport,
@@ -87,7 +110,11 @@ export default class EventDetails extends Component {
           venue : params.item.venue,
           date: params.item.date,
           id: params.item.id,
-        
+          keywords:params.item.keywords,
+          created_by:params.item.created_by
+      })
+      this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(params.item.event_name).update({
+        joined:count,
       })
       .catch(function(error) {
           console.log("error adding ", error);
@@ -106,12 +133,6 @@ export default class EventDetails extends Component {
       }
 
       
-    
-
-  
-    
-
-
     
     return (
       <Container >

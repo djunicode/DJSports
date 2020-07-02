@@ -1,35 +1,38 @@
 import React, { Component } from "react";
-import { 
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    TouchableOpacity,
-    ActivityIndicator
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
-import {Container,Header,Item,Icon,Input,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
+import { Container, Header, Item, Icon, Input, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Thumbnail, Grid, Button, Subtitle } from 'native-base'
 import EventCard from '../components/EventCard.js'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
+import ActionButton from 'react-native-action-button';
 
 class home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       db: firebase.firestore(),
-      data:[],
+      data: [],
       search: '',
       displayData: [],
-      email : '',
+      email: '',
       documentData: [],
-            limit: 9,
-            lastVisible: null,
-            loading: false,
-            refreshing: false,
-            notfirstTime: true,
-            direct: 'false',
-            visible: false,
+      limit: 9,
+      lastVisible: null,
+      loading: false,
+      refreshing: false,
+      notfirstTime: true,
+      direct: 'false',
+      visible: false,
+      search_by_name: true,
+      search_by_sport: false
 
     }
     //console.log(this.state.db)
@@ -41,34 +44,34 @@ class home extends Component {
     console.log("i am focused")
     this.handleChange('')
 
-}
+  }
 
 
 
-componentDidMount() {
+  componentDidMount() {
 
 
     const user = firebase.auth().currentUser
     this.setState({ email: user.email })
-    
+
     console.log("success kinda")
     console.log(user)
     //this.firebasegetdata(user.email)
     //this.retrieveData(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction(this.state.email)
-  })
-}
+    })
+  }
 
-componentDidUpdate() {
-  
-}
+  componentDidUpdate() {
+
+  }
 
 
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this.focusListener.remove()
-}
+  }
 
 
 
@@ -99,24 +102,24 @@ componentWillUnmount() {
 
     */
 
-    
-    renderFooter = () => {
-      try {
-          // Check If Loading
-          if (this.state.loading) {
-              return (
-                  <View style = {{flex:1, justifyContent:'center', marginTop:300}}>
-                    <ActivityIndicator size="large" color="#1a237e"/>
-                  </View>
-              )
-          }
-          else {
-              return null;
-          }
+
+  renderFooter = () => {
+    try {
+      // Check If Loading
+      if (this.state.loading) {
+        return (
+          <View style={{ flex: 1, justifyContent: 'center', marginTop: 300 }}>
+            <ActivityIndicator size="large" color="#1a237e" />
+          </View>
+        )
       }
-      catch (error) {
-          console.log(error);
+      else {
+        return null;
       }
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -125,190 +128,254 @@ componentWillUnmount() {
 
 
   static navigationOptions = {
-    headerShown:false
-}
+    headerShown: false
+  }
 
 
 
-/*  retrieveData = async () => {
-    try {
-        // Set State: Loading
-        this.setState({
-            loading: true,
-            direct: false
-        });
-        console.log('Retrieving Data');
-        // Cloud Firestore: Query
-        let initialQuery = await firebase.firestore().collection('AllEvents')
-            .limit(this.state.limit)
-        // Cloud Firestore: Query Snapshot
-        let documentSnapshots = await initialQuery.get();
-        // Cloud Firestore: Document Data
-        let documentData = documentSnapshots.docs.map(document => document.data());
-        // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
-        let lastVisible = documentData[documentData.length - 1].id;
-        // Set State
-        this.setState({
-            documentData: documentData,
-            //displayData: displayData,
-            lastVisible: lastVisible,
-            loading: false,
-        });
-    }
-    catch (error) {
-        console.log(error);
-        this.setState({ loading: false, direct: true })
+  /*  retrieveData = async () => {
+      try {
+          // Set State: Loading
+          this.setState({
+              loading: true,
+              direct: false
+          });
+          console.log('Retrieving Data');
+          // Cloud Firestore: Query
+          let initialQuery = await firebase.firestore().collection('AllEvents')
+              .limit(this.state.limit)
+          // Cloud Firestore: Query Snapshot
+          let documentSnapshots = await initialQuery.get();
+          // Cloud Firestore: Document Data
+          let documentData = documentSnapshots.docs.map(document => document.data());
+          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+          let lastVisible = documentData[documentData.length - 1].id;
+          // Set State
+          this.setState({
+              documentData: documentData,
+              //displayData: displayData,
+              lastVisible: lastVisible,
+              loading: false,
+          });
+      }
+      catch (error) {
+          console.log(error);
+          this.setState({ loading: false, direct: true })
+  
+      }
+  };
+  // Retrieve More
+  retrieveMore = async () => {
+      try {
+          // Set State: Refreshing
+          this.setState({
+              refreshing: true,
+          });
+          console.log('Retrieving additional Data');
+          // Cloud Firestore: Query (Additional Query)
+          let additionalQuery = await firebase.firestore().collection('AllEvents')
+              .startAfter(this.state.lastVisible)
+              .limit(this.state.limit)
+          // Cloud Firestore: Query Snapshot
+          let documentSnapshots = await additionalQuery.get();
+          // Cloud Firestore: Document Data
+          let documentData = documentSnapshots.docs.map(document => document.data());
+          // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+          let lastVisible = documentData[documentData.length - 1].id;
+          // Set State
+          this.setState({
+              documentData: [...this.state.documentData, ...documentData],
+             // displayData:[...this.state.displayData, ...documentData],
+              lastVisible: lastVisible,
+              refreshing: false,
+          });
+      }
+      catch (error) {
+          console.log(error);
+      }
+  };*/
 
-    }
-};
-// Retrieve More
-retrieveMore = async () => {
-    try {
-        // Set State: Refreshing
-        this.setState({
-            refreshing: true,
-        });
-        console.log('Retrieving additional Data');
-        // Cloud Firestore: Query (Additional Query)
-        let additionalQuery = await firebase.firestore().collection('AllEvents')
-            .startAfter(this.state.lastVisible)
-            .limit(this.state.limit)
-        // Cloud Firestore: Query Snapshot
-        let documentSnapshots = await additionalQuery.get();
-        // Cloud Firestore: Document Data
-        let documentData = documentSnapshots.docs.map(document => document.data());
-        // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
-        let lastVisible = documentData[documentData.length - 1].id;
-        // Set State
-        this.setState({
-            documentData: [...this.state.documentData, ...documentData],
-           // displayData:[...this.state.displayData, ...documentData],
-            lastVisible: lastVisible,
-            refreshing: false,
-        });
-    }
-    catch (error) {
-        console.log(error);
-    }
-};*/
 
-
-handleChange = async(search) => {
-  let Data = []
-  this.setState({displayData: []})
-  try {
-    this.setState({loading:true})
-    console.log('searching for ',search)
-    await this.state.db.collection('AllEvents')
-        .where('keywords','array-contains',search)
-        .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
+  handleChange = async (search) => {
+    let Data = []
+    this.setState({ displayData: [] })
+    if(this.state.search_by_name){
+      try {
+        this.setState({ loading: true })
+        
+        console.log('searching for ', search)
+        await this.state.db.collection('AllEvents')
+          .where('keywords', 'array-contains', search)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
               // doc.data() is never undefined for query doc snapshots
               console.log(doc.id, " => ", doc.data());
               Data.push(doc.data());
-              
-          
-          });
-      })
-      console.log(Data)
-      this.setState({
-       //documentData: Data,
-       displayData:Data,
-        loading:false,
-
-      },console.log(this.state.displayData));
-      //Data=[]
-      
-
+  
+  
+            });
+          })
+        console.log(Data)
+        this.setState({
+          //documentData: Data,
+          displayData: Data,
+          loading: false,
+  
+        }, console.log(this.state.displayData));
+        //Data=[]
+  
+  
+      }
+  
+  
+  
+      catch (error) {
+        console.log(error);
+      }
     }
-
     
- 
- catch (error) {
-   console.log(error);
- }
-}
-
-handleRefresh = () => {
-  try {
-    this.setState({refreshing:true})
-    this.handleChange('')
-    this.setState({
+    // Search by Sport
+    if(this.state.search_by_sport){
+      try {
+        this.setState({ loading: true })
         
-        refreshing:false
-    })
-}
-catch (error) {
-  console.log(error);
-}
-}
+        console.log('searching for ', search)
+        await this.state.db.collection('AllEvents')
+          .where('keywordsSport', 'array-contains', search)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              Data.push(doc.data());
+  
+  
+            });
+          })
+        console.log(Data)
+        this.setState({
+          //documentData: Data,
+          displayData: Data,
+          loading: false,
+  
+        }, console.log(this.state.displayData));
+        //Data=[]
+  
+  
+      }
+  
+  
+  
+      catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  handleRefresh = () => {
+    try {
+      this.setState({ refreshing: true })
+      this.handleChange('')
+      this.setState({
+
+        refreshing: false
+      })
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+  icon = () => {
+    return (
+      ActionButton.icon = <Icon name="md-funnel" />
+    );
+  }
 
 
 
-    render() {
-        console.disableYellowBox = true
-        var {navigate} = this.props.navigation;
-        return (
-            <View style = {{flex:1}}>
-            <TouchableOpacity onPress = {()=>navigate('ProfileSearch')}>
-              <View>
-                <Text>
-                  Search People
-                </Text>
-              </View>
-            </TouchableOpacity>
-              <Header searchBar rounded>
+  render() {
+    console.disableYellowBox = true
+    var { navigate } = this.props.navigation;
+    return (
+      <View style={{ flex: 1 , backgroundColor: '#323232'}}>
+        
+        <Header searchBar rounded style = {{backgroundColor: 'black'}}> 
           <Item>
             <Icon name="ios-search" />
-            <Input placeholder="Search" 
-                   onChangeText={(search) => this.handleChange(search)}
-                   />
-            <Icon name="ios-people" />
+            <Input placeholder="Search"
+              onChangeText={(search) => this.handleChange(search)}
+            />
+
           </Item>
           <Button transparent>
             <Text>Search</Text>
           </Button>
-          
+
         </Header>
-        
-          {(this.state.loading)?<ActivityIndicator size='large'/>:null}
-        
+
+        {(this.state.loading) ? <ActivityIndicator size='large' /> : null}
+
         <FlatList
-         
+
           scrollEnabled={true}
-          
-          data= {this.state.displayData}
-          renderItem={({ item }) => 
-          <TouchableOpacity onPress = {
-              ()=>navigate("details",{item})
-          }>
-        <EventCard 
-          Sport = {item.sport}
-          EventName = {item.event_name}
-          place = {item.venue}
-          Date={item.date}
-        >
-      </EventCard>
-      </TouchableOpacity>
-      }
-      ListHeaderComponent={this.renderHeader}
-                    // Footer (Activity Indicator)
-                    //ListFooterComponent={this.renderFooter}
-                    // On End Reached (Takes a function)
-                    //onEndReached={this.retrieveMore}
-                    // How Close To The End Of List Until Next Data Request Is Made
-                    //onEndReachedThreshold={0}
-                    // Refreshing (Set To True When End Reached)
-                    onRefresh={this.handleRefresh}
-                    refreshing={this.state.refreshing}
+
+          data={this.state.displayData}
+          renderItem={({ item }) =>
+            <TouchableOpacity onPress={
+              () => navigate("details", { item })
+            }>
+              <EventCard
+                Sport={item.sport}
+                EventName={item.event_name}
+                place={item.venue}
+                Date={item.date}
+              >
+              </EventCard>
+            </TouchableOpacity>
+          }
+          ListHeaderComponent={this.renderHeader}
+          // Footer (Activity Indicator)
+          //ListFooterComponent={this.renderFooter}
+          // On End Reached (Takes a function)
+          //onEndReached={this.retrieveMore}
+          // How Close To The End Of List Until Next Data Request Is Made
+          //onEndReachedThreshold={0}
+          // Refreshing (Set To True When End Reached)
+          onRefresh={this.handleRefresh}
+          refreshing={this.state.refreshing}
 
         />
-           
-            </View>
-            
-        );
-    }
+        <ActionButton
+          buttonColor="#00e676"
+          onPress={() => { console.log("hi") }}
+          renderIcon={() => this.icon()}
+          degrees= '180'
+
+        >
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search by Sport" onPress={() => this.setState({search_by_sport: true, search_by_name: false})}>
+            <Icon name="ios-basketball" color = 'black' style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search by Event" onPress={() => {this.setState({search_by_name: true, search_by_sport: false}) }}>
+            <Icon name="md-albums" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#b9f6ca' title="Search People" onPress={() => {navigate('ProfileSearch') }}>
+            <Icon name="ios-contacts" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
+
+      </View>
+
+    );
+  }
 }
 export default home;
+
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: '#424242',
+  },
+})
 
