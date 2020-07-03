@@ -91,7 +91,7 @@ const peopleStack = createMaterialTopTabNavigator({
       labelStyle: { fontSize: 20, textTransform: 'capitalize', textAlign: 'center', paddingBottom: 25 },
       tabStyle: { height: 58, justifyContent: 'center', alignItems: 'center', alignContent: 'center' },
       iconStyle: { inactiveColor: 'grey' }
-      , indicatorStyle: { height: 3, backgroundColor: '#00e676' }
+      , indicatorStyle: { height: 2, backgroundColor: '#00e676' }
 
     },
   }

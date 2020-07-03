@@ -240,21 +240,15 @@ render() {
         return (
           
             
-            <View style = {{flex:1}}>
+            <View style = {{flex:1, backgroundColor:'black'}}>
               
               
         
           {(this.state.loading)?<ActivityIndicator size='large'/>:null}
-        <View>
         
-          <Text>
-            favorites
-          </Text>
-          
-        </View>
 
         {(Array.isArray(this.state.data) && this.state.data.length!=0)?
-           <View>
+           <View style = {{marginTop: 10}}>
           <FlatList
         //   onDidFocus = {()=>this.onFocusFunction(firebase.auth().currentUser.email)}
           scrollEnabled={true}
