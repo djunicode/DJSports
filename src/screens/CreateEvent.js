@@ -4,7 +4,7 @@ import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 
-
+import Geocoder from 'react-native-geocoding';
 
 
 //const firebase = require('firebase');
@@ -24,30 +24,48 @@ export default class CreateEvent extends React.Component {
             no_people : '',
             venue : '',
             date: '',
-            
+            location: ''
 
         }
     }
 
     componentDidMount(){
         const user = firebase.auth().currentUser
+        Geocoder.init("AIzaSyCwsGyxbGuuYoCXOvr2Ju4PLZzM9gAo0NY");
+        
         this.setState({email : user.email })
-        console.log("success kinda")
-        console.log(user.email)
+        
+        // console.log(user.email)
         
       }
       
-
+    setVenue = () => {
+        console.log(this.state.venue)
+        console.log(typeof(this.state.venue))
+        Geocoder.from(this.state.venue)
+        .then(json => {
+            var locatio = json.results[0].geometry.location;
+            this.setState({
+                location : locatio
+            })
+            console.log(location);
+        // this.setState({venue : []})
+    })
+}
     handleCreate = () => {
-        alert('Event created')
+        
+        console.log("Creating event setting value")
+        this.setVenue().then(alert('Event created'))
         console.log(this.state.event_name)
+        this.setVenue().then(
         db.collection('CreatedEvent').doc(this.state.email).collection(this.state.event_name).doc(this.state.event_name).set({
             event_name : this.state.event_name,
             sport: this.state.sport,
             no_people : this.state.no_people,
             venue : this.state.venue,
-            date: this.state.date
-        })
+            date: this.state.date,
+            location : this.state.location
+        }))
         .then(() => console.log("doc added successfully"))
         .catch(function(error) {
             console.log("error adding ", error);
@@ -112,7 +130,7 @@ export default class CreateEvent extends React.Component {
                     </TextInput>
                 </View>
                 
-                <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
+                <TouchableOpacity style = {styles.button } onPress = {this.setVenue}>
                     <Text style = {{color: "white"}}>CREATE</Text>
 
                 </TouchableOpacity>
