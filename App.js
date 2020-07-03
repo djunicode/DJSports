@@ -56,6 +56,48 @@ export default class App extends React.Component {
     );
   }
 }
+
+const peopleStack = createMaterialTopTabNavigator({
+
+  ProfileSearch: {
+    screen: ProfileSearch,
+    navigationOptions: { title: 'People', }
+  },
+  Favorites: {
+    screen: Favorites,
+    navigationOptions: { title: 'Favourites', }
+  },
+
+},
+  {
+    initialRouteName: 'ProfileSearch',
+    navigationOptions: {
+      headerMode:'none',
+      title: 'EXPLORE',
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
+      headerTitleAlign: 'center',
+      headerTitleStyle: {
+        fontSize: 35,
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      },headerTintColor: 'white', 
+
+    },
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveColor: '#9e9e9e', showIcon: 'true',
+      style: { backgroundColor: 'black',},
+      labelStyle: { fontSize: 20, textTransform: 'capitalize', textAlign: 'center', paddingBottom: 25 },
+      tabStyle: { height: 58, justifyContent: 'center', alignItems: 'center', alignContent: 'center' },
+      iconStyle: { inactiveColor: 'grey' }
+      , indicatorStyle: { height: 3, backgroundColor: '#00e676' }
+
+    },
+  }
+)
+
+
 const mainpage = createStackNavigator({
   home:{
     screen:home
@@ -69,15 +111,17 @@ const mainpage = createStackNavigator({
   FavProfile:{
     screen : FavProfile
   },
-  ProfileSearch : {
+  people: peopleStack,
+  /*ProfileSearch : {
     screen : ProfileSearch
   },
   Favorites : {
     screen : Favorites
-  },
+  },*/
   
   initialRouteName : 'home'
-})
+},{headerMode:'none'})
+
 const showeventpage=createStackNavigator({
   ShowEvent:{
     screen:ShowEvent

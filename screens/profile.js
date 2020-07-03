@@ -12,6 +12,8 @@ import firebase from 'firebase';
 import '@firebase/firestore'
 import 'firebase/storage'
 import { concat } from "react-native-reanimated";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 //import StarRating from 'react-native-star-rating';
 var username = 'Simrn'
 // var name1 
@@ -264,7 +266,7 @@ class profile extends React.Component {
 
                     <View style={styles.infoContainer}>
                         <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{this.state.name}</Text>
-                        <Text style={[styles.text, { color: "#fff", fontSize: 14 }]}>{this.state.year}  {this.state.department}</Text>
+                        <Text style={[styles.text3, { color: "#ababab", fontSize: 14 }]}>{this.state.year} {this.state.department}</Text>
                     </View>
 
                     
@@ -273,7 +275,7 @@ class profile extends React.Component {
                     <View style={{ alignItems: "center" }}>
                         <View style={styles.recentItem}>
                             <View style={styles.activityIndicator}></View>
-                            <View style={{ width: 250 }}>
+                            <View style={{ width: 250 , paddinTop: 20}}>
                                 <Text style={styles.text2}>
                                     Favorite sports : <Text style={{ fontWeight: "bold" }}>{this.state.sports[0]}</Text>
                                 </Text>
@@ -292,7 +294,12 @@ class profile extends React.Component {
                     </View>
                     <TouchableOpacity style = {styles.button}
                         onPress={() => this.signout()} >
-                            <Text style = {{color: 'white', textAlign:'center'}}>SIGN OUT</Text>
+                            <Icon style={{alignSelf: 'flex-end',}}
+                        name = "sign-out"
+                        size = {20}
+                        color = "#ababab"
+                    />
+                            <Text style = {{color: '#ababab', textAlign:'center'}}> SIGN OUT</Text>
                         </TouchableOpacity>
                 </ScrollView>
             </SafeAreaView>
@@ -307,7 +314,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#000"
     },
     text: {
-        fontFamily: "Acme-Regular",
+        fontFamily: "Roboto-Regular",
         color: "#fff",
         fontSize: 20
     },
@@ -411,7 +418,8 @@ const styles = StyleSheet.create({
     recentItem: {
         flexDirection: "row",
         alignItems: "flex-start",
-        marginBottom: 16
+        marginBottom: 16,
+        paddingTop: 20
     },
     activityIndicator: {
         backgroundColor: "#CABFAB",
@@ -424,14 +432,24 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 10,
-        width: 100,
-        backgroundColor: 'red',
+        //width: 100,
+       // backgroundColor: 'red',
+      paddingTop:290,
+      paddingLeft: 280,
+      flexDirection: 'row'
+
     
     },
     text2: {
-        fontSize: 18,
+        fontSize: 22,
         fontFamily: 'FiraSansCondensed-Regular',
         color: 'white'
+    },
+    text3: {
+        fontSize:16,
+        fontFamily: 'SpaceMono-Regular',
+        textTransform: 'uppercase',
+        color: '#ababab'
     }
 });
 
