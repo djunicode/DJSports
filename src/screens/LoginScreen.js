@@ -70,6 +70,7 @@ export default class LoginScreen extends React.Component {
     this.props.navigation.navigate('SignUpScreen')
   }
   render() {
+    console.disableYellowBox = true
     return (
       <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: null, width: null , flex:1 , justifyContent:'center' }}>
         <View style={style.container}>

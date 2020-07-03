@@ -28,7 +28,8 @@ class Notification extends Component {
         return (
             <View style = {{flex:1 , backgroundColor:'#000' , borderTopColor:'#00e676' , borderTopWidth:1}}>
                 <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
-                <View style={{flexDirection:'row' , margin:20 , marginTop:20 , marginBottom:10}}>
+                <View style={{flexDirection:'row' , margin:20 , marginTop:20 , marginBottom:10, borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor:'#424242'}}>
                     <Image 
                         source = {require('../assets/profile-pic.jpg')}
                         style = {{ height:80, width:80 , borderRadius:40}}
@@ -54,7 +55,8 @@ class Notification extends Component {
                     </View>
                     </View>
                 </View>
-                <View style={{flexDirection:'row' , margin:20 , marginTop:10}}>
+                <View style={{flexDirection:'row' , margin:20 , marginTop:10,borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor:'#424242'}}>
                     <Image 
                         source = {require('../assets/profile-pic.jpg')}
                         style = {{ height:80, width:80 , borderRadius:40}}

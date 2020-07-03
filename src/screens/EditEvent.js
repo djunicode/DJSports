@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput,ImageBackground} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -175,10 +175,15 @@ check() {
         
         return(
             <View style = {styles.container}>
-                
+                <ImageBackground
+            source={require('../images/infobkg2.jpeg')}
+            style = {{flex: 1,}}
+            
+        >
             <ScrollView style = {styles.container}>
                
-                <View style = {styles.inputForm}>
+                <View style = {{  marginHorizontal: 20,
+        marginBottom: 30, paddingTop:20}}>
                     <Text style = {styles.inputTitle}>Event name</Text>
                     <TextInput 
                     style = {styles.input}  
@@ -285,6 +290,7 @@ check() {
                 
                 
             </ScrollView>
+            </ImageBackground>
             </View>
 
         )
@@ -304,8 +310,8 @@ check() {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       paddingTop: 15,
-       backgroundColor: 'black'
+       //paddingTop: 15,
+       //backgroundColor: 'black'
     },
     header: {
         alignSelf: "center",

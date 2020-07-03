@@ -159,14 +159,15 @@ const teamModule = createStackNavigator({
   myteams :{
     screen : Notification,
     navigationOptions: {
-      title: 'Notifications',
-      headerStyle: { height: 70, justifyContent: 'center', backgroundColor: 'black'},
+      title: 'NOTIFICATIONS',
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
       headerTitleAlign: 'center',
       headerTitleStyle: {
-        fontSize: 35,
-        fontWeight: 'bold',
-        color: 'white'
-      }
+        fontSize: 40,
+        //fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      }, headerTintColor: 'white', 
 
     }
 

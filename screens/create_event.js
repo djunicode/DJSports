@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
 //import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -210,10 +210,15 @@ export default class create_event extends React.Component {
         console.disableYellowBox = true
         return(
             <View style = {styles.container}>
-                
+                <ImageBackground
+                    source = {require('../assets/infobkg2.jpeg')}
+            style = {{flex: 1}}
+            
+        >
             <ScrollView style = {styles.container}>
                
-                <View style = {styles.inputForm}>
+                <View style = {{marginHorizontal: 20,
+        marginBottom: 30, paddingTop:20}}>
                     <Text style = {styles.inputTitle}>Event name</Text>
                     <TextInput 
                     style = {styles.input}  
@@ -334,7 +339,7 @@ export default class create_event extends React.Component {
                 
                 
             </ScrollView>
-            
+            </ImageBackground>
       
             </View>
    
@@ -345,8 +350,8 @@ export default class create_event extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       paddingTop: 15,
-       backgroundColor: 'black'
+       //paddingTop: 15,
+       //backgroundColor: 'black'
     },
     header: {
         alignSelf: "center",

@@ -130,7 +130,7 @@ export default class SignUpScreen extends React.Component {
             if (this.state.pass == this.state.pass2) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
                     .then(() => this.addusertodb())
-                    .catch((e) => this.setState({
+                    .catch((e) => console.log(e),this.setState({
                         error : e,
                         visible : true
                     }))
@@ -172,7 +172,7 @@ export default class SignUpScreen extends React.Component {
     addusertodb = () => {
       
         let arr = this.handleEventName(this.state.name)
-        this.state.db.collection("Users").doc(this.state.username).set({
+        this.state.db.collection("Users").doc(this.state.Id.toLowerCase()).set({
             name: this.state.name,
             address: this.state.address,
             email: this.state.Id.toLowerCase(),
@@ -355,7 +355,7 @@ export default class SignUpScreen extends React.Component {
                             <DialogContent>
                                 <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>
                                 {
-                                    this.state.error == '' ? 'Please fill up all the fields!' : this.state.error 
+                                    (this.state.error == '') ? 'Please fill up all the fields!' : this.state.error 
                                 }
                                 </Text>
                             </DialogContent>
