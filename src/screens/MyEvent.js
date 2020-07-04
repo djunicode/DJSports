@@ -30,6 +30,7 @@ export default class MyEvent extends React.Component {
             no_people: '',
             venue: '',
             date: '',
+            location: [],
             db: firebase.firestore(),
             documentData: [],
             limit: 9,
@@ -63,7 +64,9 @@ export default class MyEvent extends React.Component {
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
         console.log("success kinda")
+
         console.log(user)
+        
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
@@ -389,8 +392,8 @@ export default class MyEvent extends React.Component {
                         refreshing={this.state.refreshing}
                     /> : <View
                         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
-                            <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 25, color:'white' }}>NO EVENTS</Text>
+                            <Text style={{ fontSize: 17 , color: 'white'}}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
                         </View>}
 
                     <Dialog

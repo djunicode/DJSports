@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text } from 'native-base';
-import { View ,FlatList} from 'react-native';
+import { View ,FlatList, StyleSheet} from 'react-native';
 export default class ListExample extends Component {
     constructor(props) {
         super(props);
@@ -20,12 +20,13 @@ export default class ListExample extends Component {
   render() {
       
     return (
-      <Container>
+      <Container style = {styles.container}>
         <Content>
+    <Text style = {styles.header}>PLAYERS ({this.state.players.length})</Text>
           <List dataArray={this.state.players}
           renderRow={(item)=>
           <List>
-              <Text>
+              <Text style = {styles.name}>
               {item}
               </Text>
           </List>}/>
@@ -34,3 +35,24 @@ export default class ListExample extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor: 'black'
+  },
+  name: {
+    fontSize:20,
+    fontFamily:'Roboto-Light',
+    color:'white',
+    padding:13,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor:'#424242'
+  },
+  header: {
+    fontSize: 30,
+    color: '#ababab',
+    alignSelf: 'center',
+    padding: 20
+  }
+})

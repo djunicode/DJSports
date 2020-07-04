@@ -39,7 +39,9 @@ export default class EventDetails extends Component {
     checkLimit = () => {
       var {params} = this.props.navigation.state
       let number = parseInt(params.item.no_people)
-      this.setState({num: number})
+      this.setState(
+        {num: number}
+        )
       if(params.item.joined == number)
         this.setState({limit_reached: true})
     }
