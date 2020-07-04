@@ -359,9 +359,9 @@ class home extends Component {
           <ActionButton.Item buttonColor='#b9f6ca' title="Search by Event" onPress={() => {this.setState({search_by_name: true, search_by_sport: false}) }}>
             <Icon name="md-albums" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#b9f6ca' title="Search People" onPress={() => {navigate('ProfileSearch') }}>
+          {/* <ActionButton.Item buttonColor='#b9f6ca' title="Search People" onPress={() => {navigate('ProfileSearch') }}>
             <Icon name="ios-contacts" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
+          </ActionButton.Item> */}
         </ActionButton>
 
       </View>

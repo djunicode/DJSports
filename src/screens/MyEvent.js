@@ -270,6 +270,7 @@ export default class MyEvent extends React.Component {
     render() {
         <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
         console.disableYellowBox = true
+        var { navigate } = this.props.navigation;
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
 
 
@@ -325,6 +326,12 @@ export default class MyEvent extends React.Component {
                                                             {'  Delete the event'}
                                                         </Text>
                                                     </MenuOption>
+                                                    <MenuOption onSelect={() => {navigate('ProfileSearch',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="envelope" size = {17}/>
+                                                            {'  Invite'}
+                                                        </Text>
+                                                    </MenuOption>
                                                 </MenuOptions>
                                             </Menu>
                                         </View>
@@ -366,6 +373,12 @@ export default class MyEvent extends React.Component {
                                                     <Text style={styles.menuText}>
                                                         <Icon name="window-close" size = {17}/>
                                                             {'  Leave the event'}
+                                                        </Text>
+                                                    </MenuOption>
+                                                    <MenuOption onSelect={() => {navigate('ProfileSearch',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <Text style={styles.menuText}>
+                                                        <Icon name="envelope" size = {17}/>
+                                                            {'  Invite'}
                                                         </Text>
                                                     </MenuOption>
                                                 </MenuOptions>

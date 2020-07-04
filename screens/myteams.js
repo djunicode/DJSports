@@ -9,6 +9,9 @@ import {
     StatusBar,
     StatusBarStyle
 } from "react-native";
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
+
 
 import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
 import TeamCard from '../components/TeamCard.js'
@@ -19,69 +22,215 @@ import TeamCard from '../components/TeamCard.js'
 // moreDetails
 
 class Notification extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            displayname: '',
+            event_name: '',
+            sport: '',
+            no_people: '',
+            venue: '',
+            date: '',
+            db: firebase.firestore(),
+            documentData: [],
+            limit: 9,
+            lastVisible: null,
+            loading: false,
+            refreshing: false,
+            notfirstTime: true,
+            direct: 'false',
+            visible: false,
+            item: [],
+            data2: [],
+            expanded: false,
+            documentSnapshots:[],
+            data:[]
 
+        }
+    }
+        componentDidMount() {
+
+            //const today = moment();
+            const user = firebase.auth().currentUser
+            this.setState({ email: user.email })
+            console.log("success kinda")
+            console.log(user)
+            //this.firebasegetdata(user.email)
+            this.retrieveData(user.email)
+            // this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            //     this.onFocusFunction(user.email)
+            // })
+        
+        
+        
+        }
+        onFocusFunction = (email) => {
+            this.retrieveData(email)
+            console.log("i am focused")
+            //console.log(today.format('MMMM Do YYYY, h:mm A'))
+    
+        }
+        retrieveData = async (email) => {
+            try {
+                // Set State: Loading
+                this.setState({
+                    loading: true,
+                    direct: false
+                });
+                console.log('Retrieving Data for ', email);
+                // Cloud Firestore: Query
+                let initialQuery = await firebase.firestore().collection('Invites').doc(email).collection('InviteFrom')
+                    .limit(this.state.limit)
+                // Cloud Firestore: Query Snapshot
+                let documentSnapshots = await initialQuery.get();
+                // Cloud Firestore: Document Data
+                let documentData = documentSnapshots.docs.map(document => document.data());
+                // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+                let lastVisible = documentData[documentData.length - 1].id;
+                // Set State
+                let docSnap = await firebase.firestore().collection('Users').doc(email).get()
+                let data = docSnap.data()
+                    this.setState({
+                    data:data,
+                    documentSnapshots:documentSnapshots,
+                    docSnap:docSnap,
+                    documentData: documentData,
+                    lastVisible: lastVisible,
+                    loading: false,
+                });
+            }
+            catch (error) {
+                console.log(error);
+                this.setState({ loading: false, direct: true })
+        
+            }
+        };
+        accept=async(item)=>{
+        let EventData=[]
+        const user = firebase.auth().currentUser
+        var docRef = this.state.db.collection("AllEvents").doc(item);
+    
+        await docRef.get().then(function(doc) {
+            EventData=doc.data()
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+        let player=EventData.players
+        let creator=EventData.created_by
+        console.log(player)
+        player.push(this.state.email)
+        // console.log(params.item.joined+1)
+        let count = EventData.joined+1
+  
+        
+        this.state.db.collection('AllEvents').doc(item).update({
+          joined: count,
+          players:player
+        
+      })
+      this.state.db.collection('CreatedEvent').doc(creator).collection('MyEvent').doc(item).update({
+        players:player
+        })
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item).set({
+            event_name : item,
+            sport: EventData.sport,
+            no_people : EventData.no_people,
+            venue : EventData.venue,
+            date: EventData.date,
+            id: EventData.id,
+            keywords:EventData.keywords,
+            created_by:EventData.created_by
+        })
+        this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item).update({
+          joined:count,
+        })
+        this.state.documentData.forEach(element => {
+            let index = element.EventName.indexOf(item)
+            if(index != -1) element.EventName.splice(index,1);
+            console.log(element.EventName)
+            this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
+             EventName:element.EventName
+            }).then(this.onFocusFunction(user.email))
+            if(element.EventName.length==0){
+                this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).delete().then(this.onFocusFunction(user.email))
+            }
+            console.log(element.EventName)
+        });
+        
+        
+    }
+    ignore=(item)=>{
+        this.state.documentData.forEach(element => {
+            let index = element.EventName.indexOf(item)
+            if(index != -1) element.EventName.splice(index,1);
+            console.log(element.EventName)
+            this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
+             EventName:element.EventName
+            }).then(this.onFocusFunction(user.email))
+            if(element.EventName.length==0){
+                this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).delete().then(this.onFocusFunction(user.email))
+            }
+            console.log(element.EventName)
+        });
+      
+        
+    }
     static navigationOptions = {
         title : 'First Screen'
     }
     render() {
         var {navigate} = this.props.navigation;
+        var body = [];
+        
         return (
+            
             <View style = {{flex:1 , backgroundColor:'#000' , borderTopColor:'#00e676' , borderTopWidth:1}}>
                 <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
-                <View style={{flexDirection:'row' , margin:20 , marginTop:20 , marginBottom:10, borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor:'#424242'}}>
+                <FlatList
+                    scrollEnabled={true}
+                    data = {this.state.documentData }
+                    renderItem={({ item }) =>
+                    <View  style={{ flexDirection: 'row',margin:20 , marginTop:10,borderBottomWidth: StyleSheet.hairlineWidth,
+                    borderColor:'#424242'}}>
+                    <View styles={{flexDirection: 'row',}}>
                     <Image 
                         source = {require('../assets/profile-pic.jpg')}
                         style = {{ height:80, width:80 , borderRadius:40}}
                     />
+                    <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
+                    {item.id}{"\n"}
+                    </Text>
+                    </View>    
+                    <FlatList
+                    data={item.EventName}
+                    renderItem={({ item }) =>
+                    <View>
+                    
                     <View style ={{margin:15 , marginTop:0 }}>
-                        <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
-                            Random Name
-                        </Text>
+                       
                         <Text style = {{fontSize:15 , color:'#fff'}}>
-                            wants to be your friend
+                            invited you for {item}
                         </Text>
                     <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'center'}}>
-                        <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
+                        <TouchableOpacity style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}} onPress={() =>this.accept(item)}>
                             <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
                                 Accept
                             </Text>
-                        </View>
-                        <View style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}} onPress={() =>this.ignore(item)}>
                             <Text style={{fontWeight:'bold', fontSize:17}}>
                                 Ignore
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     </View>
-                </View>
-                <View style={{flexDirection:'row' , margin:20 , marginTop:10,borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor:'#424242'}}>
-                    <Image 
-                        source = {require('../assets/profile-pic.jpg')}
-                        style = {{ height:80, width:80 , borderRadius:40}}
+                    </View>
+                    }
                     />
-                    <View style ={{margin:15 , marginTop:0 }}>
-                        <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
-                            Random Name
-                        </Text>
-                        <Text style = {{fontSize:15 , color:'#fff'}}>
-                            invited you for random event
-                        </Text>
-                    <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'center'}}>
-                        <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
-                            <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
-                                Accept
-                            </Text>
-                        </View>
-                        <View style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}}>
-                            <Text style={{fontWeight:'bold', fontSize:17}}>
-                                Ignore
-                            </Text>
-                        </View>
                     </View>
-                    </View>
-                </View>
+                    }
+                />
             </View>
             
         );
