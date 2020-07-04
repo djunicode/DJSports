@@ -6,7 +6,8 @@ import {
     FlatList,
     TouchableOpacity,
     ActivityIndicator,
-    Alert
+    Alert,
+    StatusBar,StatusBarStyle
 } from "react-native";
 
 import {Container,Header,Item,Icon,Input,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
@@ -224,14 +225,14 @@ render() {
         return (
           
             
-            <View style = {{flex:1}} >
-              
+            <View style = {{flex:1, backgroundColor: 'black'}} >
+              <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
               
           {/* {(this.state.loading)?<ActivityIndicator size='large'/>:null} */}
         <View>
      
       
-          <Header searchBar rounded>
+          <Header searchBar rounded style = {{backgroundColor: 'black', marginTop:10, marginBottom:10}}>
           <Item>
             <Icon name="ios-search" />
             <Input placeholder="Search people" 
@@ -246,12 +247,7 @@ render() {
         </Header>
         </View>
        
-            <View>
-            <TouchableOpacity onPress = {()=>navigate("Favorites",)}>
-                <Text>Favorites</Text>
-            </TouchableOpacity>
-    
-    </View>
+           
        
     <FlatList
           
@@ -289,4 +285,9 @@ render() {
 }}
 export default ProfileSearch;
 
-
+/* <View>
+            <TouchableOpacity onPress = {()=>navigate("Favorites",)}>
+                <Text style = {{color: 'white'}}>Favorites</Text> 
+            </TouchableOpacity>
+    
+    </View>*/

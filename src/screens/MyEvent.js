@@ -392,8 +392,8 @@ export default class MyEvent extends React.Component {
                         refreshing={this.state.refreshing}
                     /> : <View
                         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 25 }}>NO EVENTS</Text>
-                            <Text style={{ fontSize: 17 }}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 25, color:'white' }}>NO EVENTS</Text>
+                            <Text style={{ fontSize: 17 , color: 'white'}}>PROCEED BY TAPPING THE BUTTON BELOW</Text>
                         </View>}
 
                     <Dialog
