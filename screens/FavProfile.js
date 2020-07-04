@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,View ,StyleSheet, TouchableOpacity,Alert} from 'react-native';
+import { Image,View ,StyleSheet, TouchableOpacity} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -17,7 +17,8 @@ export default class ProfileDetails extends Component {
             limit_reached: false,
             registered: false,
             visible: false,
-            isFavorite : false
+            isFavorite : false,
+            update : ""
         };
         
       }
@@ -40,15 +41,11 @@ export default class ProfileDetails extends Component {
         console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
          
           console.log("In snap")
-          var favs = []
-          var t ;
+          var favs,t;
           favs = querySnapshot.get("favorites")
-          console.log(favs)
-          t = favs.includes(params.item.email)
-          console.log(t)
-          console.log(typeof(t))
+          t = favs.includes(params.item.name || params.item.email)
           console.log("name " +params.item.name)
-          console.log(t)
+          console.log(t+ favs)
           this.setState({ isFavorite: t });   //set data in state here
       
           console.log(this.state.isFavorite)
@@ -76,6 +73,7 @@ export default class ProfileDetails extends Component {
        }
 
        remFav=()=>{
+        var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state
         const user = firebase.auth().currentUser
         let id = user.email
@@ -83,11 +81,11 @@ export default class ProfileDetails extends Component {
         const  arrayRemove = firebase.firestore.FieldValue.arrayRemove;
           const doc = this.state.db.collection("Users").doc(id)
           doc.update({
-          favorites : arrayRemove(params.item.name)
-          });
-          this.setState({
-            isFavorite : false
-          })
+          favorites : arrayRemove(params.item.email)
+          }).then(
+             ()=> navigate("ProfileSearch")
+          )
+          
 
 
 
@@ -139,28 +137,20 @@ export default class ProfileDetails extends Component {
               </Body>
            
             </CardItem>
-            {  this.state.isFavorite ?
+           
             <View>
-            <Text>
+            {/* <Text>
               {params.item.name} is already in your favorites!
-            </Text>
-            <TouchableOpacity onPress = {this.remFav}
-            >
+            </Text> */}
+            <TouchableOpacity onPress ={this.remFav}>
               <View>
                 <Text>Remove From favorites</Text>
               </View>
             </TouchableOpacity>
             </View>
-            :
-            <TouchableOpacity onPress= {this.addFav}>
-            <View>
-                <Text>
-                    Add to Favorite
-                </Text>
-            </View>
-        </TouchableOpacity>
+            
         
-    }
+    
           </Card>
          
         </Content>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
 //import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
+import Geocoder from 'react-native-geocoding';
 
 //import RNGooglePlaces from 'react-native-google-places';
 
@@ -35,6 +36,7 @@ export default class create_event extends React.Component {
             sport: '',
             no_people : '',
             venue : '',
+            location:"",
             date: 'Select Date and Time',
             db: firebase.firestore(),
             id: 1,
@@ -47,7 +49,10 @@ export default class create_event extends React.Component {
             see: false,
             check :false,
             visible: false,
-            show : false
+            show : false,
+            lat : 0,
+            long : 0
+
          
 
         }
@@ -56,15 +61,17 @@ export default class create_event extends React.Component {
 
     componentDidMount(){
         const today = moment();
+        Geocoder.init("AIzaSyCwsGyxbGuuYoCXOvr2Ju4PLZzM9gAo0NY");
+        console.log("Geoencoding initialised")
         const user = firebase.auth().currentUser
         this.setState({email : user.email })
-        console.log("success kinda")
-        console.log(user.email)
+        // console.log("success kinda")
+        // console.log(user.email)
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
         
         
       }
-
+      
 
       handlePicker = (datetime) => {
           
@@ -122,13 +129,14 @@ export default class create_event extends React.Component {
     }
       
 
-    handleCreate = () => {
+    handleCreate = async () => {
+        
         let arr = this.handleEventName(this.state.event_name)
         console.log(arr)
-        
+       
+
         if (this.check()) {
-        //alert('Event created')
-        console.log(this.state.event_name)
+            console.log("started check")
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
             event_name : this.state.event_name,
             sport: this.state.sport,
@@ -143,6 +151,8 @@ export default class create_event extends React.Component {
             created_by:this.state.email,
             players:[],
             joined:1,
+            lat : this.state.lat,
+            long : this.state.long
         
         })
         .then(()=>this.state.db.collection('AllEvents').doc(this.state.event_name).set({
@@ -159,7 +169,9 @@ export default class create_event extends React.Component {
             day: this.state.day,
             created_by:this.state.email,
             players:[],
-
+            location : [],
+            lat : this.state.lat,
+            long : this.state.long
 
         }))
         .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
@@ -171,7 +183,9 @@ export default class create_event extends React.Component {
         this.setState({ visible: true })
         console.log('not happeming')
     }
+         
     }
+         
 
     handleEventName = (name) => {
         this.setState ({ event_name: name})
@@ -210,10 +224,15 @@ export default class create_event extends React.Component {
         console.disableYellowBox = true
         return(
             <View style = {styles.container}>
-                
+                <ImageBackground
+                    source = {require('../assets/infobkg2.jpeg')}
+            style = {{flex: 1}}
+            
+        >
             <ScrollView style = {styles.container}>
                
-                <View style = {styles.inputForm}>
+                <View style = {{marginHorizontal: 20,
+        marginBottom: 30, paddingTop:20}}>
                     <Text style = {styles.inputTitle}>Event name</Text>
                     <TextInput 
                     style = {styles.input}  
@@ -319,22 +338,22 @@ export default class create_event extends React.Component {
                 
                 
                 <TouchableOpacity style = {styles.button } onPress = {this.handleCreate}>
-                    <Text style = {{color: "white"}}>CREATE</Text>
+                    <Text style = {{color: "white", fontFamily:'Roboto-Regular', fontSize: 20, fontWeight: 'bold'}}>CREATE</Text>
 
                 </TouchableOpacity>
-                <View style = {{ height: 40, width:40,marginRight: 20,marginBottom: 20, marginTop:40 ,alignSelf: 'flex-end'}}>
+                <View style = {{ height: 40, width:40,marginRight: 10,marginBottom: 0, marginTop:80 ,alignSelf: 'flex-end'}}>
                 <TouchableOpacity onPress = {() => alert('Name of the event and number of players cannot be changed later')}>
                     <Icon style={{alignSelf: 'flex-end',}}
                         name = "exclamation-circle"
                         size = {25}
-                        color = "red"
+                        color = "#f44336"
                     />
                 </TouchableOpacity>
                 </View>
                 
                 
             </ScrollView>
-            
+            </ImageBackground>
       
             </View>
    
@@ -345,7 +364,8 @@ export default class create_event extends React.Component {
 const styles = StyleSheet.create({
     container: {
        flex: 1,
-       marginTop: 15
+       //paddingTop: 15,
+       //backgroundColor: 'black'
     },
     header: {
         alignSelf: "center",
@@ -364,21 +384,29 @@ const styles = StyleSheet.create({
 
     inputTitle: {
         fontSize:18,
-        color: "#8A8F9E"
+        color: "#ababab",
+        fontFamily: 'Roboto-Light'
     },
     input: {
-        fontSize: 15,
+        fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40
+        height: 40,
+        color:'#fff',
+        borderColor: '#424242',
+        fontFamily: 'Roboto-Light'
     
     },
     button: {
-        marginHorizontal: 30,
-        backgroundColor: "black",
-        borderRadius: 8,
+       // marginHorizontal: 30,
+        backgroundColor: "#00e676",
+        borderRadius: 25,
         height: 52,
         justifyContent:"center",
         alignItems:"center",
+        width: 170,
+        alignSelf:'center',
+        marginTop: 15
+        
     
     }
 

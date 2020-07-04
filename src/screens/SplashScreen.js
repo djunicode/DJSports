@@ -45,7 +45,7 @@ render(){
     return(
         <View style = {style.container}>
             <Image 
-                source={require('../images/logo1.png')}
+                source={require('../images/logo2.png')}
                 style = {{height:170 , width: 370 , alignSelf:'center'}}
             />
         </View>

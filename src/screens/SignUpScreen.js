@@ -130,7 +130,7 @@ export default class SignUpScreen extends React.Component {
             if (this.state.pass == this.state.pass2) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
                     .then(() => this.addusertodb())
-                    .catch((e) => this.setState({
+                    .catch((e) => console.log(e),this.setState({
                         error : e,
                         visible : true
                     }))
@@ -172,7 +172,7 @@ export default class SignUpScreen extends React.Component {
     addusertodb = () => {
       
         let arr = this.handleEventName(this.state.name)
-        this.state.db.collection("Users").doc(this.state.username).set({
+        this.state.db.collection("Users").doc(this.state.Id.toLowerCase()).set({
             name: this.state.name,
             address: this.state.address,
             email: this.state.Id.toLowerCase(),
@@ -191,43 +191,43 @@ export default class SignUpScreen extends React.Component {
     }
     render() {
         return (
-            <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: '100%', width: '100%' }} >
-                <ScrollView style={{ padding: 10, marginTop: 20 }}>
+            <ImageBackground source={require('../images/infobkg2.jpeg')} style={{ height: '100%', width: '100%' }} >
+                <ScrollView style={{ padding: 10, marginTop: 10 }}>
                     <View style={style.container}>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 9, }} />
+                            <Icon name="user-circle" size={25} color="white" style={{ paddingTop: 10, paddingLeft: 9, }} />
                             <TextInput
                                 placeholder='User Name'
-                                placeholderTextColor='black'
+                                placeholderTextColor='white'
                                 style={style.textInput}
                                 onChangeText={this.Username}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
 
-                            <Icon name="address-book" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <Icon name="address-book" size={25} color="#bdbdbd" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Address'
-                                placeholderTextColor='black'
+                                placeholderTextColor='#bdbdbd'
                                 style={style.textInput}
                                 onChangeText={this.address}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
 
-                            <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <Icon name="user-circle" size={25} color="white" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
                                 placeholder='Name'
-                                placeholderTextColor='black'
+                                placeholderTextColor='white'
                                 style={style.textInput}
                                 onChangeText={this.name}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10 }}>
-                            <Icon name="mortar-board" size={23} color="black" style={{ paddingTop: 10, paddingLeft: 8, }} />
+                            <Icon name="mortar-board" size={23} color="#bdbdbd" style={{ paddingTop: 10, paddingLeft: 8, }} />
                             <Picker
                                 selectedValue={this.state.branch}
-                                style={{ height: 50, width: 150 }}
+                                style={{ height: 50, width: 150 , color:'#bdbdbd'}}
                                 onValueChange={(itemValue, itemIndex) =>
 
                                     this.setState({ branch: itemValue })
@@ -243,13 +243,13 @@ export default class SignUpScreen extends React.Component {
                             </Picker>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10, marginRight: 40 }}>
-                                <Icon name="calendar" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10, paddingLeft: 10, marginRight: 40 ,}}>
+                                <Icon name="calendar" size={25} color="white" style={{ paddingTop: 10, paddingLeft: 10, }} />
                                 <Picker
+                                
                                     selectedValue={this.state.year}
-                                    style={{ height: 50, width: 100, borderBottomWidth: 1, borderBottomColor: 'black' }}
+                                    style={{ height: 50, width: 100, borderBottomWidth: 1, borderBottomColor: 'white', color: 'white' }}
                                     onValueChange={(itemValue, itemIndex) =>
-
                                         this.setState({ year: itemValue })
                                         //console.log('gender issss ',this.state.gender)
                                     }>
@@ -261,10 +261,10 @@ export default class SignUpScreen extends React.Component {
                                 </Picker>
                             </View>
                             <View style={{ flexDirection: 'row', padding: 0, marginBottom: 10 }}>
-                                <Icon name="male" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 0, }} />
+                                <Icon name="male" size={25} color="white" style={{ paddingTop: 10, paddingLeft: 0, }} />
                                 <Picker
                                     selectedValue={this.state.gender}
-                                    style={{ height: 50, width: 150 }}
+                                    style={{ height: 50, width: 150 , color: 'white'}}
                                     onValueChange={(itemValue, itemIndex) =>
                                         this.setState({ gender: itemValue })
                                     }>
@@ -275,37 +275,37 @@ export default class SignUpScreen extends React.Component {
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <Icon name="futbol-o" size={25} color="#bdbdbd" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
-                                placeholder='Sports1'
-                                placeholderTextColor='black'
+                                placeholder='Sport 1'
+                                placeholderTextColor='#bdbdbd'
                                 style={style.textInput}
                                 onChangeText={this.sports1}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <Icon name="futbol-o" size={25} color="white" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
-                                placeholder='Sports2'
-                                placeholderTextColor='black'
+                                placeholder='Sport 2'
+                                placeholderTextColor='white'
                                 style={style.textInput}
                                 onChangeText={this.sports2}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="futbol-o" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} />
+                            <Icon name="futbol-o" size={25} color="#bdbdbd" style={{ paddingTop: 10, paddingLeft: 10, }} />
                             <TextInput
-                                placeholder='Sports3'
-                                placeholderTextColor='black'
+                                placeholder='Sport 3'
+                                placeholderTextColor='#bdbdbd'
                                 style={style.textInput}
                                 onChangeText={this.sports3}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="user" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
+                            <Icon name="user" size={30} color="white" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
-                                placeholder='LoginId'
-                                placeholderTextColor='black'
+                                placeholder='Email Id'
+                                placeholderTextColor='white'
                                 style={style.textInput}
                                 onChangeText={this.LoginId}
                                 autoCapitalize='none'
@@ -313,22 +313,22 @@ export default class SignUpScreen extends React.Component {
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
-                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
+                            <Icon name="lock" size={30} color="#bdbdbd" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
                                 secureTextEntry={true}
                                 placeholder='Enter Password'
-                                placeholderTextColor='black'
+                                placeholderTextColor='#bdbdbd'
                                 style={style.textInput}
                                 onChangeText={this.Password}>
                             </TextInput>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 5, marginBottom: 10 }}>
 
-                            <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} />
+                            <Icon name="lock" size={30} color="white" style={{ paddingTop: 10, paddingLeft: 12, }} />
                             <TextInput
                                 secureTextEntry={true}
                                 placeholder='Re Enter your Password'
-                                placeholderTextColor='black'
+                                placeholderTextColor='white'
                                 style={style.textInput}
                                 onChangeText={this.RePassword}>
                             </TextInput>
@@ -355,7 +355,7 @@ export default class SignUpScreen extends React.Component {
                             <DialogContent>
                                 <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>
                                 {
-                                    this.state.error == '' ? 'Please fill up all the fields!' : this.state.error 
+                                    (this.state.error == '') ? 'Please fill up all the fields!' : this.state.error 
                                 }
                                 </Text>
                             </DialogContent>
@@ -384,11 +384,11 @@ const style = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         borderRadius: 20,
-        backgroundColor: '#FFFFFF',
-        paddingTop: 20
+        //backgroundColor: '#FFFFFF',
+        //paddingTop: 20
     },
     header: {
-        paddingTop: 30,
+        //paddingTop: 30,
         fontSize: 40,
         fontWeight: 'bold',
         alignSelf: "center",
@@ -398,19 +398,22 @@ const style = StyleSheet.create({
     textbutton: {
         fontSize: 20,
         alignSelf: "center",
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Roboto-Black'
     },
     textInput: {
         height: 50,
         width: '90%',
         justifyContent: 'center',
         paddingLeft: 10,
-        color: 'black',
-        borderBottomColor: 'black',
-        borderBottomWidth: 1
+        color: 'white',
+        borderBottomColor: 'white',
+        borderBottomWidth: 1,
+        fontFamily: 'Roboto-Light',
+        fontSize:16
     },
     button1: {
-        backgroundColor: '#341f97',
+        backgroundColor: '#000',
         borderRadius: 10,
         height: 50,
         justifyContent: 'center',
@@ -418,16 +421,20 @@ const style = StyleSheet.create({
         width:150,
         marginBottom: 10,
         marginRight:20,
-        marginLeft:20
+        marginLeft:20,
+        borderColor: '#00e676',
+    borderWidth: StyleSheet.hairlineWidth,
     },
     button2: {
-        backgroundColor: '#341f97',
+        backgroundColor: '#000',
         borderRadius: 10,
         height: 50,
         justifyContent: 'center',
         paddingLeft: 10,
         marginBottom: 40,
-        width:170
+        width:170,
+        borderColor: '#00e676',
+    borderWidth: StyleSheet.hairlineWidth,
     },
     textInput1: {
         height: 50,

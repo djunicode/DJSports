@@ -70,18 +70,20 @@ export default class LoginScreen extends React.Component {
     this.props.navigation.navigate('SignUpScreen')
   }
   render() {
+    console.disableYellowBox = true
     return (
-      <ImageBackground source={require('../images/backgroundimage.jpg')} style={{ height: null, width: null , flex:1 , justifyContent:'center' }}>
+      <ImageBackground source={require('../images/infobkg2.jpeg')} style={{ height: null, width: null , flex:1 , justifyContent:'center' }}>
         <View style={style.container}>
         <Image 
-                source={require('../images/logo.png')}
-                style = {{height:140 , width: null , margin:30 , marginBottom:50,marginTop:50}}
+                source={require('../images/logo2.png')}
+                style = {{ height:150, width: null , margin:30 , marginBottom:50,marginTop:50, borderRadius:8}}
             />
           <View style={{ flexDirection: 'row', padding: 5, marginBottom:10 }}>
-            <Icon name="user" size={25} color="black" style={{ paddingTop: 10 }} />
+            <Icon name="user" size={25} color="#bdbdbd" style={{ paddingTop: 10 }} />
             <TextInput
               placeholder='Login ID'
-              placeholderTextColor='black'
+              placeholderTextColor='#fff'
+              
               onChangeText={this.LoginId}
               keyboardType='email-address'
               textContentType='emailAddress'
@@ -110,11 +112,11 @@ export default class LoginScreen extends React.Component {
             </DialogContent>
           </Dialog>
           <View style={{ flexDirection: 'row', padding: 5, marginBottom: 30 }}>
-            <Icon name="lock" size={30} color="black" style={{ paddingTop: 9 }} />
+            <Icon name="lock" size={30} color="#bdbdbd" style={{ paddingTop: 9 }} />
             <TextInput
               secureTextEntry={true}
               placeholder='Password'
-              placeholderTextColor='black'
+              placeholderTextColor='#fff'
               onChangeText={this.Password}
               style={style.textInput}
             >
@@ -141,11 +143,11 @@ export default class LoginScreen extends React.Component {
 }
 const style = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderRadius: 20,
-    margin: 10,
-    backgroundColor: 'white',
+    //paddingLeft: 10,
+    //paddingRight: 10,
+    //borderRadius: 20,
+    //margin: 10,
+    //backgroundColor: 'white',
     justifyContent:'center'
   },
   header: {
@@ -162,19 +164,22 @@ const style = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
     color: 'white',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto-Black'
   },
   textInput: {
     height: 50,
     width: '90%',
     justifyContent: 'center',
     paddingLeft: 10,
-    color: 'black',
-    borderBottomColor: 'black',
+    color: 'white',
+    borderBottomColor: '#bdbdbd',
     borderBottomWidth: 1,
+    fontFamily: 'Roboto-Light',
+    fontSize:17
   },
   button1: {
-    backgroundColor: '#341f97',
+    backgroundColor: 'black',
     borderRadius: 10,
     height: 50,
     justifyContent: 'center',
@@ -185,16 +190,21 @@ const style = StyleSheet.create({
     alignContent:'center',
     alignItems:'center',
     alignSelf:'center',
-    marginLeft:20
+    marginLeft:20,
+    borderColor: '#00e676',
+    borderWidth: StyleSheet.hairlineWidth,
+    
   },
   button2: {
-    backgroundColor: '#341f97',
+    backgroundColor: 'black',
     borderRadius: 10,
     height: 50,
     justifyContent: 'center',
     paddingLeft: 10,
     marginBottom: 40,
     width:150,
+    borderColor: '#00e676',
+    borderWidth: StyleSheet.hairlineWidth
 
   },
 })
