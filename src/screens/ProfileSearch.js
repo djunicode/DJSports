@@ -90,6 +90,8 @@ componentDidMount() {
 
     const user = firebase.auth().currentUser
     this.setState({ email: user.email })
+    const {state} = this.props.navigation;
+    this.retData(state.params.event_name)
    
     console.log("success kinda")
     
@@ -100,7 +102,19 @@ componentDidMount() {
    
 
 }
+retData=async(item)=>{
+  // console.log(item)
+  var docRef = this.state.db.collection("AllEvents").doc(item);
 
+  await docRef.get().then((doc)=> {
+      this.setState({
+          data2:doc.data()
+      })
+      // console.log(this.state.data2)
+      }).catch(function(error) {
+              console.log("Error getting document:", error);
+  });
+}
 componentWillUnmount() {
     this.focusListener.remove()
 } 
@@ -256,7 +270,7 @@ render() {
           data= {this.state.displayData}
           renderItem={({ item }) => 
           <TouchableOpacity onPress = {
-            ()=>navigate("ProfileDetails",{item})
+            ()=>navigate("ProfileDetails",{item,data2:this.state.data2})
         }>
         <ProfileCard
             image  = {require('../../assets/media2.jpg')}

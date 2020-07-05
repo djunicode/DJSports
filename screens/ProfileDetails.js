@@ -30,6 +30,7 @@ export default class ProfileDetails extends Component {
       const user = firebase.auth().currentUser
       const doc = this.state.db.collection("Users").doc(user.email)
       var {params} = this.props.navigation.state
+      this.retData(params,user.email)
       var t 
      
       firebase
@@ -55,6 +56,20 @@ export default class ProfileDetails extends Component {
           console.log(user.email)
       
       });
+
+  }
+  retData=async(params,id)=>{
+    var docRef = this.state.db.collection("Invites").doc(params.item.email).collection('InviteFrom').doc(id);
+
+    await docRef.get().then((doc)=> {
+        this.setState({
+            data2:doc.data()
+        })
+        // console.log(this.state.data2)
+        }).catch(function(error) {
+                console.log("Error getting document:", error);
+    });
+
 
   }
     addFav=()=>{
@@ -93,7 +108,38 @@ export default class ProfileDetails extends Component {
 
        }
 
+       invite=()=>{
+        var {params} = this.props.navigation.state
+        //console.log(params.data2)
+        //console.log(this.state.data2)
+        const user = firebase.auth().currentUser
+        let id = user.email
+        let data=this.state.data2
+        console.log(data)
+        
+        
+        let data2=[]
 
+        if(data==undefined){
+          data2.push(params.data2.event_name)
+          this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
+            EventName:data2,
+            name:params.item.name,
+            id:user.email
+            })
+          }
+         else{ 
+        if(!data.EventName.includes(params.data2.event_name)){
+          
+        data.EventName.push(params.data2.event_name)
+        this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
+        EventName:data.EventName,
+        name:params.item.name,
+        Id:user.email
+        })
+      }
+      }
+       }
   
    
     
@@ -152,6 +198,7 @@ export default class ProfileDetails extends Component {
             </TouchableOpacity>
             </View>
             :
+            <View>
             <TouchableOpacity onPress= {this.addFav}>
             <View>
                 <Text>
@@ -159,6 +206,15 @@ export default class ProfileDetails extends Component {
                 </Text>
             </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress= {this.invite}>
+          <View>
+              <Text>
+                  invite
+              </Text>
+          </View>
+      </TouchableOpacity>
+      </View>
+        
         
     }
           </Card>
