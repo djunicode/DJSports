@@ -194,12 +194,14 @@ render() {
           <View>
             <Text style = {
               {
-              color: 'white',
-              fontWeight:"bold",
-              paddingStart: 20,
+              color: '#D3D3D3',
+              //fontWeight:"bold",
+              //paddingStart: 20,
               paddingTop : 10,
-              fontSize : 20,
-              width: 300
+              fontSize : 18,
+              //width: 300,
+              fontFamily: 'Roboto-Light',
+              alignSelf: 'center'
           
           }}>
               Who do you want to play with?

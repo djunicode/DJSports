@@ -217,22 +217,26 @@ render() {
             <Text style = {
               {
               color: 'white',
-              fontWeight:"bold",
-              paddingLeft:40,
+              //fontWeight:"100",
+              //paddingLeft:40,
               paddingTop : 60,
-              fontSize : 20,
-              width: 300,
-              alignSelf:"center"
+              fontSize : 22,
+              //width: 350,
+              paddingBottom:10,
+              alignSelf:"center",
+              fontFamily: 'SpaceMono-Regular'
+              //fontFamily: 'Acme-Regular'
+
           
           }}>
-            You have no Favorites</Text>
-        <TouchableOpacity onPress = {()=> navigate("ProfileSearch")}
-        style={
-          {paddingLeft:85,
-          paddingTop:20}
-        }
+            You have no Favourites</Text>
+        <TouchableOpacity style={{ alignSelf: 'center',margin: 10, backgroundColor: '#000',
+        padding: 8, width: 150, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginLeft: 5 }} 
+        onPress = {()=> navigate("ProfileSearch")}
+        
         >
-                <Text style ={{textAlign:"center",margin:10 , backgroundColor:'#00e676' , padding:8 ,width:180, justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}
+                <Text style={{ fontWeight: 'bold', fontSize: 18, color: "#b9f6ca" 
+                , padding:3,borderBottomWidth:1, borderColor:'#b9f6ca'}}
                 > Find people?</Text>
         </TouchableOpacity>
         </View>
