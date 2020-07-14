@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Image,View ,StyleSheet, TouchableOpacity,Alert} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import {Container,Content, Card, CardItem,Text,Left, Body, Right} from 'native-base';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
-import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 export default class ProfileDetails extends Component {
   
     constructor(props) {
@@ -65,7 +64,6 @@ export default class ProfileDetails extends Component {
         this.setState({
             data2:doc.data()
         })
-        // console.log(this.state.data2)
         }).catch(function(error) {
                 console.log("Error getting document:", error);
     });
@@ -98,7 +96,7 @@ export default class ProfileDetails extends Component {
         const  arrayRemove = firebase.firestore.FieldValue.arrayRemove;
           const doc = this.state.db.collection("Users").doc(id)
           doc.update({
-          favorites : arrayRemove(params.item.name)
+          favorites : arrayRemove(params.item.email)
           });
           this.setState({
             isFavorite : false
@@ -106,8 +104,47 @@ export default class ProfileDetails extends Component {
 
 
 
-       }
 
+
+       }
+       askToRemove=()=>
+       {
+        Alert.alert(
+          'Remove from Favorites?',
+          '',
+          [
+            {
+              text: 'Yes',
+              onPress: this.remFav
+            },
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: true }
+        );
+       }
+        askToAdd=()=>{
+          Alert.alert(
+            'Add to Favorites?',
+            '',
+            [
+              {
+                text: 'Yes',
+                onPress: this.addFav
+              },
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel'
+              },
+              // { text: 'OK', onPress: () => console.log('OK Pressed') }
+            ],
+            { cancelable: true }
+          );
+        }
        invite=()=>{
         var {params} = this.props.navigation.state
         //console.log(params.data2)
@@ -188,9 +225,9 @@ export default class ProfileDetails extends Component {
             {  this.state.isFavorite ?
             <View>
             <Text>
-              {params.item.name} is already in your favorites!
+              {params.item.name} is in your favorites!
             </Text>
-            <TouchableOpacity onPress = {this.remFav}
+            <TouchableOpacity onPress = {this.askToRemove}
             >
               <View>
                 <Text>Remove From favorites</Text>
@@ -199,24 +236,25 @@ export default class ProfileDetails extends Component {
             </View>
             :
             <View>
-            <TouchableOpacity onPress= {this.addFav}>
+            <TouchableOpacity onPress= {this.askToAdd}>
             <View>
                 <Text>
                     Add to Favorite
                 </Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress= {this.invite}>
+        
+      </View>
+        
+        
+    }
+    <TouchableOpacity onPress= {this.invite}>
           <View>
               <Text>
                   invite
               </Text>
           </View>
       </TouchableOpacity>
-      </View>
-        
-        
-    }
           </Card>
          
         </Content>

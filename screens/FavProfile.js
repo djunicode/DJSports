@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,View ,StyleSheet, TouchableOpacity} from 'react-native';
+import { Alert,Image,View ,StyleSheet, TouchableOpacity} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -90,7 +90,25 @@ export default class ProfileDetails extends Component {
 
 
        }
-
+       askToRemove=()=>
+       {
+        Alert.alert(
+          'Remove from Favorites?',
+          '',
+          [
+            {
+              text: 'Yes',
+              onPress: this.remFav
+            },
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: true }
+        );
+       }
 
   
    
@@ -142,7 +160,7 @@ export default class ProfileDetails extends Component {
             {/* <Text>
               {params.item.name} is already in your favorites!
             </Text> */}
-            <TouchableOpacity onPress ={this.remFav}>
+            <TouchableOpacity onPress ={this.askToRemove}>
               <View>
                 <Text>Remove From favorites</Text>
               </View>
