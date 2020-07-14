@@ -281,9 +281,9 @@ render() {
           </TouchableOpacity> */}
          </View>:
         <View>
-        <Text>You have no Favorites</Text>
+        <Text style = {{color: 'white'}}>You have no Favorites</Text>
         <TouchableOpacity onPress = {()=> navigate("ProfileSearch")}>
-                <Text> Add People to your favorites?</Text>
+                <Text style = {{color: 'white'}}> Add People to your favorites?</Text>
         </TouchableOpacity>
         </View>
         }

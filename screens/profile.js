@@ -434,8 +434,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         //width: 100,
        // backgroundColor: 'red',
-      paddingTop:290,
-      paddingLeft: 280,
+      marginTop:290,
+      marginLeft: 280,
       flexDirection: 'row'
 
     

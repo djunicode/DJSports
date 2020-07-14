@@ -61,7 +61,7 @@ const peopleStack = createMaterialTopTabNavigator({
 
   ProfileSearch: {
     screen: ProfileSearch,
-    navigationOptions: { title: 'People', }
+    navigationOptions: { title: 'Explore', }
   },
   Favorites: {
     screen: Favorites,
