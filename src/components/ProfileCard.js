@@ -6,10 +6,10 @@ import {
     Image,
     TouchableOpacity,StatusBar,StatusBarStyle
 } from "react-native";
-import {Container,Header,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import 'firebase/firestore'
 class ProfileCard extends Component {
+   
+   
     render() {
         console.disableYellowBox = true
         return (
@@ -36,11 +36,25 @@ class ProfileCard extends Component {
                         </View>
                         </View>
                         <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 ,width:180, justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
-                            <TouchableOpacity>
+                            {
+                               (this.props.Fav)?
+                               
+                                
+
                                 <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
-                                    Add to Favourites
+                                    Already in your Favs
                                 </Text>
-                            </TouchableOpacity>
+                            
+                            :
+                           
+
+                                <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
+                                    View Details
+                                </Text>
+                            
+                                
+                            }
+                            
                         </View>
                   
                     </View>
@@ -65,67 +79,3 @@ const styles = StyleSheet.create({
         color: "#52575D"
     },
 });
-
-/*<View style={{flexDirection:'row' , margin:20 , marginTop:20 , marginBottom:10, borderBottomWidth: StyleSheet.hairlineWidth,
-                        borderColor:'#424242'}}>
-                    <Image 
-                        source = {require('../assets/profile-pic.jpg')}
-                        style = {{ height:80, width:80 , borderRadius:40}}
-                    />
-                    <View style ={{margin:15 , marginTop:0 }}>
-                        <Text style={{fontWeight:'bold', fontSize:17 , color:'#fff'}}>
-                            Random Name
-                        </Text>
-                        <Text style = {{fontSize:15 , color:'#fff'}}>
-                            wants to be your friend
-                        </Text>
-                    <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'center'}}>
-                        <View style ={{margin:10 , backgroundColor:'#00e676' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10 , marginLeft:5}}>
-                            <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
-                                Accept
-                            </Text>
-                        </View>
-                        <View style ={{margin:10 , backgroundColor:'#D3D3D3' , padding:8 , width:100 , justifyContent:'center',alignItems:'center' , borderRadius:10}}>
-                            <Text style={{fontWeight:'bold', fontSize:17}}>
-                                Ignore
-                            </Text>
-                        </View>
-                    </View>
-                    </View>
-                </View>
-                */
-
-
-    /* 
-    <Content style={{padding:5}}>
-                <Card style = {{alignContent : 'center',height:125}}>
-                
-                <CardItem >
-                <Left>
-                    
-                    <Thumbnail source ={this.props.image}>
-                        
-                    </Thumbnail>
-               
-                    <View>
-                        <Title style ={{color : 'black',paddingStart : 20}}>
-                            {this.props.Name}
-                        </Title>
-                        <Subtitle style ={{color : 'black',paddingStart : 20,paddingTop:10,fontSize:15}}>
-                            {this.props.Branch} - {this.props.Year}
-                        </Subtitle>
-                        
-                        <Subtitle style ={{color : 'black',paddingStart : 20,paddingTop:10,fontSize:15}}>
-                        
-                        { this.props.Sports.map((item, key)=>(
-                        <Text key={key} style={styles.TextStyle}>{item} </Text>)
-                        )}
-                        </Subtitle>
-                    </View>
-                    </Left>                    
-                </CardItem>
-                
-                </Card>
-                
-            </Content>
-            */
