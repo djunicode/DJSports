@@ -26,6 +26,7 @@
     "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-google-signin": "^2.1.1",
+    "react-native-image-crop-picker": "^0.32.2",
     "react-native-image-picker": "^2.3.1",
     "react-native-modal-datetime-picker": "^8.5.1",
     "react-native-multiple-select-list": "^1.0.4",

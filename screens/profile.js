@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { SafeAreaView, Image, ScrollView } from "react-native";
-import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-crop-picker'
 import firebase from 'firebase';
 import '@firebase/firestore'
 import 'firebase/storage'
@@ -117,8 +117,11 @@ class profile extends React.Component {
                 skipBackup: true,
                 path: 'images',
             },
+            cropping:true,
+            width:500,
+            height:500,	
         };
-        ImagePicker.showImagePicker(options, (response) => {
+        ImagePicker.openPicker(options).then((response) => {
             console.log('Response = ', response);
 
             if (response.didCancel) {
@@ -138,11 +141,11 @@ class profile extends React.Component {
                 this.setState({
                     filePath: response,
                     fileData: response.data,
-                    fileUri: response.uri
+                    fileUri: response.path
                 });
-                const blob = this.uriToBlob(response.uri)
+                const blob = this.uriToBlob(response.path)
                 console.log(`blob create ${blob}`)
-                const img = this.uploadPhotoAsync(response.uri)
+                const img = this.uploadPhotoAsync(response.path)
                 // const img = this.uploadToFirebase(blob)
                 console.log('image uploaded...' + JSON.stringify(img))
             }
