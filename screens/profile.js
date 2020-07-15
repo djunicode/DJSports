@@ -212,7 +212,7 @@ class profile extends React.Component {
                         image:url
                     })
                     this.setState({
-                        refresh:"ajds"
+                        refresh:true
                     })
                 }
             );
