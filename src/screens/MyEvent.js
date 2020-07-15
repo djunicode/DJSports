@@ -81,6 +81,16 @@ export default class MyEvent extends React.Component {
         this.focusListener.remove()
     }
 
+    filter = (data) => {
+       //let data = []
+       //let data = this.state.documentData
+       for(let i=0; i<data.length; i++){
+           console.log(i)
+           this.checkDate(data[i].day, data[i].event_name)
+            //console.log(i," ", data[i].event_name)
+       }
+    }
+
 
 
 
@@ -107,6 +117,8 @@ export default class MyEvent extends React.Component {
                 lastVisible: lastVisible,
                 loading: false,
             });
+            this.filter(documentData)
+            
         }
         catch (error) {
             console.log(error);
@@ -138,7 +150,9 @@ export default class MyEvent extends React.Component {
                 lastVisible: lastVisible,
                 refreshing: false,
             });
+            this.filter([...this.state.documentData, ...documentData])
         }
+    
         catch (error) {
             console.log(error);
         }
@@ -204,12 +218,13 @@ export default class MyEvent extends React.Component {
             //alert('Event deleted')
 
         }).then(this.onFocusFunction(this.state.email),
-            this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
+            this.state.db.collection('AllEvents').doc(event).delete().then(function () {
 
                 console.log("Document successfully deleted from AllEvents!");
 
 
-            })
+            }),
+            this.retrieveData(this.state.email)
         )
 
 
@@ -259,8 +274,8 @@ export default class MyEvent extends React.Component {
 
     checkDate = (data, event) => {
         const rn = moment(right_now).format('YYYY-MM-DD')
-        console.log(moment(right_now).format('YYYY-MM-DD')),
-            console.log(data)
+        console.log("right now is ",moment(right_now).format('YYYY-MM-DD')),
+            console.log("date to be checked is ",data)
         console.log(moment(rn).isAfter(data))
         if (moment(rn).isAfter(data))
             this.deletEvent(event)
@@ -283,9 +298,10 @@ export default class MyEvent extends React.Component {
                         data={this.state.documentData}
                         // Render Items
                         renderItem={({ item }) => (
-
+                           
                             (item.created_by == this.state.email)
                                 ?
+                                 
                                 <View style={styles.itemContainer}>
 
 
