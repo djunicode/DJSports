@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text } from 'native-base';
 import { View ,FlatList, StyleSheet} from 'react-native';
+
+Array.prototype.unique = function () {
+  return Array.from(new Set(this));
+}
+
 export default class ListExample extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +19,7 @@ export default class ListExample extends Component {
         var {params} = this.props.navigation.state
         console.log(params.players)
         this.setState({
-            players:params.players
+            players:params.players.unique()
         })
     }
   render() {

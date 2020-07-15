@@ -63,7 +63,7 @@ const peopleStack = createMaterialTopTabNavigator({
 
   ProfileSearch: {
     screen: ProfileSearch,
-    navigationOptions: { title: 'People', }
+    navigationOptions: { title: 'Explore', }
   },
   Favorites: {
     screen: Favorites,
@@ -337,13 +337,13 @@ const BottomNavigator = createMaterialTopTabNavigator({
   home : {
     screen : mainpage,
     navigationOptions: {title: 'Home', tabBarIcon: ({ tintColor }) => (
-      <Icon name="home" size={25} color="white" />
+      <Icon name="home" size={25} color={tintColor} />
       )},
   },
   event_main :{
     screen :event_main,
     navigationOptions: {title: 'My Events', tabBarIcon: ({ tintColor }) => (
-      <Icon name="folder-open" size={21} color="white" />
+      <Icon name="folder-open" size={21} color={tintColor} />
       )}
   },
   /*profile_search : {
@@ -355,25 +355,25 @@ const BottomNavigator = createMaterialTopTabNavigator({
   notifs : {
     screen : teamModule,
     navigationOptions: {title: 'Notifications', tabBarIcon: ({ tintColor }) => (
-      <Icon name="bell" size={25} color="white" />
+      <Icon name="bell" size={25} color={tintColor} />
       )}
   }
 
   ,profile : {
     screen: profile,
     navigationOptions: {title: 'Profile', tabBarIcon: ({ tintColor }) => (
-      <Icon name="user" size={25} color="white" />
+      <Icon name="user" size={25} color={tintColor} />
       )}
   }},
   {
   initialRouteName : 'home',
   tabBarPosition: 'bottom',
-  tabBarOptions: {activeTintColor: 'white',
-  inactiveColor: '#9e9e9e', showIcon: 'true',
+  tabBarOptions: {activeTintColor: '#b9f6ca',
+  inactiveColor: 'white', showIcon: 'true',
   style: { backgroundColor: '#212121', },
   labelStyle: {fontSize:12,textTransform:'capitalize'},
   tabStyle:{height:60},
-  iconStyle: {inactiveColor:'grey', paddingTop:3, activeColor: 'white'},
+  iconStyle: {inactiveColor:'grey', paddingTop:3},
   indicatorStyle: { backgroundColor: '#00e676', height: 4}
   
 

@@ -42,7 +42,7 @@ class ProfileCard extends Component {
                                 
 
                                 <Text  style={{fontWeight:'bold', fontSize:17 ,color : "#fff"}}>
-                                    Already in your Favs
+                                    Already in Favourites
                                 </Text>
                             
                             :
