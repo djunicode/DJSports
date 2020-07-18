@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { 
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    TouchableOpacity,
-    ActivityIndicator,
-    Alert,
-    StatusBar,StatusBarStyle
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  StatusBar,StatusBarStyle
 } from "react-native";
 
-import {Container,Header,Item,Icon,Input,Body,CheckBox,Title,Card,CardItem,Left,Right,Content,Thumbnail,Grid,Button, Subtitle} from 'native-base'
+import {Header,Item,Icon,Input,Button} from 'native-base'
 import ProfileCard from '../components/ProfileCard.js'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -25,6 +25,7 @@ class ProfileSearch extends Component {
       favs : [],
       favData : [],
       documentData: [],
+      favList :[],
             limit: 9,
             lastVisible: null,
             loading: false,
@@ -50,32 +51,13 @@ onFocusFunction = (email) => {
           
           var incoming_favs = []
           incoming_favs = querySnapshot.get("favorites")
-          console.log("In on focus")
-          console.log(typeof(incoming_favs))
-          
-          incoming_favs.forEach(
-            
-            async (elem)=>{
-              if (elem !=firebase.auth().currentUser.email)
-              { firebase
-                .firestore()
-                .collection("Users").doc(elem)
-                .get()
-                .then((querySnapshot) => { 
-                   
-          this.setState({
-            data: [
-              ...this.state.data,
-              querySnapshot.data()
-            ]
-          })
-          
-                  });
-                  
-              
-              }
-          
-          })})
+          this.setState(
+            {
+                favList : incoming_favs
+            }
+          )
+        })
+    
             
       
     this.handleChange('')
@@ -90,8 +72,10 @@ componentDidMount() {
 
     const user = firebase.auth().currentUser
     this.setState({ email: user.email })
+    const {state} = this.props.navigation;
+    this.retData(state.params.event_name)
    
-    console.log("success kinda")
+    console.log("SSSSS kinda")
     
  
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
@@ -101,6 +85,20 @@ componentDidMount() {
 
 }
 
+retData=async(item)=>{
+ 
+  var docRef = this.state.db.collection("AllEvents").doc(item);
+
+  await docRef.get().then((doc)=> {
+      this.setState({
+          data2:doc.data()
+      })
+      console.log("Below is the data2.")
+       console.log(this.state.data2)
+      }).catch(function(error) {
+              console.log("Error getting document:", error);
+  });
+}
 componentWillUnmount() {
     this.focusListener.remove()
 } 
@@ -127,49 +125,13 @@ renderFooter = () => {
 }
 
 
-showFav = async() => {
-  let data  = []
-  console.log("in showfav")
-  console.log("This is the list of"+this.state.favs)
-  await this.state.favs.forEach(
-  async (elem)=>{
-    
-  firebase
-  .firestore()
-  .collection("Users").doc(elem)
-  .get()
-  .then((querySnapshot) => { 
-    
-   
-    
-   this.setState(
-     {
-       favData :[ ...this.state.favData, querySnapshot.data() ]
-     }
-   )
 
-    });
-    
-   
-}).then(this.setState({
-  data : data
-}))
-
-console.log("The final data")
-console.log(this.state.data)
-
- 
-console.log("Check data")
-
-console.log(this.state.favData)
-}
 
 handleChange = async(search) => {
   let Data = []
   this.setState({displayData: []})
   try {
     this.setState({loading:true})
-    // console.log('searching for ',search)
     await this.state.db.collection('Users')
         .where('keywords','array-contains',search)
         .get()
@@ -177,9 +139,10 @@ handleChange = async(search) => {
           querySnapshot.forEach(function(doc) {
             if (doc.data().email !=firebase.auth().currentUser.email)
             
-             {
+            {
                Data.push(doc.data());
-              } 
+            
+            } 
               
           
           });
@@ -226,11 +189,24 @@ render() {
           
             
             <View style = {{flex:1, backgroundColor: 'black'}} >
-              <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
-              
-          {/* {(this.state.loading)?<ActivityIndicator size='large'/>:null} */}
+ <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />              
         <View>
-     
+          <View>
+            <Text style = {
+              {
+              color: '#D3D3D3',
+              //fontWeight:"bold",
+              //paddingStart: 20,
+              paddingTop : 10,
+              fontSize : 18,
+              //width: 300,
+              fontFamily: 'Roboto-Light',
+              alignSelf: 'center'
+          
+          }}>
+              Who do you want to play with?
+            </Text>
+          </View>
       
           <Header searchBar rounded style = {{backgroundColor: 'black', marginTop:10, marginBottom:10}}>
           <Item>
@@ -256,7 +232,7 @@ render() {
           data= {this.state.displayData}
           renderItem={({ item }) => 
           <TouchableOpacity onPress = {
-            ()=>navigate("ProfileDetails",{item})
+            ()=>navigate("ProfileDetails",{item,data2:this.state.data2})
         }>
         <ProfileCard
             image  = {require('../../assets/media2.jpg')}
@@ -265,6 +241,8 @@ render() {
           Ratings = {item.rating}
           Branch={item.branch}
           Year = {item.year}
+          Fav = {this.state.favList.includes(item.email)?true:false}
+        
         >
       </ProfileCard>
     </TouchableOpacity>
@@ -282,12 +260,8 @@ render() {
             
       );
     
-}}
+}
+
+}
 export default ProfileSearch;
 
-/* <View>
-            <TouchableOpacity onPress = {()=>navigate("Favorites",)}>
-                <Text style = {{color: 'white'}}>Favorites</Text> 
-            </TouchableOpacity>
-    
-    </View>*/

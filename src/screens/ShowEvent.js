@@ -37,7 +37,8 @@ export default class ShowEvent extends React.Component {
         this.retData(state.params.event_name)
         var location
         console.log(state.params.venue)
-        fetch('https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext=' + state.params.venue + '&apiKey=l9zrSly8XJoP7gQ7M5hCxRe_-g6f-yfr41tgSF2N7Yc')
+        /*try {
+            fetch('https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext=' + state.params.venue + '&apiKey=l9zrSly8XJoP7gQ7M5hCxRe_-g6f-yfr41tgSF2N7Yc')
             .then((response) => response.json())
             .then((json) => {
                 console.log("test")
@@ -54,6 +55,11 @@ export default class ShowEvent extends React.Component {
             .catch((error) => {
                 console.error(error);
             })
+        }
+        catch(error){
+            console.log('locating error: ', error)
+        }*/
+        
         this.setState({
             event_name: state.params.event_name,
             no_people: state.params.no_people,
@@ -118,7 +124,7 @@ export default class ShowEvent extends React.Component {
                                 
                             </View>
                         </View>
-                        <TouchableOpacity onPress={() => Linking.openURL('http://www.google.com/maps/place/' + this.state.lat + ',' + this.state.long)}>
+                        <TouchableOpacity disabled={true} onPress={() => Linking.openURL('http://www.google.com/maps/place/' + this.state.lat + ',' + this.state.long)}>
                                     <View style={{ flexDirection: 'row', marginLeft: 40 , paddingBottom: 20}}>
                                         <Icon name="location-arrow" style={{ color: '#ababab',}} size={15} />
                                         <Text style={{ color: '#ababab',}}>
@@ -169,6 +175,14 @@ export default class ShowEvent extends React.Component {
                             <Text style={styles.info}>{this.state.venue}</Text>
                             <Text> {this.state.location}</Text>
                         </View>
+                        <TouchableOpacity disabled={true} onPress={() => Linking.openURL('http://www.google.com/maps/place/' + this.state.lat + ',' + this.state.long)}>
+                                    <View style={{ flexDirection: 'row', marginLeft: 40 , paddingBottom: 20}}>
+                                        <Icon name="location-arrow" style={{ color: '#ababab',}} size={15} />
+                                        <Text style={{ color: '#ababab',}}>
+                                            {"  Directions"}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
                         <View style={styles.shadow}>
                             <Icon name="calendar" style={styles.icon} size={25} />
                             <Text style={styles.info}>{this.state.date}</Text>
@@ -253,7 +267,7 @@ const styles = StyleSheet.create({
 
 
     },
-    icon: {
+    icon: { 
         color: 'white',
         padding: 12
     }

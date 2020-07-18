@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { SafeAreaView, Image, ScrollView } from "react-native";
-import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-crop-picker'
 import firebase from 'firebase';
 import '@firebase/firestore'
 import 'firebase/storage'
@@ -36,6 +36,8 @@ class profile extends React.Component {
             filePath: {},
             fileData: '',
             fileUri: '',
+            email:'',
+            refresh : true,
         };
 
     }
@@ -52,6 +54,7 @@ class profile extends React.Component {
 
     componentDidMount() {
         const user = firebase.auth().currentUser
+        this.setState({email:user.email})
         //console.log('user : ' , user)
         /*const ref = firebase.firestore().collection('Users').doc('Simrn');
         firebase.firestore()
@@ -92,7 +95,8 @@ class profile extends React.Component {
                         sports: data.sports,
                         year: data.year,
                         address: data.address,
-                        department: data.branch
+                        department: data.branch,
+                        image:data.image,
 
                     })
 
@@ -113,8 +117,11 @@ class profile extends React.Component {
                 skipBackup: true,
                 path: 'images',
             },
+            cropping:true,
+            width:500,
+            height:500,	
         };
-        ImagePicker.showImagePicker(options, (response) => {
+        ImagePicker.openPicker(options).then((response) => {
             console.log('Response = ', response);
 
             if (response.didCancel) {
@@ -134,19 +141,19 @@ class profile extends React.Component {
                 this.setState({
                     filePath: response,
                     fileData: response.data,
-                    fileUri: response.uri
+                    fileUri: response.path
                 });
-                const blob = this.uriToBlob(response.uri)
+                const blob = this.uriToBlob(response.path)
                 console.log(`blob create ${blob}`)
-                const img = this.uploadPhotoAsync(response.uri)
+                const img = this.uploadPhotoAsync(response.path)
                 // const img = this.uploadToFirebase(blob)
                 console.log('image uploaded...' + JSON.stringify(img))
             }
         });
     }
     renderFileData = () => {
-        if (this.state.fileData) {
-            return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }}
+        if (this.state.image) {
+            return <Image source={{ uri: this.state.image }}
                 style={styles.profileImage}
             />
         } else {
@@ -191,7 +198,7 @@ class profile extends React.Component {
 
             let upload = firebase
                 .storage()
-                .ref('profile/manav')
+                .ref('profile/'+this.state.email)
                 .put(file);
 
             upload.on(
@@ -204,6 +211,12 @@ class profile extends React.Component {
                     const url = await upload.snapshot.ref.getDownloadURL();
                     res(url);
                     console.log(url)
+                    firebase.firestore().collection("Users").doc(this.state.email).update({
+                        image:url
+                    })
+                    this.setState({
+                        refresh:true
+                    })
                 }
             );
         });
@@ -434,8 +447,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         //width: 100,
        // backgroundColor: 'red',
-      paddingTop:290,
-      paddingLeft: 280,
+      marginTop:290,
+      marginLeft: 280,
       flexDirection: 'row'
 
     
