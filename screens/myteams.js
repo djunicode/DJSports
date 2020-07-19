@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef, useImperativeHandle } from "react";
 import {
     View,
     Text,
@@ -45,7 +45,8 @@ class Notification extends Component {
             data2: [],
             expanded: false,
             documentSnapshots: [],
-            data: []
+            data: [],
+            isempty: false
 
         }
     }
@@ -98,6 +99,32 @@ class Notification extends Component {
                 documentData: documentData,
                 lastVisible: lastVisible,
                 loading: false,
+            });
+            this.state.documentData.forEach(element => {
+                let data = element.EventName
+                element.EventName.forEach(item=>{
+                    const index = data.indexOf(item)
+                    this.state.db.collection('AllEvents').doc(item).get()
+                    .then((docSnapshot)=>{
+                        if(!docSnapshot.exists){
+                        if (index != -1) data.splice(index, 1);
+                        console.log(data.length)
+                        this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
+                            EventName: data
+                        })
+                        console.log(data.length)
+                        if (data.length == 0) {
+                            this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).delete()
+                            
+                        }
+                        // 
+                        }
+                    })
+                    // console.log(data)
+                   
+
+                })
+
             });
         }
         catch (error) {
@@ -161,18 +188,22 @@ class Notification extends Component {
 
     }
     ignore = (item) => {
+        const user = firebase.auth().currentUser
+        // console.log(this.state.documentData)
         try {
             this.state.documentData.forEach(element => {
                 let index = element.EventName.indexOf(item)
                 if (index != -1) element.EventName.splice(index, 1);
-                console.log(element.EventName)
-                this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
+                 console.log(element.id)
+                this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).update({
                     EventName: element.EventName
                 }).then(this.onFocusFunction(user.email))
                 if (element.EventName.length == 0) {
-                    this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).delete().then(this.onFocusFunction(user.email))
+                    this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).delete()
+                    
                 }
-                console.log(element.EventName)
+                this.onFocusFunction(user.email)
+                // console.log(element.EventName)
             });
         }
         catch (error) {
@@ -190,13 +221,15 @@ class Notification extends Component {
         var body = [];
 
         return (
-
+            
             <View style={{ flex: 1, backgroundColor: '#000', borderTopColor: '#00e676', borderTopWidth: 1 }}>
                 <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
+                
                 <FlatList
                     scrollEnabled={true}
                     data={this.state.documentData}
                     renderItem={({ item }) =>
+                        
                         <View style={{
                             flexDirection: 'row', margin: 20, marginTop: 10, borderBottomWidth: StyleSheet.hairlineWidth,
                             borderColor: '#424242'
@@ -240,7 +273,9 @@ class Notification extends Component {
                                 }
                             />
                         </View>
+                       
                     }
+                    
                 />
             </View>
 

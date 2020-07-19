@@ -4,6 +4,7 @@ import { Container, Content, Card, CardItem, Text, Left, Body, Right } from 'nat
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter, DialogTitle } from 'react-native-popup-dialog';
+import { cos } from 'react-native-reanimated';
 
 export default class ProfileDetails extends Component {
 
@@ -19,7 +20,9 @@ export default class ProfileDetails extends Component {
       registered: false,
       visible: false,
       visible_remove: false,
-      isFavorite: false
+      isFavorite: false,
+      isInvited:false,
+      visible_invite: false
     };
 
   }
@@ -31,9 +34,28 @@ export default class ProfileDetails extends Component {
 
     const user = firebase.auth().currentUser
     const doc = this.state.db.collection("Users").doc(user.email)
-    var { params } = this.props.navigation.state
-    this.retData(params, user.email)
+     var { params } = this.props.navigation.state
+    // this.retData(params, user.email)
     var t
+    // let id = user.email
+    // console.log(params.data2.event_name)
+    // this.state.db.collection('CreatedEvent').doc(params.item.email).collection('MyEvent').doc(params.data2.event_name).get()
+    // .then((docSnapshot)=>{
+    //   if(docSnapshot.exists){
+    //     this.setState({isInvited:true})
+    // }
+    // })
+    // this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).get()
+    //   .then((docSnapshot)=>{
+    //     if(docSnapshot.exists){
+        
+    //     console.log(docSnapshot.data().EventName.includes(params.data2.event_name))
+    //     if(docSnapshot.data().EventName.includes(params.data2.event_name)){
+    //       this.setState({isInvited:true})
+    //     }
+    //   }
+    //   })
+
 
     firebase
       .firestore()
@@ -60,19 +82,19 @@ export default class ProfileDetails extends Component {
       });
 
   }
-  retData = async (params, id) => {
-    var docRef = this.state.db.collection("Invites").doc(params.item.email).collection('InviteFrom').doc(id);
+  // retData = async (params, id) => {
+  //   var docRef = this.state.db.collection("Invites").doc(params.item.email).collection('InviteFrom').doc(id);
 
-    await docRef.get().then((doc) => {
-      this.setState({
-        data2: doc.data()
-      })
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+  //   await docRef.get().then((doc) => {
+  //     this.setState({
+  //       data2: doc.data()
+  //     })
+  //   }).catch(function (error) {
+  //     console.log("Error getting document:", error);
+  //   });
 
 
-  }
+  // }
   addFav = () => {
     this.setState({
       visible: false
@@ -159,39 +181,51 @@ export default class ProfileDetails extends Component {
       { cancelable: true }
     );*/
   }
-  invite = () => {
-    var { params } = this.props.navigation.state
-    //console.log(params.data2)
-    //console.log(this.state.data2)
-    const user = firebase.auth().currentUser
-    let id = user.email
-    let data = this.state.data2
-    console.log(data)
+  // askToInvite=()=>{
+  //   this.setState({
+  //     visible_invite: true
+  //   })
+  // }
+
+  // invite = () => {
+  //   this.setState({
+  //     visible_invite:false
+  //   })
+  //   // var { params } = this.props.navigation.state
+  //   //console.log(params.data2)
+  //   //console.log(this.state.data2)
+  //   const user = firebase.auth().currentUser
+  //   let id = user.email
+  //   let data = this.state.data2
+  //   console.log(data)
 
 
-    let data2 = []
+  //   let data2 = []
 
-    if (data == undefined) {
-      data2.push(params.data2.event_name)
-      this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
-        EventName: data2,
-        name: params.item.name,
-        id: user.email
-      })
-    }
-    else {
-      if (!data.EventName.includes(params.data2.event_name)) {
+  //   if (data == undefined) {
+  //     data2.push(params.data2.event_name)
+  //     this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
+  //       EventName: data2,
+  //       name: params.item.name,
+  //       id: user.email
+  //     })
+  //   }
+  //   else {
+  //     if (!data.EventName.includes(params.data2.event_name)) {
 
-        data.EventName.push(params.data2.event_name)
-        this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
-          EventName: data.EventName,
-          name: params.item.name,
-          Id: user.email
-        })
-      }
-    }
-  }
-
+  //       data.EventName.push(params.data2.event_name)
+  //       this.state.db.collection('Invites').doc(params.item.email).collection('InviteFrom').doc(id).set({
+  //         EventName: data.EventName,
+  //         name: params.item.name,
+  //         id: user.email
+  //       })
+  //     }
+  //   }
+  //   this.setState({
+  //     isInvited:true
+  //   })
+    
+  // }
 
 
 
@@ -269,16 +303,26 @@ export default class ProfileDetails extends Component {
 
 
     }
-    <TouchableOpacity style={{ margin: 10, backgroundColor: '#D3D3D3', padding: 8, width: 240, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginLeft: 5 }} 
-     onPress= {this.invite}>
+    {/* { !this.state.isInvited ?
+     <TouchableOpacity style={{ margin: 10, backgroundColor: '#D3D3D3', padding: 8, width: 240, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginLeft: 5 }} 
+     onPress= {this.askToInvite}>
           <View>
               <Text style={{ fontWeight: 'bold', fontSize: 20, }}>
                   Invite to Event
               </Text>
           </View>
       </TouchableOpacity>
-
-       
+      :
+      <View style={{ margin: 10, backgroundColor: '#D3D3D3', padding: 8, width: 240, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginLeft: 5 }} >
+          <View>
+              <Text style={{ fontWeight: 'bold', fontSize: 20, }}>
+                  Already Invited or joined
+              </Text>
+          </View>
+      </View>
+     
+      
+    } */}
 
 
           </View>
@@ -330,6 +374,30 @@ export default class ProfileDetails extends Component {
               <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Remove from Favourites ?</Text>
             </DialogContent>
           </Dialog>
+          {/* <Dialog
+            visible={this.state.visible_invite}
+
+            footer={
+              <DialogFooter>
+
+                <DialogButton
+                  text="OK"
+                  onPress={() => this.invite()}
+                />
+                <DialogButton
+                  text="Cancel"
+                  onPress={() => this.setState({ visible_invite: false })}
+                />
+              </DialogFooter>
+            }
+            dialogAnimation={new SlideAnimation({
+              slideFrom: 'bottom',
+            })}
+          >
+            <DialogContent>
+              <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Invite this person</Text>
+            </DialogContent>
+          </Dialog> */}
 
 
 
