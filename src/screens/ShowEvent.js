@@ -67,7 +67,10 @@ export default class ShowEvent extends React.Component {
             date: state.params.date,
             venue: state.params.venue,
             created_by: state.params.created_by,
-            email: user.email
+            email: user.email,
+            lat : state.params.lat,
+            long : state.params.long
+
         })
     }
     retData = async (item) => {
@@ -124,7 +127,8 @@ export default class ShowEvent extends React.Component {
                                 
                             </View>
                         </View>
-                        <TouchableOpacity disabled={true} onPress={() => Linking.openURL('http://www.google.com/maps/place/' + this.state.lat + ',' + this.state.long)}>
+    
+                        <TouchableOpacity disabled={false} onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${this.state.lat},${this.state.long}`)}>
                                     <View style={{ flexDirection: 'row', marginLeft: 40 , paddingBottom: 20}}>
                                         <Icon name="location-arrow" style={{ color: '#ababab',}} size={15} />
                                         <Text style={{ color: '#ababab',}}>
