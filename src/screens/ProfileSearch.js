@@ -72,8 +72,8 @@ componentDidMount() {
 
     const user = firebase.auth().currentUser
     this.setState({ email: user.email })
-    const {state} = this.props.navigation;
-    this.retData(state.params.event_name)
+    // const {state} = this.props.navigation;
+    // this.retData(state.params.event_name)
    
     console.log("SSSSS kinda")
     
@@ -232,7 +232,7 @@ render() {
           data= {this.state.displayData}
           renderItem={({ item }) => 
           <TouchableOpacity onPress = {
-            ()=>navigate("ProfileDetails",{item,data2:this.state.data2})
+            ()=>navigate("ProfileDetails",{item})
         }>
         <ProfileCard
             image  = {require('../../assets/media2.jpg')}
@@ -241,7 +241,7 @@ render() {
           Ratings = {item.rating}
           Branch={item.branch}
           Year = {item.year}
-          Fav = {this.state.favList.includes(item.email)?true:false}
+          // Fav = {this.state.favList.includes(item.email)?true:false}
         
         >
       </ProfileCard>

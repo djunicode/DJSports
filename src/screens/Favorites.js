@@ -31,6 +31,7 @@ class Favorites extends Component {
             notfirstTime: true,
             direct: 'false',
             visible: false,
+            data2:[]
 
     }
   
@@ -117,6 +118,7 @@ componentDidMount() {
   const user = firebase.auth().currentUser
   this.setState({ email: user.email })
   const {state} = this.props.navigation;
+  this.retData(state.params.event_name)
   console.log(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction()
@@ -129,6 +131,20 @@ componentDidMount() {
 componentWillUnmount() {
   this.focusListener.remove()
 } 
+retData=async(item)=>{
+ 
+  var docRef = this.state.db.collection("AllEvents").doc(item);
+
+  await docRef.get().then((doc)=> {
+      this.setState({
+          data2:doc.data()
+      })
+      console.log("Below is the data2.")
+       console.log(this.state.data2)
+      }).catch(function(error) {
+              console.log("Error getting document:", error);
+  });
+}
 renderFooter = () => {
       try {
           // Check If Loading
@@ -189,7 +205,7 @@ render() {
           data= {this.state.displayData}
           renderItem={({ item }) => 
           <TouchableOpacity onPress = {
-           ()=>navigate("FavProfile",{item})
+           ()=>navigate("FavProfile",{item,data2:this.state.data2})
         }>
         <ProfileCard
             image  = {require('../../assets/media2.jpg')}

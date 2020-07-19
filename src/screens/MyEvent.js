@@ -342,7 +342,7 @@ export default class MyEvent extends React.Component {
                                                             {'  Delete the event'}
                                                         </Text>
                                                     </MenuOption>
-                                                    <MenuOption onSelect={() => {navigate('ProfileSearch',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <MenuOption onSelect={() => {navigate('Favorites',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
                                                     <Text style={styles.menuText}>
                                                         <Icon name="envelope" size = {17}/>
                                                             {'  Invite'}
@@ -391,7 +391,7 @@ export default class MyEvent extends React.Component {
                                                             {'  Leave the event'}
                                                         </Text>
                                                     </MenuOption>
-                                                    <MenuOption onSelect={() => {navigate('ProfileSearch',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
+                                                    <MenuOption onSelect={() => {navigate('Favorites',{ event_name: item.event_name }) }} style = {{borderBottomWidth: 0.2, borderBottomColor:'#ababab', marginLeft: 10, marginRight: 10}}>
                                                     <Text style={styles.menuText}>
                                                         <Icon name="envelope" size = {17}/>
                                                             {'  Invite'}
