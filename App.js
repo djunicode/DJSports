@@ -27,6 +27,7 @@ import Favorites from "./src/screens/Favorites.js"
 import SplashScreen from './src/screens/SplashScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Showlist from './src/screens/ShowList';
+import Location from './src/screens/Location'
 
 import select_player from './screens/select_player.js'
 import {decode, encode} from 'base-64'
@@ -196,6 +197,21 @@ const event_main = createStackNavigator({
         fontFamily: 'Roboto-Regular'
       }, headerTintColor: 'white', 
 
+
+    }
+  },
+  Location: {
+    screen: Location,
+    navigationOptions: {
+      title: 'Location',
+      headerStyle: { height: 90, justifyContent: 'center', backgroundColor: 'black', borderBottomWidth: 1, borderBottomColor: '#00e676'},
+      headerTitleAlign: 'center',
+      headerTitleStyle: {
+        fontSize: 40,
+        
+        color: '#FFF',
+        fontFamily: 'Roboto-Regular'
+      }, headerTintColor: 'white', 
 
     }
   },
