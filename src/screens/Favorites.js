@@ -208,7 +208,7 @@ render() {
            ()=>navigate("FavProfile",{item,data2:this.state.data2})
         }>
         <ProfileCard
-            image  = {require('../../assets/media2.jpg')}
+            image  = {{uri : item.image}}
           Name = {item.name}
           Sports = {item.sports}
           Ratings = {item.rating}

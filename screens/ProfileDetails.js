@@ -244,7 +244,7 @@ export default class ProfileDetails extends Component {
           </View>
 
           <View style={{ alignSelf: "center", }}>
-            <Image source={require("../assets/media2.jpg")} style={styles.profileImage} />
+            <Image source={{uri : params.item.image}} style={styles.profileImage} />
             <View style={styles.dm}>
               {/* <MaterialIcons name="chat" size={18} color="#DFD8C8"></MaterialIcons> */}
             </View>
