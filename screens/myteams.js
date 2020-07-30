@@ -46,7 +46,8 @@ class Notification extends Component {
             expanded: false,
             documentSnapshots: [],
             data: [],
-            isempty: false
+            isempty: false,
+            image : []
 
         }
     }
@@ -60,7 +61,7 @@ class Notification extends Component {
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         // this.focusListener = this.props.navigation.addListener('didFocus', () => {
-        //     this.onFocusFunction(user.email)
+        //      this.onFocusFunction(user.email)
         // })
 
 
@@ -132,6 +133,8 @@ class Notification extends Component {
             this.setState({ loading: false, direct: true })
 
         }
+        this.Image()
+
     };
     accept = async (item) => {
         let EventData = []
@@ -216,6 +219,20 @@ class Notification extends Component {
     static navigationOptions = {
         title: 'First Screen'
     }
+    Image =  ( ) => {
+        console.log(this.state.documentData)
+        this.state.documentData.map((data) => {
+            console.log(data)
+            const imageRef =  firebase.firestore().collection('Users').doc(data.id);
+            imageRef.onSnapshot((data) => {
+              this.state.image.push(data.data().image)
+                this.setState({image : this.state.image})
+                
+            }    
+                
+              );
+        })
+    }
     render() {
         var { navigate } = this.props.navigation;
         var body = [];
@@ -228,17 +245,18 @@ class Notification extends Component {
                 <FlatList
                     scrollEnabled={true}
                     data={this.state.documentData}
-                    renderItem={({ item }) =>
+                    renderItem={({ item ,index }) =>
                         
                         <View style={{
                             flexDirection: 'row', margin: 20, marginTop: 10, borderBottomWidth: StyleSheet.hairlineWidth,
                             borderColor: '#424242'
                         }}>
                             <View styles={{ flexDirection: 'row', }}>
-                                <Image
-                                    source={require('../assets/profile-pic.jpg')}
-                                    style={{ height: 80, width: 80, borderRadius: 40 }}
+                                <Image 
+                                    source = {{uri : this.state.image[index]}}
+                                    style = {{height:100 , width:100 , alignSelf:'center' , borderRadius:50}}
                                 />
+                                
                                 <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#ababab', fontFamily: 'SpaceMono-Regular' }}>
                                     {item.id}{"\n"}
                                 </Text>
