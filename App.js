@@ -108,13 +108,7 @@ const mainpage = createStackNavigator({
   details:{
     screen:EventDetails
   },
-  ProfileDetails:{
-    screen:ProfileDetails
-  },
-  FavProfile:{
-    screen : FavProfile
-  },
-  people: peopleStack,
+
   /*ProfileSearch : {
     screen : ProfileSearch
   },
@@ -215,6 +209,13 @@ const event_main = createStackNavigator({
 
     }
   },
+  ProfileDetails:{
+    screen:ProfileDetails
+  },
+  FavProfile:{
+    screen : FavProfile
+  },
+  people: peopleStack,
 
  
   initialRouteName : 'MyEvent'

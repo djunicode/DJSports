@@ -9,6 +9,7 @@ import {
     StatusBar,
     StatusBarStyle
 } from "react-native";
+import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 
@@ -47,7 +48,11 @@ class Notification extends Component {
             documentSnapshots: [],
             data: [],
             isempty: false,
-            image : []
+            image : [],
+            visible_accept: false,
+            visible_ignore: false,
+            name: [],
+            checkContent : true
 
         }
     }
@@ -56,8 +61,8 @@ class Notification extends Component {
         //const today = moment();
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
-        console.log("on notif")
-        console.log(user)
+        // console.log("on notif")
+        // console.log(user)
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
         // this.focusListener = this.props.navigation.addListener('didFocus', () => {
@@ -80,7 +85,7 @@ class Notification extends Component {
                 loading: true,
                 direct: false
             });
-            console.log('Retrieving Data for ', email);
+            // console.log('Retrieving Data for ', email);
             // Cloud Firestore: Query
             let initialQuery = await firebase.firestore().collection('Invites').doc(email).collection('InviteFrom')
                 .limit(this.state.limit)
@@ -140,7 +145,7 @@ class Notification extends Component {
         let EventData = []
         const user = firebase.auth().currentUser
         var docRef = this.state.db.collection("AllEvents").doc(item);
-
+        
         await docRef.get().then(function (doc) {
             EventData = doc.data()
         }).catch(function (error) {
@@ -185,11 +190,44 @@ class Notification extends Component {
             if (element.EventName.length == 0) {
                 this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).delete().then(this.onFocusFunction(user.email))
             }
-            console.log(element.EventName)
+            // console.log(element.EventName)
         });
+        // await this.state.db.collection('Invites').doc(this.state.email).get()
+        // .then((docSnapshot)=>{
+        //     console.log(docSnapshot,"asjhhlahs")
+        //     if(!docSnapshot.exists){
+        //         this.setState({
+        //             checkContent:false
+        //         })
+        //     }
+        // })
+        this.setState({
+            visible_accept: true
+          })
 
 
     }
+    askToAccept=async ()=>{
+        this.setState({
+            visible_accept:false
+        })
+        await this.state.db.collection('Invites').doc(this.state.email).get()
+        .then((docSnapshot)=>{
+            if(!docSnapshot.exists){
+                this.setState({
+                    checkContent:false
+                })
+            }
+            else{
+                this.setState({
+                    visible_accept:false
+                })
+            }
+        })
+        
+
+        
+      }
     ignore = (item) => {
         const user = firebase.auth().currentUser
         // console.log(this.state.documentData)
@@ -201,10 +239,7 @@ class Notification extends Component {
                 this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).update({
                     EventName: element.EventName
                 }).then(this.onFocusFunction(user.email))
-                if (element.EventName.length == 0) {
-                    this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).delete()
-                    
-                }
+               
                 this.onFocusFunction(user.email)
                 // console.log(element.EventName)
             });
@@ -212,21 +247,52 @@ class Notification extends Component {
         catch (error) {
             console.log('ignore error is ', error)
         }
+        this.setState({
+            visible_ignore: true
+          })
+
 
 
 
     }
+    askToIgnore=async()=>{
+        this.setState({
+            visible_ignore:false
+        })
+        await this.state.db.collection('Invites').doc(this.state.email).get()
+        .then((docSnapshot)=>{
+            if(!docSnapshot.exists){
+                this.setState({
+                    checkContent:false
+                })
+            }
+            else{
+                this.setState({
+                    visible_ignore:false
+                })
+            }
+        })
+      }
     static navigationOptions = {
         title: 'First Screen'
     }
     Image =  ( ) => {
-        console.log(this.state.documentData)
+        // console.log(this.state.documentData)
+        const data2 = this.state.documentData
+        data2.forEach((data)=>{
+            console.log(data.EventName.length)
+           if (data.EventName.length == 0) {
+                 this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(data.id).delete()
+                
+             }
+        })
         this.state.documentData.map((data) => {
-            console.log(data)
+            console.log(data.EventName.length)
             const imageRef =  firebase.firestore().collection('Users').doc(data.id);
             imageRef.onSnapshot((data) => {
+              this.state.name.push(data.data().name)
               this.state.image.push(data.data().image)
-                this.setState({image : this.state.image})
+                this.setState({image : this.state.image, name:this.state.name})
                 
             }    
                 
@@ -238,10 +304,10 @@ class Notification extends Component {
         var body = [];
 
         return (
-            
+            this.state.checkContent
+            ?
             <View style={{ flex: 1, backgroundColor: '#000', borderTopColor: '#00e676', borderTopWidth: 1 }}>
-                <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
-                
+                <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" /> 
                 <FlatList
                     scrollEnabled={true}
                     data={this.state.documentData}
@@ -257,8 +323,8 @@ class Notification extends Component {
                                     style = {{height:100 , width:100 , alignSelf:'center' , borderRadius:50}}
                                 />
                                 
-                                <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#ababab', fontFamily: 'SpaceMono-Regular' }}>
-                                    {item.id}{"\n"}
+                                <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#ababab', fontFamily: 'SpaceMono-Regular' , paddingLeft: 15 }}>
+                                    {this.state.name[index]}{"\n"}
                                 </Text>
                             </View>
                             <FlatList
@@ -295,6 +361,50 @@ class Notification extends Component {
                     }
                     
                 />
+                   <Dialog
+                    visible={this.state.visible_accept}
+
+            footer={
+              <DialogFooter>
+
+                <DialogButton
+                  text="OK"
+                  onPress={() => this.askToAccept()}
+                />
+              </DialogFooter>
+            }
+            dialogAnimation={new SlideAnimation({
+              slideFrom: 'bottom',
+            })}
+          >
+            <DialogContent>
+              <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Accepted invite</Text>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            visible={this.state.visible_ignore}
+
+            footer={
+              <DialogFooter>
+
+                <DialogButton
+                  text="OK"
+                  onPress={() => this.askToIgnore()}
+                />
+              </DialogFooter>
+            }
+            dialogAnimation={new SlideAnimation({
+              slideFrom: 'bottom',
+            })}
+          >
+            <DialogContent>
+              <Text style={{ padding: 20, paddingBottom: 0, fontSize: 18 }}>Ignored invite</Text>
+            </DialogContent>
+          </Dialog>
+            </View>
+            :
+            <View style={{ flex: 1, backgroundColor: '#000', borderTopColor: '#00e676', borderTopWidth: 1 }}>
+                <StatusBar barStyle={StatusBarStyle} backgroundColor="#111111" />
             </View>
 
         );
