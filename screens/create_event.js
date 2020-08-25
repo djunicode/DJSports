@@ -9,7 +9,7 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import Dialog, { SlideAnimation, DialogContent , DialogButton, DialogFooter, DialogTitle} from 'react-native-popup-dialog';
 import Geocoder from 'react-native-geocoding';
-
+import AsyncStorage from '@react-native-community/async-storage'
 //import RNGooglePlaces from 'react-native-google-places';
 
 
@@ -57,7 +57,23 @@ export default class create_event extends React.Component {
 
         }
     }
-
+    onFocusFunction = async() =>{
+        this.getloc() 
+    }
+    getloc = async() =>{
+        const location = await AsyncStorage.getItem('Location')
+        const loc = JSON.parse(location)
+        console.log(loc)
+        location !== null ? 
+            this.setState({
+                venue : loc.title,
+                lat : loc.long_lat.lat,
+                long : loc.long_lat.lng,
+            }) :
+            this.setState({
+                location : ''
+            })
+    }
 
     componentDidMount(){
         const today = moment();
@@ -68,9 +84,16 @@ export default class create_event extends React.Component {
         // console.log("success kinda")
         // console.log(user.email)
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
-        
-        
+        this.focusListner = this.props.navigation.addListener('didFocus' , () =>{
+            this.onFocusFunction()
+        })    
       }
+      componentWillUnmount() {
+        if(this.focusListner.remove()){
+            this.focusListener.remove()
+       }
+    }
+      
       
 
       handlePicker = (datetime) => {
@@ -185,6 +208,10 @@ export default class create_event extends React.Component {
     }
          
     }
+    Navigate = () =>{
+        console.log("Test")
+        this.props.navigation.navigate("Location")
+    }
          
 
     handleEventName = (name) => {
@@ -268,15 +295,9 @@ export default class create_event extends React.Component {
                 }
                 <View style = {styles.inputForm}>
                     <Text style = {styles.inputTitle}>Venue</Text>
-                    <TextInput 
-                    style = {styles.input}  
-                    autoCapitalize= "sentences" 
-                    multiline = {true}
-                    numberOfLines = {3}
-                    onChangeText = {venue => this.setState({venue})}
-                    value = {this.state.venue}
-                    >
-                    </TextInput>
+                    <TouchableOpacity onPress={this.Navigate} >
+            <Text style = {styles.input}>{this.state.venue ? this.state.venue : 'Add your location'}</Text>
+                    </TouchableOpacity>
                 </View>
                 <Dialog
                     visible={this.state.see}

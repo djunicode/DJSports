@@ -83,7 +83,7 @@ componentDidMount = () => {
             <View>
                 
             <Header style = {{backgroundColor: 'blue'}}/>
-            <Text>Check text here =></Text>
+            <Text>Check text here =</Text>
               <FlatList
        
         scrollEnabled={true}
