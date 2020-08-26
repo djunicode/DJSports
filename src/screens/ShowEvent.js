@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
 
     },
     info: {
-        fontSize: 25,
-        //marginLeft: 10,
+        fontSize: 22,
+        marginHorizontal: 5,
         padding: 10,
         paddingBottom: 1,
         color: '#e0e0e0',
@@ -267,7 +267,8 @@ const styles = StyleSheet.create({
         //borderRightColor:'#3f51b5',
         marginVertical: 10,
         flexDirection: 'row',
-        //padding:10
+        //padding:10,
+        
 
 
     },

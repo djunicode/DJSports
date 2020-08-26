@@ -255,8 +255,9 @@ class profile extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                {/*<ScrollView showsVerticalScrollIndicator={false}>*/}
                     <View style={styles.titleBar}>
+                        
                         {/* <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons> */}
                         {/* <Ionicons name="md-more" size={24} color="#52575D"></Ionicons> */}
                     </View>
@@ -314,7 +315,7 @@ class profile extends React.Component {
                     />
                             <Text style = {{color: '#ababab', textAlign:'center'}}> SIGN OUT</Text>
                         </TouchableOpacity>
-                </ScrollView>
+                {/*</ScrollView>*/}
             </SafeAreaView>
         );
     }
@@ -447,8 +448,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         //width: 100,
        // backgroundColor: 'red',
-      marginTop:290,
-      marginLeft: 280,
+      //marginTop:290,
+      right: 20,
+      bottom:20,
+      position: 'absolute',
       flexDirection: 'row'
 
     

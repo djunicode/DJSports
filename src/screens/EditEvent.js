@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput,ImageBackground} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput,ImageBackground, Dimensions} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
+        //height: 5/100*Dimensions.get('window').height,
         color:'#fff',
         borderColor: '#424242',
         fontFamily: 'Roboto-Light'
@@ -346,10 +346,10 @@ const styles = StyleSheet.create({
        // marginHorizontal: 30,
         backgroundColor: "#00e676",
         borderRadius: 25,
-        height: 52,
+        height: 5.5/100*Dimensions.get('window').height,
         justifyContent:"center",
         alignItems:"center",
-        width: 170,
+        width: 45/100*Dimensions.get('window').width,//170,
         alignSelf:'center',
         marginTop: 15
         

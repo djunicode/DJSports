@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput,Dimensions , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
 //import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
+        //height: 40,
         color:'#fff',
         borderColor: '#424242',
         fontFamily: 'Roboto-Light'
@@ -421,10 +421,10 @@ const styles = StyleSheet.create({
        // marginHorizontal: 30,
         backgroundColor: "#00e676",
         borderRadius: 25,
-        height: 52,
+        height: 5.5/100*Dimensions.get('window').height,
         justifyContent:"center",
         alignItems:"center",
-        width: 170,
+        width: 45/100*Dimensions.get('window').width,
         alignSelf:'center',
         marginTop: 15
         
