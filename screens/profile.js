@@ -43,9 +43,9 @@ class profile extends React.Component {
     }
 
     onFocusFunction = (email) => {
-        console.log('ehehhe ', email)
+        //console.log('ehehhe ', email)
         this.retrieveData(email)
-        console.log("i am on profile")
+        //console.log("i am on profile")
         //const user = firebase.auth().currentUser
         //console.log('user : ' , user)
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
@@ -84,10 +84,10 @@ class profile extends React.Component {
 
     retrieveData = async (email) => {
         try {
-            console.log('fetching user details')
+            //console.log('fetching user details')
             await firebase.firestore().collection("Users").doc(email)
                 .onSnapshot(documentSnapshot => {
-                    console.log('User data: ', documentSnapshot.data());
+                    //console.log('User data: ', documentSnapshot.data());
 
                     let data = documentSnapshot.data()
                     this.setState({
@@ -122,7 +122,7 @@ class profile extends React.Component {
             height:500,	
         };
         ImagePicker.openPicker(options).then((response) => {
-            console.log('Response = ', response);
+            //console.log('Response = ', response);
 
             if (response.didCancel) {
                 console.log('User cancelled image picker');
@@ -144,10 +144,10 @@ class profile extends React.Component {
                     fileUri: response.path
                 });
                 const blob = this.uriToBlob(response.path)
-                console.log(`blob create ${blob}`)
+                //console.log(`blob create ${blob}`)
                 const img = this.uploadPhotoAsync(response.path)
                 // const img = this.uploadToFirebase(blob)
-                console.log('image uploaded...' + JSON.stringify(img))
+                //console.log('image uploaded...' + JSON.stringify(img))
             }
         });
     }
@@ -210,7 +210,7 @@ class profile extends React.Component {
                 async () => {
                     const url = await upload.snapshot.ref.getDownloadURL();
                     res(url);
-                    console.log(url)
+                    //console.log(url)
                     firebase.firestore().collection("Users").doc(this.state.email).update({
                         image:url
                     })
@@ -255,8 +255,9 @@ class profile extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                {/*<ScrollView showsVerticalScrollIndicator={false}>*/}
                     <View style={styles.titleBar}>
+                        
                         {/* <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons> */}
                         {/* <Ionicons name="md-more" size={24} color="#52575D"></Ionicons> */}
                     </View>
@@ -314,7 +315,7 @@ class profile extends React.Component {
                     />
                             <Text style = {{color: '#ababab', textAlign:'center'}}> SIGN OUT</Text>
                         </TouchableOpacity>
-                </ScrollView>
+                {/*</ScrollView>*/}
             </SafeAreaView>
         );
     }
@@ -447,8 +448,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         //width: 100,
        // backgroundColor: 'red',
-      marginTop:290,
-      marginLeft: 280,
+      //marginTop:290,
+      right: 20,
+      bottom:20,
+      position: 'absolute',
       flexDirection: 'row'
 
     

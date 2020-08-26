@@ -87,8 +87,8 @@ onFocusFunction = () => {
   var incoming_favs = []
   
   var email = firebase.auth().currentUser.email
-  console.log(email)
-  console.log("i am focused in favs")
+  //console.log(email)
+  //console.log("i am focused in favs")
   firebase
     .firestore()
     .collection("Users").doc(email)
@@ -97,8 +97,8 @@ onFocusFunction = () => {
         
         
         incoming_favs = querySnapshot.get("favorites")
-        console.log("In on focus")
-        console.log(incoming_favs)
+        //console.log("In on focus")
+        //console.log(incoming_favs)
         this.setState(
             {
               favlist:incoming_favs
@@ -119,7 +119,7 @@ componentDidMount() {
   this.setState({ email: user.email })
   const {state} = this.props.navigation;
   this.retData(state.params.event_name)
-  console.log(user.email)
+  //console.log(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction()
   })
@@ -139,8 +139,8 @@ retData=async(item)=>{
       this.setState({
           data2:doc.data()
       })
-      console.log("Below is the data2.")
-       console.log(this.state.data2)
+      //console.log("Below is the data2.")
+       //console.log(this.state.data2)
       }).catch(function(error) {
               console.log("Error getting document:", error);
   });

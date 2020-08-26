@@ -72,8 +72,6 @@ componentDidMount = () => {
     
   
     render() {
-        console.log('In render')
-        console.log(this.state.data)
         
         
 

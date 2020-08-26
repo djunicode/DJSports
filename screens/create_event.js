@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput,Dimensions , SafeAreaView,ScrollView, YellowBox, ImageBackground} from 'react-native';
 //import SignUpScreen from './SignUpScreen';
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -63,7 +63,7 @@ export default class create_event extends React.Component {
     getloc = async() =>{
         const location = await AsyncStorage.getItem('Location')
         const loc = JSON.parse(location)
-        console.log(loc)
+        //console.log(loc)
         location !== null ? 
             this.setState({
                 venue : loc.title,
@@ -78,7 +78,7 @@ export default class create_event extends React.Component {
     componentDidMount(){
         const today = moment();
         Geocoder.init("AIzaSyCwsGyxbGuuYoCXOvr2Ju4PLZzM9gAo0NY");
-        console.log("Geoencoding initialised")
+        //console.log("Geoencoding initialised")
         const user = firebase.auth().currentUser
         this.setState({email : user.email })
         // console.log("success kinda")
@@ -111,7 +111,7 @@ export default class create_event extends React.Component {
                     day: moment(datetime).format('YYYY-MM-DD'),
                     //date_time : moment(datetime).format()
                     
-                },() => console.log("Date is ", this.state.date))
+                },)//() => console.log("Date is ", this.state.date))
             }
              
           
@@ -123,16 +123,16 @@ export default class create_event extends React.Component {
             isVisible: false,
             //date: moment(datetime).format(),
             
-        },() => console.log("Date issss ", this.state.date))
+        },)//() => console.log("Date issss ", this.state.date))
         
     }
 
     showPicker = () => {
-        console.log('hell')
+        //console.log('hell')
         this.setState({
             isVisible: true,
         })
-        console.log(this.state.isVisible)
+        //console.log(this.state.isVisible)
     }
 
 
@@ -155,11 +155,11 @@ export default class create_event extends React.Component {
     handleCreate = async () => {
         
         let arr = this.handleEventName(this.state.event_name)
-        console.log(arr)
+        //console.log(arr)
        
 
         if (this.check()) {
-            console.log("started check")
+            //console.log("started check")
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).set({
             event_name : this.state.event_name,
             sport: this.state.sport,
@@ -197,19 +197,20 @@ export default class create_event extends React.Component {
             long : this.state.long
 
         }))
-        .then(() => console.log("doc added successfully"), this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
+        .then(() => //console.log("doc added successfully"),
+         this.setState({id: this.state.id+1}) ,this.props.navigation.navigate('MyEvent',{refresh : 'true'}))
         .catch(function(error) {
             console.log("error adding ", error);
         });
     }
     else {
         this.setState({ visible: true })
-        console.log('not happeming')
+        //console.log('not happeming')
     }
          
     }
     Navigate = () =>{
-        console.log("Test")
+        //console.log("Test")
         this.props.navigation.navigate("Location")
     }
          
@@ -235,12 +236,12 @@ export default class create_event extends React.Component {
             arrName.push(curName);
         })
         this.setState({keywordsSport: arrName})
-        console.log(arrName)
+        //console.log(arrName)
         return arrName;
     }
 
     check() {
-        console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
+        //console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
         if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
           return true
         else
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
+        //height: 40,
         color:'#fff',
         borderColor: '#424242',
         fontFamily: 'Roboto-Light'
@@ -421,10 +422,10 @@ const styles = StyleSheet.create({
        // marginHorizontal: 30,
         backgroundColor: "#00e676",
         borderRadius: 25,
-        height: 52,
+        height: 5.5/100*Dimensions.get('window').height,
         justifyContent:"center",
         alignItems:"center",
-        width: 170,
+        width: 45/100*Dimensions.get('window').width,
         alignSelf:'center',
         marginTop: 15
         

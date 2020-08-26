@@ -107,7 +107,7 @@ export default class EventDetails extends Component {
         console.log("Error getting document:", error);
       });
       this.setState({ data2: documentData })
-      console.log('data 2 is', this.state.data2.player)
+      //console.log('data 2 is', this.state.data2.player)
     }
 
 
@@ -115,7 +115,7 @@ export default class EventDetails extends Component {
       try{
         let player = this.state.data2.players
       let creator = this.state.data2.created_by
-      console.log(player)
+      //console.log(player)
       player.push(this.state.email)
       // console.log(params.item.joined+1)
       let count = params.item.joined + 1
@@ -148,7 +148,7 @@ export default class EventDetails extends Component {
           });
       }
       else {
-        console.log('already registered')
+        //console.log('already registered')
         this.setState({ visible: true })
       }
 

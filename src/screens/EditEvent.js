@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput,ImageBackground} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, ScrollView, TextInput,ImageBackground, Dimensions} from 'react-native'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -38,8 +38,8 @@ export default class EditEvent extends React.Component {
     componentDidMount() {
         const users = firebase.auth().currentUser
         this.setState({email : users.email })
-        console.log("success yeah")
-        console.log(users.email)
+        //console.log("success yeah")
+        //console.log(users.email)
         const {state} = this.props.navigation;
         
         this.setState({
@@ -56,7 +56,7 @@ export default class EditEvent extends React.Component {
     handleEdit = () => {
         
         if (this.check()) {
-        console.log(this.state.event_name)
+        //console.log(this.state.event_name)
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.event_name).update({
             event_name : this.state.event_name,
             sport: this.state.sport,
@@ -66,7 +66,7 @@ export default class EditEvent extends React.Component {
             id: this.state.id,
             day: this.state.day
         })
-        .then(() => console.log("doc edited successfully"), 
+        .then(() => //console.log("doc edited successfully"), 
         this.setState({id: this.state.id+1}) ,
         this.props.navigation.navigate('MyEvent'),
         this.state.db.collection('AllEvents').doc(this.state.event_name).update({
@@ -86,7 +86,7 @@ export default class EditEvent extends React.Component {
     }
     else {
         this.setState({ visible: true })
-        console.log('not happeming')
+        //console.log('not happeming')
     }
     }
 
@@ -105,8 +105,8 @@ export default class EditEvent extends React.Component {
           
         const rn = moment(right_now).format('YYYY-MM-DD')
         const data = moment(datetime).format('YYYY-MM-DD')
-        console.log(rn)
-        console.log(data)
+        //console.log(rn)
+        //console.log(data)
         if(moment(rn).isSameOrAfter(data))
               this.setState({
                   see: true
@@ -118,7 +118,7 @@ export default class EditEvent extends React.Component {
                   day: moment(datetime).format('YYYY-MM-DD'),
                   //date_time : moment(datetime).format()
                   
-              },() => console.log("Date is ", this.state.date))
+              })//,() => console.log("Date is ", this.state.date))
           }
            
         
@@ -130,7 +130,7 @@ export default class EditEvent extends React.Component {
           isVisible: false,
           //date: moment(datetime).format(),
           
-      },() => console.log("Date is ", this.state.date))
+      },)//() => console.log("Date is ", this.state.date))
       
   }
 
@@ -138,7 +138,7 @@ export default class EditEvent extends React.Component {
       this.setState({
           isVisible: true,
       })
-      console.log('hell now')
+      //console.log('hell now')
   }
 
  /* check = () => {
@@ -162,7 +162,7 @@ export default class EditEvent extends React.Component {
 }*/
 
 check() {
-    console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
+    //console.log('name :' , this.state.event_name , `\n sport : ${this.state.sport} \n people : ${this.state.no_people} \n venue: ${this.state.venue} \n ${this.state.date} ` )
     if (this.state.event_name != '' && this.state.sport != '' && this.state.no_people != '' && this.state.venue != '' &&  this.state.date !== 'Select Date and Time' && parseInt(this.state.no_people) < 31)
       return true
     else
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 18,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
+        //height: 5/100*Dimensions.get('window').height,
         color:'#fff',
         borderColor: '#424242',
         fontFamily: 'Roboto-Light'
@@ -346,10 +346,10 @@ const styles = StyleSheet.create({
        // marginHorizontal: 30,
         backgroundColor: "#00e676",
         borderRadius: 25,
-        height: 52,
+        height: 5.5/100*Dimensions.get('window').height,
         justifyContent:"center",
         alignItems:"center",
-        width: 170,
+        width: 45/100*Dimensions.get('window').width,//170,
         alignSelf:'center',
         marginTop: 15
         

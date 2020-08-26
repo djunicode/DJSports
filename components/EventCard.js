@@ -72,7 +72,7 @@ class EventCard extends Component {
                 </Card>
                 <Card style={{ flex: 1, overflow: 'hidden' }}>
                     {this.state.expanded &&
-                        <CardItem style={{ backgroundColor: '#00e676', borderBottomRadius: 5, height: 45 }}>
+                        <CardItem style={{ backgroundColor: '#00e676', borderBottomRadius: 5,  }}>
                             <Left style={{ paddingLeft: 0, borderRadius: 5 }}>
                             <View style={{ flex: 1, flexDirection: 'row'}}>
                             <Icon style = {{padding:1}}

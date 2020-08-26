@@ -36,7 +36,7 @@ export default class ShowEvent extends React.Component {
         const user = firebase.auth().currentUser
         this.retData(state.params.event_name)
         var location
-        console.log(state.params.venue)
+        //console.log(state.params.venue)
         /*try {
             fetch('https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext=' + state.params.venue + '&apiKey=l9zrSly8XJoP7gQ7M5hCxRe_-g6f-yfr41tgSF2N7Yc')
             .then((response) => response.json())
@@ -74,7 +74,7 @@ export default class ShowEvent extends React.Component {
         })
     }
     retData = async (item) => {
-        console.log(item)
+        //console.log(item)
         var docRef = this.state.db.collection("AllEvents").doc(item);
 
         await docRef.get().then((doc) => {
@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
 
     },
     info: {
-        fontSize: 25,
-        //marginLeft: 10,
+        fontSize: 22,
+        marginHorizontal: 5,
         padding: 10,
         paddingBottom: 1,
         color: '#e0e0e0',
@@ -267,7 +267,8 @@ const styles = StyleSheet.create({
         //borderRightColor:'#3f51b5',
         marginVertical: 10,
         flexDirection: 'row',
-        //padding:10
+        //padding:10,
+        
 
 
     },

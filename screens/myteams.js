@@ -74,7 +74,6 @@ class Notification extends Component {
     }
     onFocusFunction = (email) => {
         this.retrieveData(email)
-        console.log("i am focused")
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
 
     }
@@ -114,11 +113,9 @@ class Notification extends Component {
                     .then((docSnapshot)=>{
                         if(!docSnapshot.exists){
                         if (index != -1) data.splice(index, 1);
-                        console.log(data.length)
                         this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
                             EventName: data
                         })
-                        console.log(data.length)
                         if (data.length == 0) {
                             this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).delete()
                             
@@ -153,7 +150,6 @@ class Notification extends Component {
         });
         let player = EventData.players
         let creator = EventData.created_by
-        console.log(player)
         player.push(this.state.email)
         // console.log(params.item.joined+1)
         let count = EventData.joined + 1
@@ -183,7 +179,6 @@ class Notification extends Component {
         this.state.documentData.forEach(element => {
             let index = element.EventName.indexOf(item)
             if (index != -1) element.EventName.splice(index, 1);
-            console.log(element.EventName)
             this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(element.id).update({
                 EventName: element.EventName
             }).then(this.onFocusFunction(user.email))
@@ -235,7 +230,6 @@ class Notification extends Component {
             this.state.documentData.forEach(element => {
                 let index = element.EventName.indexOf(item)
                 if (index != -1) element.EventName.splice(index, 1);
-                 console.log(element.id)
                 this.state.db.collection('Invites').doc(user.email).collection('InviteFrom').doc(element.id).update({
                     EventName: element.EventName
                 }).then(this.onFocusFunction(user.email))
@@ -280,14 +274,12 @@ class Notification extends Component {
         // console.log(this.state.documentData)
         const data2 = this.state.documentData
         data2.forEach((data)=>{
-            console.log(data.EventName.length)
            if (data.EventName.length == 0) {
                  this.state.db.collection('Invites').doc(this.state.email).collection('InviteFrom').doc(data.id).delete()
                 
              }
         })
         this.state.documentData.map((data) => {
-            console.log(data.EventName.length)
             const imageRef =  firebase.firestore().collection('Users').doc(data.id);
             imageRef.onSnapshot((data) => {
               this.state.name.push(data.data().name)
