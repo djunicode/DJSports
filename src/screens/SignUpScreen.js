@@ -44,7 +44,7 @@ export default class SignUpScreen extends React.Component {
     }
 
     onIds = (devices) => {
-        console.log('Device info = ', devices)
+        //console.log('Device info = ', devices)
         this.setState({
           userId: devices.userId
         })
@@ -79,7 +79,7 @@ export default class SignUpScreen extends React.Component {
     }
 
     check = () => {
-        console.log('checking')
+        /*console.log('checking')
         console.log(this.state.username)
         console.log(this.state.address)
         console.log(this.state.branch)
@@ -90,7 +90,7 @@ export default class SignUpScreen extends React.Component {
         console.log(this.state.pass2)
         console.log(this.state.sports1)
         console.log(this.state.sports2)
-        console.log(this.state.sports3)
+        console.log(this.state.sports3)*/
         if (this.state.username != '')
             this.setState({ check: true })
         else if (this.state.address != '')
@@ -122,10 +122,10 @@ export default class SignUpScreen extends React.Component {
 
     }
     signUp = async() => {
-        console.log(this.state.Id)
+        //console.log(this.state.Id)
         await this.check()
         if (this.state.check) {
-            console.log('happening')
+            //console.log('happening')
             this.setState({ visible: false })
             if (this.state.pass == this.state.pass2) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
@@ -142,7 +142,7 @@ export default class SignUpScreen extends React.Component {
         }
         else {
             this.setState({ visible: true })
-            console.log('not happeming')
+            //console.log('not happeming')
         }
 
     }

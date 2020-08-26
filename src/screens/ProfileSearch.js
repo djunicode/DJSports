@@ -42,7 +42,7 @@ class ProfileSearch extends Component {
 onFocusFunction = (email) => {
     
     const user = firebase.auth().currentUser
-    console.log("i am focused")
+    //console.log("i am focused")
     firebase
       .firestore()
       .collection("Users").doc(email)
@@ -75,7 +75,7 @@ componentDidMount() {
     // const {state} = this.props.navigation;
     // this.retData(state.params.event_name)
    
-    console.log("SSSSS kinda")
+    //console.log("SSSSS kinda")
     
  
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
@@ -93,8 +93,8 @@ retData=async(item)=>{
       this.setState({
           data2:doc.data()
       })
-      console.log("Below is the data2.")
-       console.log(this.state.data2)
+      //console.log("Below is the data2.")
+       //console.log(this.state.data2)
       }).catch(function(error) {
               console.log("Error getting document:", error);
   });

@@ -51,7 +51,7 @@ export default class MyEvent extends React.Component {
     }
     onFocusFunction = (email) => {
         this.retrieveData(email)
-        console.log("i am focused")
+        //console.log("i am focused")
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
 
     }
@@ -63,9 +63,9 @@ export default class MyEvent extends React.Component {
         //const today = moment();
         const user = firebase.auth().currentUser
         this.setState({ email: user.email })
-        console.log("success kinda")
+        //console.log("success kinda")
 
-        console.log(user)
+        //console.log(user)
         
         //this.firebasegetdata(user.email)
         this.retrieveData(user.email)
@@ -85,7 +85,7 @@ export default class MyEvent extends React.Component {
        //let data = []
        //let data = this.state.documentData
        for(let i=0; i<data.length; i++){
-           console.log(i)
+           //console.log(i)
            this.checkDate(data[i].day, data[i].event_name)
             //console.log(i," ", data[i].event_name)
        }
@@ -101,7 +101,7 @@ export default class MyEvent extends React.Component {
                 loading: true,
                 direct: false
             });
-            console.log('Retrieving Data for ', email);
+            //console.log('Retrieving Data for ', email);
             // Cloud Firestore: Query
             let initialQuery = await firebase.firestore().collection('CreatedEvent').doc(email).collection('MyEvent')
                 .limit(this.state.limit)
@@ -133,7 +133,7 @@ export default class MyEvent extends React.Component {
             this.setState({
                 refreshing: true,
             });
-            console.log('Retrieving additional Data');
+            //console.log('Retrieving additional Data');
             // Cloud Firestore: Query (Additional Query)
             let additionalQuery = await firebase.firestore().collection('CreatedEvent').doc(this.state.email).collection('MyEvent')
                 .startAfter(this.state.lastVisible)
@@ -176,13 +176,13 @@ export default class MyEvent extends React.Component {
     };
 
     showEvent = (item) => {
-        console.log(item.event_name)
+        //console.log(item.event_name)
         this.props.navigation.navigate('ShowEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date, players: item.players, created_by: item.created_by })
 
     }
 
     goEdit = (item) => {
-        console.log(item.event_name)
+       // console.log(item.event_name)
         this.props.navigation.navigate('EditEvent', { event_name: item.event_name, sport: item.sport, no_people: item.no_people, venue: item.venue, date: item.date, day: item.day })
 
     }
@@ -191,13 +191,13 @@ export default class MyEvent extends React.Component {
     deleteEvent = () => {
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(this.state.item.event_name).delete().then(function () {
 
-            console.log("Document successfully deleted from CreatedEvent!");
+            //console.log("Document successfully deleted from CreatedEvent!");
             //alert('Event deleted')
 
         }).then(this.onFocusFunction(this.state.email),
             this.state.db.collection('AllEvents').doc(this.state.item.event_name).delete().then(function () {
 
-                console.log("Document successfully deleted from AllEvents!");
+                //console.log("Document successfully deleted from AllEvents!");
 
 
             })
@@ -214,13 +214,13 @@ export default class MyEvent extends React.Component {
     deletEvent = (event) => {
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(event).delete().then(function () {
 
-            console.log("Document successfully deleted from CreatedEvent!");
+            //console.log("Document successfully deleted from CreatedEvent!");
             //alert('Event deleted')
 
         }).then(this.onFocusFunction(this.state.email),
             this.state.db.collection('AllEvents').doc(event).delete().then(function () {
 
-                console.log("Document successfully deleted from AllEvents!");
+                //console.log("Document successfully deleted from AllEvents!");
 
 
             }),
@@ -246,11 +246,11 @@ export default class MyEvent extends React.Component {
         }).catch(function (error) {
             console.log("Error getting document:", error);
         });
-        console.log(this.state.data2)
+        //console.log(this.state.data2)
         let arr = this.state.data2
         arr = arr.players
         arr = arr.filter(item => item != this.state.email)
-        console.log(arr)
+        //console.log(arr)
         let count = item.joined
         count = count - 1
         this.state.db.collection('AllEvents').doc(item.event_name).update({
@@ -260,7 +260,7 @@ export default class MyEvent extends React.Component {
         })
         this.state.db.collection('CreatedEvent').doc(this.state.email).collection('MyEvent').doc(item.event_name).delete().then(function () {
 
-            console.log("Document successfully deleted from CreatedEvent!");
+            //console.log("Document successfully deleted from CreatedEvent!");
             alert('Event left')
 
         }).then(this.onFocusFunction(this.state.email))
@@ -274,16 +274,16 @@ export default class MyEvent extends React.Component {
 
     checkDate = (data, event) => {
         const rn = moment(right_now).format('YYYY-MM-DD')
-        console.log("right now is ",moment(right_now).format('YYYY-MM-DD')),
-            console.log("date to be checked is ",data)
-        console.log(moment(rn).isAfter(data))
+        //console.log("right now is ",moment(right_now).format('YYYY-MM-DD')),
+          //  console.log("date to be checked is ",data)
+        //console.log(moment(rn).isAfter(data))
         if (moment(rn).isAfter(data))
             this.deletEvent(event)
 
     }
 
     render() {
-        <NavigationEvents onDidFocus={() => console.log('I am triggered')} />
+        <NavigationEvents onDidFocus={() => {}} />
         console.disableYellowBox = true
         var { navigate } = this.props.navigation;
         //console.log(today.format('MMMM Do YYYY, h:mm A'))
@@ -311,7 +311,7 @@ export default class MyEvent extends React.Component {
                                         </View>
                                         <View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 30 }}>
                                             <Menu
-                                                onSelect={() => console.log('blahh ', item.event_name)}
+                                                onSelect={() => {}}
                                                 renderer={SlideInMenu} style={{ width: 50, height: 20, justifyContent: 'center' }}>
                                                 <MenuTrigger style={{ color: 'white' }}
                                                 >
@@ -367,7 +367,7 @@ export default class MyEvent extends React.Component {
                                         </View>
                                         <View style={{  flexDirection: 'column', justifyContent: 'center', marginRight: 30 }}>
                                         <Menu
-                                                onSelect={() => console.log('blahh ', item.event_name)}
+                                                onSelect={() => {}}
                                                 renderer={SlideInMenu} style={{ width: 50, height: 20, justifyContent: 'center' }}>
                                                 <MenuTrigger style={{ color: 'white' }}
                                                 >

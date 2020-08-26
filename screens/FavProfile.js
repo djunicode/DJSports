@@ -46,7 +46,7 @@ export default class ProfileDetails extends Component {
         .then((docSnapshot)=>{
           if(docSnapshot.exists){
           
-          console.log(docSnapshot.data().EventName.includes(params.data2.event_name))
+          //console.log(docSnapshot.data().EventName.includes(params.data2.event_name))
           if(docSnapshot.data().EventName.includes(params.data2.event_name)){
             this.setState({isInvited:true})
           }
@@ -58,18 +58,18 @@ export default class ProfileDetails extends Component {
       .collection("Users").doc(user.email)
       .get()
       .then((querySnapshot) => { 
-        console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
+        //console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
          
-          console.log("In snap")
+          //console.log("In snap")
           var favs,t;
           favs = querySnapshot.get("favorites")
           t = favs.includes(params.item.name || params.item.email)
-          console.log("name " +params.item.name)
-          console.log(t+ favs)
+          //console.log("name " +params.item.name)
+          //console.log(t+ favs)
           this.setState({ isFavorite: t });   //set data in state here
       
-          console.log(this.state.isFavorite)
-          console.log(user.email)
+          //console.log(this.state.isFavorite)
+         // console.log(user.email)
       
       });
 
@@ -91,7 +91,7 @@ export default class ProfileDetails extends Component {
 
     addFav=()=>{
       var {params} = this.props.navigation.state
-      console.log('sports are',params.item.sports)
+      //console.log('sports are',params.item.sports)
       const user = firebase.auth().currentUser
       let id = user.email
       
@@ -115,7 +115,7 @@ export default class ProfileDetails extends Component {
         const user = firebase.auth().currentUser
         let id = user.email
         let data = this.state.data2
-        console.log(data)
+        //console.log(data)
     
     
         let data2 = []
@@ -201,7 +201,7 @@ export default class ProfileDetails extends Component {
         const user = firebase.auth().currentUser
         let id = user.email
         let data = this.state.data2
-        console.log(data)
+        //console.log(data)
     
     
         let data2 = []

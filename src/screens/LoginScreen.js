@@ -32,7 +32,7 @@ export default class LoginScreen extends React.Component {
   }
   //onIds is a one-signal function which takes required info of the device
   onIds = (devices) => {
-    console.log('Device info = ', devices)
+    //console.log('Device info = ', devices)
     this.setState({
       userId: devices.userId
     })

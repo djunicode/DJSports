@@ -15,7 +15,7 @@ export default class Location extends React.Component {
         if (text.length > 3) {
             const response = await fetch('https://autosuggest.search.hereapi.com/v1/autosuggest?at=19.0760,72.8777&limit=20&q='+text+'&apiKey=fQJs0PSSbhmAyaxhDboKx7RvThmIeQhgoFIHuf3JpLA')
             const result = await response.json()
-            console.log(result)
+            //console.log(result)
             const results = result.items
             this.state.data = []
             results.map((item) => {
@@ -34,7 +34,7 @@ export default class Location extends React.Component {
         })
     }
     storeadd = async (item) =>{
-        console.log(item)
+        //console.log(item)
         const loc = JSON.stringify(item)
         await AsyncStorage.setItem('Location' , loc)
         this.props.navigation.navigate('create_event')

@@ -17,7 +17,7 @@ export default class ListExample extends Component {
 
     componentDidMount(){
         var {params} = this.props.navigation.state
-        console.log(params.players)
+        //console.log(params.players)
         this.setState({
             players:params.players.unique()
         })

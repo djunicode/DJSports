@@ -62,22 +62,22 @@ export default class ProfileDetails extends Component {
       .collection("Users").doc(user.email)
       .get()
       .then((querySnapshot) => {
-        console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
+        //console.log("out snap") //Notice the arrow funtion which bind `this` automatically.
 
-        console.log("In snap")
+        //console.log("In snap")
         var favs = []
         var t;
         favs = querySnapshot.get("favorites")
-        console.log(favs)
+        //console.log(favs)
         t = favs.includes(params.item.email)
-        console.log(t)
-        console.log(typeof (t))
-        console.log("name " + params.item.name)
-        console.log(t)
+        //console.log(t)
+        //console.log(typeof (t))
+        //console.log("name " + params.item.name)
+        //console.log(t)
         this.setState({ isFavorite: t });   //set data in state here
 
-        console.log(this.state.isFavorite)
-        console.log(user.email)
+        //console.log(this.state.isFavorite)
+        //console.log(user.email)
 
       });
 

@@ -41,7 +41,7 @@ class home extends Component {
 
   onFocusFunction = (email) => {
     //this.retrieveData(email)
-    console.log("i am focused")
+    //console.log("i am focused")
     this.handleChange('')
 
   }
@@ -54,8 +54,8 @@ class home extends Component {
     const user = firebase.auth().currentUser
     this.setState({ email: user.email })
 
-    console.log("success kinda")
-    console.log(user)
+    //console.log("success kinda")
+    //console.log(user)
     //this.firebasegetdata(user.email)
     //this.retrieveData(user.email)
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
@@ -203,26 +203,26 @@ class home extends Component {
       try {
         this.setState({ loading: true })
         
-        console.log('searching for ', search)
+        //console.log('searching for ', search)
         await this.state.db.collection('AllEvents')
           .where('keywords', 'array-contains', search)
           .get()
           .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
               // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data());
+              //console.log(doc.id, " => ", doc.data());
               Data.push(doc.data());
   
   
             });
           })
-        console.log(Data)
+        //console.log(Data)
         this.setState({
           //documentData: Data,
           displayData: Data,
           loading: false,
   
-        }, console.log(this.state.displayData));
+        })//, console.log(this.state.displayData));
         //Data=[]
   
   
@@ -240,26 +240,26 @@ class home extends Component {
       try {
         this.setState({ loading: true })
         
-        console.log('searching for ', search)
+        //console.log('searching for ', search)
         await this.state.db.collection('AllEvents')
           .where('keywordsSport', 'array-contains', search)
           .get()
           .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
               // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data());
+              //console.log(doc.id, " => ", doc.data());
               Data.push(doc.data());
   
   
             });
           })
-        console.log(Data)
+        //console.log(Data)
         this.setState({
           //documentData: Data,
           displayData: Data,
           loading: false,
   
-        }, console.log(this.state.displayData));
+        },)// console.log(this.state.displayData));
         //Data=[]
   
   
@@ -348,7 +348,7 @@ class home extends Component {
         />
         <ActionButton
           buttonColor="#00e676"
-          onPress={() => { console.log("hi") }}
+          onPress={() => { }}
           renderIcon={() => this.icon()}
           degrees= '180'
 
