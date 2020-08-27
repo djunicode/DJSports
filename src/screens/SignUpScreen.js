@@ -8,7 +8,9 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
-    Picker
+    Picker,
+    Alert,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import OneSignal from 'react-native-onesignal';
@@ -170,7 +172,7 @@ export default class SignUpScreen extends React.Component {
         return arrName;
     }
     addusertodb = () => {
-      
+        ToastAndroid.show("Signing Up .....",ToastAndroid.LONG )
         let arr = this.handleEventName(this.state.name)
         this.state.db.collection("Users").doc(this.state.Id.toLowerCase()).set({
             name: this.state.name,
@@ -186,7 +188,7 @@ export default class SignUpScreen extends React.Component {
             keywords: this.state.keywords,
             OneSignalId : this.state.userId
         })
-            .then(() => this.props.navigation.navigate('LoginScreen'))
+            .then(() => Alert.alert("SignUp Succesful"))
             .catch((e) => console.log(e))
     }
     render() {
